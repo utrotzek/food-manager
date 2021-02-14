@@ -1,6 +1,7 @@
 <template>
     <div class="container">
         <h4>Food Manager hello world</h4>
+        <button @click="login()">Login</button>
     </div>
 </template>
 
@@ -16,6 +17,9 @@ export default {
     mounted() {
     },
     methods: {
+        login() {
+            this.$store.dispatch('auth/LOGIN', {userName: "Testuser"})
+        }
     }
 };
 </script>

@@ -37,6 +37,8 @@ Vue.use(IconsPlugin)
 import App from '../js/components/App';
 import Home from '../js/components/Home';
 
+import store from '../js/store';
+
 const router = new VueRouter({
     mode: "history",
     linkActiveClass: "active",
@@ -55,5 +57,6 @@ const app = new Vue({
     components: {
         App
     },
-    router
+    router,
+    store
 });
