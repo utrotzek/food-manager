@@ -11,11 +11,13 @@ window.Vue = require('vue');
 //Register vue.js plugins
 import VueRouter from 'vue-router'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
+import vueTopProgress from 'vue-top-progress';
 import '../sass/app.scss';
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+Vue.use(vueTopProgress)
 
 /**
  * The following block of code may be used to automatically register your
