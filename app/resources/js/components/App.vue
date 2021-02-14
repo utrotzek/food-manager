@@ -2,7 +2,7 @@
     <div>
         <vue-topprogress ref="topProgress"></vue-topprogress>
         <router-view />
-        <button @click="start">Start</button>
+        <b-button variant="primary" @click="start">Start</b-button>
     </div>
 </template>
 

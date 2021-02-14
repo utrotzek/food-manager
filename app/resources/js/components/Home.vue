@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <h4>Food Manager hello world</h4>
-        <button @click="login()">Login</button>
+        <b-button variant="primary" @click="login()">Login</b-button>
     </div>
 </template>
 
