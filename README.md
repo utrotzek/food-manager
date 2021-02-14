@@ -11,7 +11,7 @@ This project uses vue ellipse progress bar. The documentation can be found here:
 * (vee validate)[https://vee-validate.logaretm.com/v4]
 * (vue top progress) [https://github.com/dalphyx/vue-top-progress]
 * (vuex)[https://vuex.vuejs.org/]
-
+* (pest testing framework)[https://pestphp.com/]
 
 # docker setup
 TODO
