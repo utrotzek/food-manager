@@ -1,12 +1,12 @@
 <template>
-<div>
+  <div>
     Example component
-</div>
+  </div>
 </template>
 
 <script>
 export default {
-    name: "ExampleComponent.vue",
+    name: "ExampleComponent",
     methods: {
         returnTwo() {
             return 2;

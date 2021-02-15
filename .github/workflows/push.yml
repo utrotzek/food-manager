@@ -9,6 +9,8 @@ jobs:
         run: docker-compose -f docker-compose-testing.yml up -d
       - name: Check PHP code style
         run: docker-compose -f docker-compose-testing.yml exec -T app composer run-script csFixer -- --dry-run
+      - name: Check JS code style
+        run: docker-compose -f docker-compose-testing.yml exec -T app yarn lint-dry
       - name: Test PHP
         run: docker-compose -f docker-compose-testing.yml exec -T app ./artisan test
       - name: Test JS

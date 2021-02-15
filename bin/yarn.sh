@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-docker-compose exec app yarn "$@"
+docker-compose exec -T app yarn "$@"

@@ -1,18 +1,23 @@
 <template>
-    <div class="container">
-        <h4>Food Manager hello world</h4>
-        <b-button variant="primary" @click="login()">Login</b-button>
-    </div>
+  <div class="container">
+    <h4>Food Manager hello world</h4>
+    <b-button
+      variant="primary"
+      @click="login()"
+    >
+      Login
+    </b-button>
+  </div>
 </template>
 
 <script>
 export default {
+    components: {
+    },
     data () {
         return {
 
         };
-    },
-    components: {
     },
     mounted() {
     },
