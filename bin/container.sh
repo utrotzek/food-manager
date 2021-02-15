@@ -53,7 +53,7 @@ function installEnvironment {
 
     if [[ ! -f "${rootPath}/.git/hooks/pre-commit" ]]; then
         echo "initializing git hook"
-        ln -sinf "${rootPath}/app/.build/.git-hooks/pre-commit-cs-fixer.sh" "${rootPath}/.git/hooks/pre-commit"
+        ln -sinf "${rootPath}/.git-hooks/pre-commit-cs-fixer.sh" "${rootPath}/.git/hooks/pre-commit"
     fi
 }
 
