@@ -50,6 +50,11 @@ function installEnvironment {
         ${rootPath}/bin/yarn.sh install
         ${rootPath}/bin/yarn.sh run dev
     fi
+
+    if [[ ! -f "${rootPath}/.git/hooks/pre-commit" ]]; then
+        echo "initializing git hook"
+        ln -sinf "${rootPath}/app/.build/.git-hooks/pre-commit-cs-fixer.sh" "${rootPath}/.git/hooks/pre-commit"
+    fi
 }
 
 function initStartOptions {
@@ -89,8 +94,6 @@ function status {
 
 function main {
     initializeCommands $@
-
-
 }
 
 main $@
