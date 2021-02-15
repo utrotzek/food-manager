@@ -81,7 +81,6 @@ USER $USER_NAME
 COPY --chown=$USER_NAME:$USER_NAME app /var/www/html/app
 WORKDIR /var/www/html/app
 
-#run npm dev because of a bug with non working animations in production context
 RUN composer install && \
     yarn install && \
     yarn run prod

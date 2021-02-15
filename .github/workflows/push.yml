@@ -1,0 +1,11 @@
+name: docker-compose-actions-workflow
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the stack
+        run: docker-compose -f docker-compose-testing.yml up -d
+      - name: Test
+        run: docker-compose exec -T app ./artisan test
