@@ -6,10 +6,14 @@
 
 <script>
 export default {
-    name: "ExampleComponent.vue"
+    name: "ExampleComponent.vue",
+    methods: {
+        returnTwo() {
+            return 2;
+        }
+    }
 }
 </script>
 
 <style scoped>
-
 </style>
