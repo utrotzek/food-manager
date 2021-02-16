@@ -1,30 +1,28 @@
 <template>
-    <div class="search-wrapper">
-        <!-- Search form -->
-        <b-form
-            class="search-form form-inline md-form form-sm mt-0"
-            @submit="onSubmit"
-        >
-            <b-icon-search class="search-icon">
-            </b-icon-search>
-            <b-input
-                v-model="query"
-                class="search-control"
-                type="text"
-                placeholder="Suche"
-                aria-label="Search"
-                @keyup="triggerSearch"
-            >
-            </b-input>
-            <span
-                class="search-clear"
-                @click="clearQuery"
-                v-if="displayDelete"
-            >
-                <b-icon-x-circle-fill></b-icon-x-circle-fill>
-            </span>
-        </b-form>
-    </div>
+  <div class="search-wrapper">
+    <!-- Search form -->
+    <b-form
+      class="search-form form-inline md-form form-sm mt-0"
+      @submit="onSubmit"
+    >
+      <b-icon-search class="search-icon" />
+      <b-input
+        v-model="query"
+        class="search-control"
+        type="text"
+        placeholder="Suche"
+        aria-label="Search"
+        @keyup="triggerSearch"
+      />
+      <span
+        v-if="displayDelete"
+        class="search-clear"
+        @click="clearQuery"
+      >
+        <b-icon-x-circle-fill />
+      </span>
+    </b-form>
+  </div>
 </template>
 
 <script>

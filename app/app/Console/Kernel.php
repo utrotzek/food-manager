@@ -2,7 +2,6 @@
 
 namespace App\Console;
 
-use App\Console\Commands\IndexingCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,9 +24,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
-        $schedule->command('index:execute --increment')->cron('*/15 * * * *');
-        $schedule->command('index:execute --full')->cron('0 6 * * *');
     }
 
     /**

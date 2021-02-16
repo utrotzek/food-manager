@@ -1,18 +1,10 @@
 <?php
+it('basic test', function () {
+    expect(true)->toBe(true);
+});
 
-namespace Tests\Unit;
 
-use PHPUnit\Framework\TestCase;
-
-class ExampleTest extends TestCase
-{
-    /**
-     * A basic test example.
-     *
-     * @return void
-     */
-    public function testBasicTest()
-    {
-        $this->assertTrue(true);
-    }
-}
+it('can calculate', function () {
+    $myClass = new \App\MyClass();
+    expect($myClass->calc())->toBe(2);
+});

@@ -7,18 +7,20 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-
+//test
 //Register vue.js plugins
 import VueRouter from 'vue-router'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import vueTopProgress from 'vue-top-progress';
 import '../sass/app.scss';
+import { ValidationProvider } from 'vee-validate';
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(vueTopProgress)
 
+Vue.component('ValidationProvider', ValidationProvider);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue

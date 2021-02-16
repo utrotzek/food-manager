@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Foto Rahmen</title>
+    <title>Food Manger</title>
     <meta name="description" content="Login Page">
     <meta name="viewport" content="height=device-height,
                       width=device-width, initial-scale=1.0,

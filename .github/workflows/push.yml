@@ -1,0 +1,39 @@
+name: docker-compose-actions-workflow
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Docker pull
+        run: docker-compose -f docker-compose-testing.yml pull
+      - uses: satackey/action-docker-layer-caching@v0.0.11
+        # Ignore the failure of a step and avoid terminating the job.
+        continue-on-error: true
+      - name: Build the stack
+        run: docker-compose -f docker-compose-testing.yml up --build -d
+      - name: Check PHP code style
+        run: docker-compose -f docker-compose-testing.yml exec -T app composer run-script csFixer -- --dry-run
+      - name: Check JS code style
+        run: docker-compose -f docker-compose-testing.yml exec -T app yarn lint-dry
+      - name: Test PHP
+        run: docker-compose -f docker-compose-testing.yml exec -T app composer run-script test-coverage
+      - name: Test JS
+        run: docker-compose -f docker-compose-testing.yml exec -T app yarn test-coverage > app/.coverage/js/coverage-summary.txt
+      - name: Copy php coverage from container
+        run: docker cp $(docker-compose -f docker-compose-testing.yml ps -q app):/var/www/html/app/.coverage/php/ app/.coverage/
+      - name: Show git status
+        run: git status
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+      - name: Update badges in readme
+        run: php updateBadges.php
+      - name: Commit changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: "Uwe Trotzek"
+          author_email: "uwe.trotzek@gmail.com"
+          message: "[TASK] Update coverage in README.md"
+          add: README.md
