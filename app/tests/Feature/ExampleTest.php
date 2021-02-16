@@ -1,5 +1,6 @@
 <?php
+use function Pest\Laravel\get;
 
-it('home')
-    ->get('/')
-    ->assertStatus(200);
+it('Basic test', function () {
+    get('/')->assertStatus(200);
+});

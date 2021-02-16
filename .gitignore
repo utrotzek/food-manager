@@ -3,3 +3,4 @@
 data/database/**
 !data/database/.gitkeep
 mix-manifest.json
+app/.php_cs.cache

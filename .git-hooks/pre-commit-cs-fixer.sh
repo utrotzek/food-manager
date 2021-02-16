@@ -14,10 +14,10 @@ ESLINT="$GIT_DIR/../bin/yarn.sh lint"
 
 echo -e "${BLUE}executing cs fixer${NC}"
 #identify staged php files and execute cs linter
-PHP_FILES=$(git status --porcelain | egrep -i '^\s*[AM].*.(php)$' | cut -c 3- | tr '\n' ' ')
+PHP_FILES=$(git status --porcelain | egrep -i '^\s*[AM].*.(php)$' | cut -c 3- | cut -d'/' -f2- | tr '\n' ' ')
 $COMPOSER_PATH run-script csFixer $PHP_FILES
 for dir in $PHP_FILES; do
-    git add "$dir"
+    git add "app/$dir"
 done
 
 echo -e "${BLUE}executing eslint${NC}"

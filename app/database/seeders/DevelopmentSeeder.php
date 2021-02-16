@@ -1,8 +1,6 @@
 <?php
-
 namespace Database\Seeders;
 
-use Database\Seeders\Development\PlaylistSeeder;
 use Illuminate\Database\Seeder;
 
 class DevelopmentSeeder extends Seeder
