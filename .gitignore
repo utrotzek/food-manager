@@ -8,3 +8,4 @@ app/.coverage/php/*
 !app/.coverage/php/.gitkeep
 app/.coverage/js/*
 !app/.coverage/js/.gitkeep
+app/_ide_helper.php
