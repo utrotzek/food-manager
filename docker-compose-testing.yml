@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: docker/app/Dockerfile.test
+    environment:
+      XDEBUG_MODE: "coverage"
+      DB_HOST: "db"
+      DB_PORT: "3306"
+      DB_DATABASE: "food-manager"
+      DB_USERNAME: "food-manager"
+      DB_PASSWORD: "app"
+      APP_KEY: "base64:NTZfl334sf2kYlP5w+OZcGZhqgmBGh6YzX7f9yvqKLY="
+    working_dir: /var/www/html/app
+  db:
+    image: mariadb:10.5
+    environment:
+      MYSQL_DATABASE: "food-manager"
+      MYSQL_USER: "food-manager"
+      MYSQL_PASSWORD: "app"
