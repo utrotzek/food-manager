@@ -1,6 +1,6 @@
 Food Manager
 ------------
-[![Generic Badge](https://img.shields.io/github/checks-status/utrotzek/food-manager/master?label=master)](https://shields.io/) [![Generic Badge](https://img.shields.io/github/checks-status/utrotzek/food-manager/develop?label=develop)](https://shields.io/) [![Generic badge](https://img.shields.io/badge/php--coverage-25%25-orange)](https://shields.io/) [![Generic badge](https://img.shields.io/badge/js--coverage-20%25-orange)](https://shields.io/)
+[![Generic Badge](https://img.shields.io/github/checks-status/utrotzek/food-manager/master?label=master)](https://shields.io/) [![Generic Badge](https://img.shields.io/github/checks-status/utrotzek/food-manager/develop?label=develop)](https://shields.io/) [![Generic badge](https://img.shields.io/badge/php--coverage-100%25-success)](https://shields.io/) [![Generic badge](https://img.shields.io/badge/js--coverage-100%25-success)](https://shields.io/)
 
 # Development
 
