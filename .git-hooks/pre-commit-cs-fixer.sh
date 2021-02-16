@@ -14,7 +14,7 @@ ESLINT="$GIT_DIR/../bin/yarn.sh lint"
 
 echo -e "${BLUE}executing cs fixer${NC}"
 #identify staged php files and execute cs linter
-PHP_FILES=$(git status --porcelain | egrep -i '^\s*[AM].*.(php)$' | cut -c 3- | cut -d'/' -f2- | tr '\n' ' ')
+PHP_FILES=$(git status --porcelain | egrep -i '^\s*[AM]\s*app/.*.(php)$' | cut -c 3- | cut -d'/' -f2- | tr '\n' ' ')
 
 if [[ $PHP_FILES != "" ]]; then
     $COMPOSER_PATH run-script csFixer $PHP_FILES
@@ -25,10 +25,10 @@ fi
 
 echo -e "${BLUE}executing eslint${NC}"
 #identify staged vue and js files and execute eslint (correct the path by suppressing /app/resources/js)
-JS_FILES=$(git status --porcelain | egrep -i '^\s*[AM].*.(vue|js)$' | cut -c 3- | tr '\n' ' ' | sed -e 's#app/resources/js/##g')
+JS_FILES=$(git status --porcelain | egrep -i '^\s*[AM]\s*app/resources/js/.*.(vue|js)' | cut -c 3- | tr '\n' ' ' | sed -e 's#app/resources/js/##g')
 
 if [[ $JS_FILES != "" ]]; then
-    $ESLINT $JS_FILES
+    $ESLINT
 fi
 
 echo -e "${GREEN}Linting passed. Committing files..${NC}"

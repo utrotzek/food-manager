@@ -1,5 +1,6 @@
-# food-manager
-TODO
+Food Manager
+------------
+[![Generic badge](https://img.shields.io/badge/php--coverage-25%25-orange)](https://shields.io/) [![Generic badge](https://img.shields.io/badge/js--coverage-20%25-orange)](https://shields.io/)
 
 # Development
 

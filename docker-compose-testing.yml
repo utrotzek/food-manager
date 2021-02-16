@@ -6,6 +6,7 @@ services:
       context: ./
       dockerfile: docker/app/Dockerfile.test
     environment:
+      XDEBUG_MODE: "coverage"
       DB_HOST: "db"
       DB_PORT: "3306"
       DB_DATABASE: "food-manager"

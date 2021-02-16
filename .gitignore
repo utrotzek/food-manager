@@ -4,3 +4,7 @@ data/database/**
 !data/database/.gitkeep
 mix-manifest.json
 app/.php_cs.cache
+app/.coverage/php/*
+!app/.coverage/php/.gitkeep
+app/.coverage/js/*
+!app/.coverage/js/.gitkeep
