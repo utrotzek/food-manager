@@ -4,8 +4,7 @@ Food Manager
 
 # Development
 
-## Progress bar
-This project uses vue ellipse progress bar. The documentation can be found here: [docs](https://github.com/setaman/vue-ellipse-progress#installation)
+Start the environment: `bin/container start` (use -s flag to boot only the container)
 
 # Techstack
 
