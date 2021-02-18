@@ -6,6 +6,12 @@ Food Manager
 
 Start the environment: `bin/container start` (use -s flag to boot only the container)
 
+# Postman collection export
+
+Profclems aweseom postman collection generator (big thanks) is included. A fresh export can be done using:
+
+`bin/artisan.sh postman:collection:export MyNewExport --api`
+
 # Techstack
 
 * (vee validate)[https://vee-validate.logaretm.com/v4]
