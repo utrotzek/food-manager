@@ -6,7 +6,6 @@ use App\Http\Resources\GoodGroupResource;
 use App\Http\Resources\GoodGroupResourceCollection;
 use App\Models\GoodGroup;
 use App\Models\GoodGroupRepository;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -99,21 +98,58 @@ class GoodGroupController extends Controller
      */
     public function update(Request $request, GoodGroup $goodGroup)
     {
-        $rules = [
-            'title' => 'required|max:255'
-        ];
+        $rules = ['title' => 'required|unique:good_groups|max:255'];
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             $response['response'] = $validator->messages();
         } else {
-            $goodGroup->update($request->all());
+            $title = $request->input('title');
+            $goodGroup = $this->goodGroupRepository->updateTitle($title, $goodGroup);
 
-            $response = new Response(
-                sprintf('Good %1$s successfully updated', $goodGroup['title'])
-            );
+            $response = sprintf('Good %1$s successfully updated', $goodGroup['title']);
         }
-        return $response;
+        return new Response($response);
+    }
+
+    public function resort(Request $request, GoodGroup $goodGroup)
+    {
+        $rules = ['sort_type' => 'required'];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            $response['response'] = $validator->messages();
+        } else {
+            switch ($request->input('sort_type')) {
+                case GoodGroupRepository::SORT_TYPYE_FIRST:
+                    $goodGroup = $this->goodGroupRepository->resortFirst($goodGroup);
+                    $response = sprintf('Good %1$s successfully sorted first', $goodGroup['title']);
+                    break;
+                case GoodGroupRepository::SORT_TYPYE_LAST:
+                    $goodGroup = $this->goodGroupRepository->resortLast($goodGroup);
+                    $response = sprintf('Good %1$s successfully sorted last', $goodGroup['title']);
+                    break;
+                case GoodGroupRepository::SORT_TYPYE_AFTER:
+                    $rules = ['after_sort' => 'required'];
+                    $validator = Validator::make($request->all(), $rules);
+
+                    if ($validator->fails()) {
+                        $response['response'] = $validator->messages();
+                    } else {
+                        $afterSort = $request->input('after_sort');
+                        $goodGroupAfter = $this->goodGroupRepository->findBySort($afterSort);
+
+                        $this->goodGroupRepository->resortAfter($goodGroup, $afterSort);
+                        $response = sprintf(
+                            'Good %1$s successfully sorted after %2$s',
+                            $goodGroup['title'],
+                            $goodGroupAfter['title']
+                        );
+                    }
+                    break;
+            }
+        }
+        return new Response($response);
     }
 
     /**

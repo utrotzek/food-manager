@@ -28,3 +28,6 @@ Route::apiResources([
     'tags' => TagController::class,
     'units' => UnitController::class
 ]);
+
+
+Route::put('/goodGroups/resort/{goodGroup}', [GoodGroupController::class, 'resort']);
