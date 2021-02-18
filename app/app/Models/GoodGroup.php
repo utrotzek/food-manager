@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class GoodGroup extends Model
 {
     use HasFactory;
+
+    protected $fillable = ['title', 'sort'];
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Database\Seeders;
 
+use Database\Seeders\Development\GoodGroupSeeder;
 use Illuminate\Database\Seeder;
 
 class DevelopmentSeeder extends Seeder
@@ -13,6 +14,7 @@ class DevelopmentSeeder extends Seeder
     public function run()
     {
         $this->call([
+            GoodGroupSeeder::class
         ]);
     }
 }

@@ -15,8 +15,8 @@ class CreateGoodGroupsTable extends Migration
     {
         Schema::create('good_groups', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->integer('sort');
+            $table->string('title')->unique();
+            $table->integer('sort')->unique();
             $table->timestamps();
         });
     }
