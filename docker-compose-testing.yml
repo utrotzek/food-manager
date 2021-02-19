@@ -18,6 +18,7 @@ services:
   db:
     image: mariadb:10.5
     environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "true"
       MYSQL_DATABASE: "food-manager"
       MYSQL_USER: "food-manager"
       MYSQL_PASSWORD: "app"
