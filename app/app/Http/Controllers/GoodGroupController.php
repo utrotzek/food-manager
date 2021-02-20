@@ -53,13 +53,13 @@ class GoodGroupController extends Controller
             $title = $request->input('title');
 
             switch ($request->input('sort_type')) {
-                case GoodGroupRepository::SORT_TYPYE_FIRST:
+                case GoodGroupRepository::SORT_TYPE_FIRST:
                     $goodGroup = $this->goodGroupRepository->createFirst($title);
                     break;
-                case GoodGroupRepository::SORT_TYPYE_LAST:
+                case GoodGroupRepository::SORT_TYPE_LAST:
                     $goodGroup = $this->goodGroupRepository->createLast($title);
                     break;
-                case GoodGroupRepository::SORT_TYPYE_AFTER:
+                case GoodGroupRepository::SORT_TYPE_AFTER:
                     $sortAfterItem = $this->goodGroupRepository->findById($request->input('after_sort_id'));
                     $goodGroup = $this->goodGroupRepository->createAfter($title, $sortAfterItem);
                     break;
@@ -122,15 +122,15 @@ class GoodGroupController extends Controller
             $response['response'] = $validator->messages();
         } else {
             switch ($request->input('sort_type')) {
-                case GoodGroupRepository::SORT_TYPYE_FIRST:
+                case GoodGroupRepository::SORT_TYPE_FIRST:
                     $goodGroup = $this->goodGroupRepository->resortFirst($goodGroup);
                     $response = sprintf('Good %1$s successfully sorted first', $goodGroup['title']);
                     break;
-                case GoodGroupRepository::SORT_TYPYE_LAST:
+                case GoodGroupRepository::SORT_TYPE_LAST:
                     $goodGroup = $this->goodGroupRepository->resortLast($goodGroup);
                     $response = sprintf('Good %1$s successfully sorted last', $goodGroup['title']);
                     break;
-                case GoodGroupRepository::SORT_TYPYE_AFTER:
+                case GoodGroupRepository::SORT_TYPE_AFTER:
                     $rules = ['after_sort_id' => 'required|int'];
                     $validator = Validator::make($request->all(), $rules);
 

@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class GoodGroupRepository implements GoodGroupRepositoryInterface
 {
-    const SORT_TYPYE_FIRST = 'first';
-    const SORT_TYPYE_LAST = 'last';
-    const SORT_TYPYE_AFTER = 'after';
+    const SORT_TYPE_FIRST = 'first';
+    const SORT_TYPE_LAST = 'last';
+    const SORT_TYPE_AFTER = 'after';
 
     /**
      * @codeCoverageIgnore
@@ -35,33 +35,33 @@ class GoodGroupRepository implements GoodGroupRepositoryInterface
         return GoodGroup::find($id);
     }
 
-    public function updateTitle(string $title, GoodGroup $goodGroup): GoodGroup
+    public function updateTitle(string $title, GoodGroup $item): GoodGroup
     {
-        $goodGroup['title'] = $title;
-        $goodGroup->save();
-        return $goodGroup->refresh();
+        $item['title'] = $title;
+        $item->save();
+        return $item->refresh();
     }
 
-    public function resortFirst(GoodGroup $goodGroup): GoodGroup
+    public function resortFirst(GoodGroup $item): GoodGroup
     {
         $this->shiftAllSortIndexes();
-        $goodGroup->fresh();
+        $item->fresh();
 
         $sort = 0;
-        $goodGroup['sort'] = $sort;
-        $goodGroup->save();
+        $item['sort'] = $sort;
+        $item->save();
         $this->resortAll();
 
-        return $goodGroup->fresh();
+        return $item->fresh();
     }
 
-    public function resortLast(GoodGroup $goodGroup): GoodGroup
+    public function resortLast(GoodGroup $item): GoodGroup
     {
         $sort = $this->getHighestSort();
 
-        $goodGroup['sort'] = $sort;
-        $goodGroup->save();
-        return $goodGroup->fresh();
+        $item['sort'] = $sort;
+        $item->save();
+        return $item->fresh();
     }
 
     /**
@@ -87,13 +87,13 @@ class GoodGroupRepository implements GoodGroupRepositoryInterface
     {
         $this->shiftAllSortIndexes();
         $sort = 0;
-        $goodGroup = new GoodGroup(['title' => $title]);
-        $goodGroup['sort'] = $sort;
-        $goodGroup->save();
+        $item = new GoodGroup(['title' => $title]);
+        $item['sort'] = $sort;
+        $item->save();
 
         //resort all items to get a fresh sort index
         $this->resortAll();
-        $goodGroup->refresh();
+        $item->refresh();
 
         return GoodGroup::where('title', $title)->first();
     }
@@ -109,9 +109,9 @@ class GoodGroupRepository implements GoodGroupRepositoryInterface
     public function createLast(string $title): GoodGroup
     {
         $sort = $this->getHighestSort();
-        $goodGroup = new GoodGroup(['title' => $title]);
-        $goodGroup['sort'] = $sort;
-        $goodGroup->save();
+        $item = new GoodGroup(['title' => $title]);
+        $item['sort'] = $sort;
+        $item->save();
 
         return GoodGroup::where('title', $title)->first();
     }
@@ -123,18 +123,18 @@ class GoodGroupRepository implements GoodGroupRepositoryInterface
      * @param int $afterSort
      * @return GoodGroup
      */
-    public function createAfter(string $title, GoodGroup $goodGroup): GoodGroup
+    public function createAfter(string $title, GoodGroup $item): GoodGroup
     {
-        $afterSort = $goodGroup['sort'];
+        $afterSort = $item['sort'];
         $newSort = $afterSort + 10;
         $this->shiftAfterSortIndex($newSort);
-        $goodGroup = new GoodGroup(['title' => $title]);
-        $goodGroup['sort'] = $newSort;
-        $goodGroup->save();
+        $item = new GoodGroup(['title' => $title]);
+        $item['sort'] = $newSort;
+        $item->save();
 
         //resort all items to get a fresh sort index
         $this->resortAll();
-        return $goodGroup->refresh();
+        return $item->refresh();
     }
 
     /**
