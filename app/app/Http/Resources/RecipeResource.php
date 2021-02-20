@@ -2,8 +2,16 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Recipe;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/**
+ * @see Recipe
+ * @method HasMany steps()
+ * @method BelongsToMany tags()
+ */
 class RecipeResource extends JsonResource
 {
     /**
@@ -20,7 +28,8 @@ class RecipeResource extends JsonResource
             'rating' => $this->rating,
             'portion' => $this->portion,
             'comments' => $this->comments,
-            'steps' => new StepResourceCollection($this->steps()->get())
+            'steps' => new StepResourceCollection($this->steps()->get()),
+            'tags' => new TagResourceCollection($this->tags()->get()),
         ];
     }
 }

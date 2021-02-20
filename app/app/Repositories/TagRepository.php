@@ -16,6 +16,14 @@ class TagRepository implements TagRepositoryInterface
 
     /**
      * @codeCoverageIgnore
+     */
+    public function findByTitle(string $title): ?Tag
+    {
+        return Tag::where('title', $title)->first();
+    }
+
+    /**
+     * @codeCoverageIgnore
      * Just glue code. No tests necessary
      */
     public function create($attributes): Tag

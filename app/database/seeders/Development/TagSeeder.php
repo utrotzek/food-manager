@@ -12,5 +12,6 @@ class TagSeeder extends Seeder
         Tag::create(['title' => 'Diät']);
         Tag::create(['title' => 'IQs Kitchen']);
         Tag::create(['title' => 'Weight Watcher']);
+        Tag::create(['title' => 'Eintopf']);
     }
 }

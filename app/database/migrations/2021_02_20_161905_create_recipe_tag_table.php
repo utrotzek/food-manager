@@ -6,7 +6,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRecipesTagsTable extends Migration
+class CreateRecipeTagTable extends Migration
 {
     /**
      * Run the migrations.
@@ -15,7 +15,7 @@ class CreateRecipesTagsTable extends Migration
      */
     public function up()
     {
-        Schema::create('recipes_tags', function (Blueprint $table) {
+        Schema::create('recipe_tag', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->foreignId('recipe_id')->references('id')->on('recipes');
             $table->foreignId('tag_id')->references('id')->on('tags');
