@@ -64,24 +64,24 @@ class GoodGroupRepository implements GoodGroupRepositoryInterface
         return $goodGroup->fresh();
     }
 
-    public function resortAfter(GoodGroup $goodGroup, int $afterSort): GoodGroup
+    /**
+     * Sorts a given item after the $itemToSortAfter item
+     */
+    public function resortAfter(GoodGroup $item, GoodGroup $itemToSortAfter): GoodGroup
     {
+        $afterSort = $itemToSortAfter['sort'];
         $newSort = $afterSort + 10;
         $this->shiftAfterSortIndex($newSort);
-        $goodGroup['sort'] = $newSort;
-        $goodGroup->save();
+        $item['sort'] = $newSort;
+        $item->save();
 
         //resort all items to get a fresh sort index
         $this->resortAll();
-        return $goodGroup->refresh();
+        return $item->refresh();
     }
 
     /**
      * Creates a new good group item after a given sort index
-     *
-     * @param string $title
-     * @param int $afterSort
-     * @return GoodGroup
      */
     public function createFirst(string $title): GoodGroup
     {
@@ -123,8 +123,9 @@ class GoodGroupRepository implements GoodGroupRepositoryInterface
      * @param int $afterSort
      * @return GoodGroup
      */
-    public function createAfter(string $title, int $afterSort): GoodGroup
+    public function createAfter(string $title, GoodGroup $goodGroup): GoodGroup
     {
+        $afterSort = $goodGroup['sort'];
         $newSort = $afterSort + 10;
         $this->shiftAfterSortIndex($newSort);
         $goodGroup = new GoodGroup(['title' => $title]);
@@ -133,8 +134,7 @@ class GoodGroupRepository implements GoodGroupRepositoryInterface
 
         //resort all items to get a fresh sort index
         $this->resortAll();
-        $goodGroup->refresh();
-        return GoodGroup::where('title', $title)->first();
+        return $goodGroup->refresh();
     }
 
     /**

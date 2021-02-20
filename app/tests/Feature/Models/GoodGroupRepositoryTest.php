@@ -33,13 +33,14 @@ it('Can insert entries sorted last', function () {
 
 it('Can insert after sort entry', function () {
     $subject = new \App\Models\GoodGroupRepository();
-    $subject->createAfter('TestTitle', 20);
 
-    $goodGorup = $subject->findByTitle('TestTitle');
-    expect($goodGorup['sort'])->toBe(30);
+    $itemTAfter = $subject->findById(3);
+    $itemToSortAfter = $subject->findById(2);
+    $createdItem = $subject->createAfter('TestTitle', $itemToSortAfter);
 
-    $goodGorup = $subject->findBySort(40);
-    expect($goodGorup['title'])->toBe('Fleisch');
+    $itemTAfter = $itemTAfter->fresh();
+    expect($createdItem['sort'])->toBe(30);
+    expect($itemTAfter['sort'])->toBe(40);
 });
 
 it('Can update the title', function () {
@@ -73,14 +74,14 @@ it('Can resort item as last element', function () {
 
 it('Can resort item after certain item', function () {
     $subject = new \App\Models\GoodGroupRepository();
-    $goodGroupToResort = $subject->findById(6);
-    $itemAfterElementToSort = $subject->findById(4);
+    $itemToResort = $subject->findById(6);
+    $itemToSortAfter = $subject->findById(4);
 
-    $subject->resortAfter($goodGroupToResort, 30);
+    $itemToResort = $subject->resortAfter($itemToResort, $itemToSortAfter);
 
-    $goodGroupToResort = $goodGroupToResort->fresh();
-    $itemAfterElementToSort = $itemAfterElementToSort->fresh();
+    $itemToResort = $itemToResort->fresh();
+    $itemToSortAfter = $itemToSortAfter->fresh();
 
-    expect($goodGroupToResort['sort'])->toBe(40);
-    expect($itemAfterElementToSort['sort'])->toBe(50);
+    expect($itemToResort['sort'])->toBe(50);
+    expect($itemToSortAfter['sort'])->toBe(40);
 });

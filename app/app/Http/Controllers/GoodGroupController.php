@@ -60,7 +60,8 @@ class GoodGroupController extends Controller
                     $goodGroup = $this->goodGroupRepository->createLast($title);
                     break;
                 case GoodGroupRepository::SORT_TYPYE_AFTER:
-                    $goodGroup = $this->goodGroupRepository->createAfter($title, $request->input('after_sort'));
+                    $sortAfterItem = $this->goodGroupRepository->findById($request->input('after_sort_id'));
+                    $goodGroup = $this->goodGroupRepository->createAfter($title, $sortAfterItem);
                     break;
             }
 
@@ -130,16 +131,14 @@ class GoodGroupController extends Controller
                     $response = sprintf('Good %1$s successfully sorted last', $goodGroup['title']);
                     break;
                 case GoodGroupRepository::SORT_TYPYE_AFTER:
-                    $rules = ['after_sort' => 'required'];
+                    $rules = ['after_sort_id' => 'required|int'];
                     $validator = Validator::make($request->all(), $rules);
 
                     if ($validator->fails()) {
                         $response['response'] = $validator->messages();
                     } else {
-                        $afterSort = $request->input('after_sort');
-                        $goodGroupAfter = $this->goodGroupRepository->findBySort($afterSort);
-
-                        $this->goodGroupRepository->resortAfter($goodGroup, $afterSort);
+                        $goodGroupAfter =  $this->goodGroupRepository->findById($request->input('after_sort_id'));
+                        $this->goodGroupRepository->resortAfter($goodGroup, $goodGroupAfter);
                         $response = sprintf(
                             'Good %1$s successfully sorted after %2$s',
                             $goodGroup['title'],
