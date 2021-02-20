@@ -1,9 +1,8 @@
 <?php
-
-
-namespace App\Models;
+namespace App\Repositories;
 
 use App\Interfaces\RepositoryInterfaces\GoodGroupRepositoryInterface;
+use App\Models\GoodGroup;
 use Illuminate\Database\Eloquent\Model;
 
 class GoodGroupRepository implements GoodGroupRepositoryInterface

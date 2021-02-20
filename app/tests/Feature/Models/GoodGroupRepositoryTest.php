@@ -1,22 +1,22 @@
 <?php
 
+use App\Repositories\GoodGroupRepository;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use function Pest\Laravel\get;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 uses(
-    \Illuminate\Foundation\Testing\DatabaseTransactions::class,
+    DatabaseTransactions::class,
     DatabaseMigrations::class
 );
 
-/** @var \App\Models\GoodGroupRepository $subject */
-$subject = null;
 
 beforeEach(function () {
     $this->seed('DevelopmentSeeder');
 });
 
+
 it('Can insert entries sorted first', function () {
-    $subject = new \App\Models\GoodGroupRepository();
+    $subject = new GoodGroupRepository();
     $subject->createFirst('TestTitle');
 
     $goodGorup = $subject->findByTitle('TestTitle');
@@ -24,7 +24,7 @@ it('Can insert entries sorted first', function () {
 });
 
 it('Can insert entries sorted last', function () {
-    $subject = new \App\Models\GoodGroupRepository();
+    $subject = new GoodGroupRepository();
     $subject->createLast('TestTitle');
 
     $goodGorup = $subject->findByTitle('TestTitle');
@@ -32,7 +32,7 @@ it('Can insert entries sorted last', function () {
 });
 
 it('Can insert after sort entry', function () {
-    $subject = new \App\Models\GoodGroupRepository();
+    $subject = new GoodGroupRepository();
 
     $itemTAfter = $subject->findById(3);
     $itemToSortAfter = $subject->findById(2);
@@ -44,7 +44,7 @@ it('Can insert after sort entry', function () {
 });
 
 it('Can update the title', function () {
-    $subject = new \App\Models\GoodGroupRepository();
+    $subject = new GoodGroupRepository();
     $goodGroupToUpdate = $subject->findByTitle('Obst und Gemüse');
     $subject->updateTitle('A new title', $goodGroupToUpdate);
 
@@ -53,7 +53,7 @@ it('Can update the title', function () {
 });
 
 it('Can resort item as first element', function () {
-    $subject = new \App\Models\GoodGroupRepository();
+    $subject = new GoodGroupRepository();
     $goodGroupToResort = $subject->findById(2);
     expect($goodGroupToResort['sort'])->toBe(20);
 
@@ -63,7 +63,7 @@ it('Can resort item as first element', function () {
 });
 
 it('Can resort item as last element', function () {
-    $subject = new \App\Models\GoodGroupRepository();
+    $subject = new GoodGroupRepository();
     $goodGroupToResort = $subject->findById(2);
     expect($goodGroupToResort['sort'])->toBe(20);
 
@@ -73,7 +73,7 @@ it('Can resort item as last element', function () {
 });
 
 it('Can resort item after certain item', function () {
-    $subject = new \App\Models\GoodGroupRepository();
+    $subject = new GoodGroupRepository();
     $itemToResort = $subject->findById(6);
     $itemToSortAfter = $subject->findById(4);
 
