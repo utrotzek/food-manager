@@ -4,9 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\GoodGroupResource;
 use App\Http\Resources\GoodGroupResourceCollection;
+use App\Http\Resources\TagResource;
 use App\Models\GoodGroup;
 use App\Repositories\GoodGroupRepository;
-use App\Repositories\GoodRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -100,18 +100,21 @@ class GoodGroupController extends Controller
      */
     public function update(Request $request, GoodGroup $goodGroup)
     {
-        $rules = ['title' => 'required|unique:good_groups|max:255'];
+        $rules = ['title' => 'required|max:255'];
         $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             $response['response'] = $validator->messages();
+            $statusCode = 500;
         } else {
             $title = $request->input('title');
-            $goodGroup = $this->goodGroupRepository->updateTitle($title, $goodGroup);
+            $item = $this->goodGroupRepository->updateTitle($title, $goodGroup);
 
-            $response = sprintf('Good %1$s successfully updated', $goodGroup['title']);
+            $response['item'] = new GoodGroupResource($item);
+            $response['message'] = sprintf('Good group %1$s successfully updated', $item['title']);
+            $statusCode = 200;
         }
-        return new Response($response);
+        return new Response($response, $statusCode);
     }
 
     public function resort(Request $request, GoodGroup $goodGroup)
