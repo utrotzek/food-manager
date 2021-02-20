@@ -115,7 +115,12 @@ class RecipeController extends Controller
             $statusCode = 500;
         } else {
             $newItem = $this->recipeRepository->update($request->input(), $recipe);
-            $response['item'] = new RecipeResource($newItem);
+            $actualSteps = $this->stepRepository->syncStepsWithDescriptionList(
+                $newItem->steps()->get(),
+                $request->input('steps')
+            );
+            $newItem->steps()->saveMany($actualSteps);
+            $response['item'] = new RecipeResource($newItem->fresh());
             $response['message'] = sprintf('Recipe %1$s successfully updated', $newItem['title']);
             $statusCode = 200;
         }
