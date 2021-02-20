@@ -24,11 +24,6 @@ class GoodGroupRepository implements GoodGroupRepositoryInterface
         return GoodGroup::where('title', $title)->first();
     }
 
-    public function findBySort(int $sort): ?GoodGroup
-    {
-        return GoodGroup::where('sort', $sort)->first();
-    }
-
     public function findById(int $id): GoodGroup
     {
         return GoodGroup::find($id);

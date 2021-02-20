@@ -21,7 +21,7 @@ class CreateGoodsTable extends Migration
             $table->integer('fat');
             $table->integer('protein');
             $table->integer('kcal');
-            $table->integer('piece_in_gramm');
+            $table->integer('piece_in_gramm')->nullable();
             $table->timestamps();
         });
     }
