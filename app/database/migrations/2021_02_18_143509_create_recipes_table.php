@@ -15,10 +15,10 @@ class CreateRecipesTable extends Migration
     {
         Schema::create('recipes', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->float('rating');
+            $table->string('title')->unique();
+            $table->float('rating')->nullable();
             $table->integer('portion');
-            $table->longText('comments');
+            $table->longText('comments')->nullable();
             $table->timestamps();
         });
     }

@@ -2,10 +2,25 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RecipeResource;
+use App\Http\Resources\RecipeResourceCollection;
+use App\Models\Recipe;
+use App\Repositories\RecipeRepository;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Validator;
 
 class RecipeController extends Controller
 {
+    /**
+     * @var RecipeRepository
+     */
+    protected RecipeRepository $recipeRepository;
+
+    public function __construct(RecipeRepository $recipeRepository)
+    {
+        $this->recipeRepository = $recipeRepository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +28,11 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        //
+        return new Response(
+            new RecipeResourceCollection(
+                $this->recipeRepository->all()
+            )
+        );
     }
 
     /**
@@ -24,7 +43,26 @@ class RecipeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $response = [];
+        $rules = [
+            'title' => 'required|unique:recipes|max:255',
+            'rating' => 'numeric',
+            'portion' => 'required|int'
+
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            $response['message'] = $validator->messages();
+            $statusCode = 500;
+        } else {
+            $newItem = $this->recipeRepository->create($request->input());
+            $response['item'] = new RecipeResource($newItem);
+            $response['message'] = sprintf('Recipe %1$s successfully created', $newItem['title']);
+            $statusCode = 200;
+        }
+
+        return new Response($response, $statusCode);
     }
 
     /**
@@ -33,9 +71,11 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Recipe $recipe)
     {
-        //
+        return new Response(
+            new RecipeResource($recipe)
+        );
     }
 
     /**
@@ -45,9 +85,28 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Recipe $recipe)
     {
-        //
+        $response = [];
+        $rules = [
+            'title' => 'required|max:255',
+            'rating' => 'numeric',
+            'portion' => 'required|int'
+
+        ];
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            $response['message'] = $validator->messages();
+            $statusCode = 500;
+        } else {
+            $newItem = $this->recipeRepository->update($request->input(), $recipe);
+            $response['item'] = new RecipeResource($newItem);
+            $response['message'] = sprintf('Recipe %1$s successfully updated', $newItem['title']);
+            $statusCode = 200;
+        }
+
+        return new Response($response, $statusCode);
     }
 
     /**
@@ -56,8 +115,12 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Recipe $recipe)
     {
-        //
+        $recipe->delete();
+
+        return new Response(
+            ['message' => sprintf('Recipe %1$s successfully deleted', $recipe['title'])]
+        );
     }
 }
