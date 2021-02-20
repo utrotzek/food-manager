@@ -6,6 +6,7 @@ use App\Http\Resources\RecipeResource;
 use App\Http\Resources\RecipeResourceCollection;
 use App\Models\Recipe;
 use App\Repositories\RecipeRepository;
+use App\Repositories\StepRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Validator;
@@ -17,9 +18,15 @@ class RecipeController extends Controller
      */
     protected RecipeRepository $recipeRepository;
 
-    public function __construct(RecipeRepository $recipeRepository)
+    /**
+     * @var StepRepository
+     */
+    protected StepRepository $stepRepository;
+
+    public function __construct(RecipeRepository $recipeRepository, StepRepository $stepRepository)
     {
         $this->recipeRepository = $recipeRepository;
+        $this->stepRepository = $stepRepository;
     }
     /**
      * Display a listing of the resource.
@@ -45,9 +52,10 @@ class RecipeController extends Controller
     {
         $response = [];
         $rules = [
-            'title' => 'required|unique:recipes|max:255',
+            'title' => 'required|max:255',
             'rating' => 'numeric',
-            'portion' => 'required|int'
+            'portion' => 'required|int',
+            'steps' => 'array'
 
         ];
         $validator = Validator::make($request->all(), $rules);
@@ -57,6 +65,12 @@ class RecipeController extends Controller
             $statusCode = 500;
         } else {
             $newItem = $this->recipeRepository->create($request->input());
+
+            if ($request->has('steps')) {
+                $steps = $this->stepRepository->prepareByDescriptionArray($request->input('steps'));
+                $newItem->steps()->saveMany($steps);
+            }
+
             $response['item'] = new RecipeResource($newItem);
             $response['message'] = sprintf('Recipe %1$s successfully created', $newItem['title']);
             $statusCode = 200;
