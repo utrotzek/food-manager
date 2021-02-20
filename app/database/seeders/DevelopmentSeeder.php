@@ -3,6 +3,7 @@ namespace Database\Seeders;
 
 use Database\Seeders\Development\GoodGroupSeeder;
 use Database\Seeders\Development\GoodSeeder;
+use Database\Seeders\Development\UnitSeeder;
 use Illuminate\Database\Seeder;
 
 class DevelopmentSeeder extends Seeder
@@ -17,6 +18,7 @@ class DevelopmentSeeder extends Seeder
         $this->call([
             GoodGroupSeeder::class,
             GoodSeeder::class,
+            UnitSeeder::class
         ]);
     }
 }

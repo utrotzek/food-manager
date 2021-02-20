@@ -16,7 +16,8 @@ class CreateUnitsTable extends Migration
         Schema::create('units', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->integer('sort');
+            $table->integer('average_gram')->nullable();
+            $table->boolean('is_piece')->default(false);
             $table->timestamps();
         });
     }
