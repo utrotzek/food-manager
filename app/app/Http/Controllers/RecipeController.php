@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Factories\IngredientFactory;
 use App\Http\Resources\RecipeResource;
 use App\Http\Resources\RecipeResourceCollection;
 use App\Models\Recipe;
@@ -19,14 +20,23 @@ class RecipeController extends Controller
     protected RecipeRepository $recipeRepository;
 
     /**
+     * @var IngredientFactory
+     */
+    protected IngredientFactory  $ingredientFactory;
+
+    /**
      * @var StepRepository
      */
     protected StepRepository $stepRepository;
 
-    public function __construct(RecipeRepository $recipeRepository, StepRepository $stepRepository)
-    {
+    public function __construct(
+        RecipeRepository $recipeRepository,
+        StepRepository $stepRepository,
+        IngredientFactory $ingredientFactory
+    ) {
         $this->recipeRepository = $recipeRepository;
         $this->stepRepository = $stepRepository;
+        $this->ingredientFactory = $ingredientFactory;
     }
     /**
      * Display a listing of the resource.
@@ -52,11 +62,14 @@ class RecipeController extends Controller
     {
         $response = [];
         $rules = [
-            'title' => 'required|max:255',
+            'title' => 'required|unique:recipes|max:255',
             'rating' => 'numeric',
             'portion' => 'required|int',
             'steps' => 'array',
-            'tags' => 'array'
+            'tags' => 'array',
+            'ingredients.unitId' => 'int',
+            'ingredients.goodId' => 'int',
+            'ingredients.amount' => 'int',
 
         ];
         $validator = Validator::make($request->all(), $rules);
@@ -66,6 +79,13 @@ class RecipeController extends Controller
             $statusCode = 500;
         } else {
             $newItem = $this->recipeRepository->create($request->input());
+
+            if ($request->has('ingredients')) {
+                $ingredients = $this->ingredientFactory->newIngredientList(
+                    $request->input('ingredients')
+                );
+                $newItem->ingredients()->saveMany($ingredients);
+            }
 
             if ($request->has('steps')) {
                 $steps = $this->stepRepository->prepareByDescriptionArray($request->input('steps'));

@@ -10,6 +10,8 @@ class Ingredient extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['unit_amount'];
+
     public function good(): BelongsTo
     {
         return $this->belongsTo(Good::class, 'good_id');

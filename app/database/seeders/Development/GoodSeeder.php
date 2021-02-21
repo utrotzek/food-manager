@@ -75,6 +75,15 @@ class GoodSeeder extends Seeder
             'kcal' => 50,
             'piece_in_gramm' => 500
         ]);
+
+        $fruitAndVeggieGoods[] = new Good([
+            'title' => 'Knoblauchzehe',
+            'carbs' => 10,
+            'fat' => 10,
+            'protein' => 5,
+            'kcal' => 20,
+            'piece_in_gramm' => 10
+        ]);
         $this->saveGoodsToGroup($goodGroupRepository->findByTitle('Obst und Gemüse'), $fruitAndVeggieGoods);
 
         $meatGoods = [];
@@ -138,11 +147,29 @@ class GoodSeeder extends Seeder
             'kcal' => 150,
             'piece_in_gramm' => 20
         ]);
+
+        $tomatoGoods[] = new Good([
+            'title' => 'passierte Tomaten',
+            'carbs' => 10,
+            'fat' => 45,
+            'protein' => 10,
+            'kcal' => 150,
+            'piece_in_gramm' => 20
+        ]);
         $this->saveGoodsToGroup($goodGroupRepository->findByTitle('Tomatenprodukte'), $tomatoGoods);
 
         $spicesGoods = [];
         $spicesGoods[] = new Good([
             'title' => 'Paprikapulver',
+            'carbs' => 10,
+            'fat' => 45,
+            'protein' => 10,
+            'kcal' => 150,
+            'piece_in_gramm' => 20
+        ]);
+
+        $spicesGoods[] = new Good([
+            'title' => 'Bolognese Gewürzmischung',
             'carbs' => 10,
             'fat' => 45,
             'protein' => 10,
