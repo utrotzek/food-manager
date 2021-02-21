@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Factories\IngredientFactory;
 use App\Http\Resources\RecipeResource;
 use App\Http\Resources\RecipeResourceCollection;
-use App\Models\Recipe;
+use App\Repositories\IngredientRepository;
 use App\Repositories\RecipeRepository;
 use App\Repositories\StepRepository;
 use Illuminate\Http\Request;
@@ -20,6 +20,11 @@ class RecipeController extends Controller
     protected RecipeRepository $recipeRepository;
 
     /**
+     * @var IngredientRepository
+     */
+    protected IngredientRepository $ingredientRepository;
+
+    /**
      * @var IngredientFactory
      */
     protected IngredientFactory  $ingredientFactory;
@@ -32,11 +37,13 @@ class RecipeController extends Controller
     public function __construct(
         RecipeRepository $recipeRepository,
         StepRepository $stepRepository,
-        IngredientFactory $ingredientFactory
+        IngredientFactory $ingredientFactory,
+        IngredientRepository $ingredientRepository
     ) {
         $this->recipeRepository = $recipeRepository;
         $this->stepRepository = $stepRepository;
         $this->ingredientFactory = $ingredientFactory;
+        $this->ingredientRepository = $ingredientRepository;
     }
     /**
      * Display a listing of the resource.
@@ -157,6 +164,9 @@ class RecipeController extends Controller
                 );
                 $newItem->steps()->saveMany($actualSteps);
                 $newItem->tags()->sync($request->input('tags'));
+                $actualIngredients = $this->ingredientFactory->newIngredientList($request->input('ingredients'));
+                $this->ingredientRepository->deleteRemovedItems($newItem->ingredients()->get(), $actualIngredients);
+                $newItem->ingredients()->saveMany($actualIngredients);
 
                 $response['item'] = new RecipeResource($newItem->fresh());
                 $response['message'] = sprintf('Recipe %1$s successfully updated', $newItem['title']);
