@@ -35,4 +35,14 @@ class RecipeRepository implements RecipeRepositoryInterface
         $recipe->save();
         return $recipe->fresh();
     }
+
+    public function findByIdOrSlug(string $idOrTitle): ?Recipe
+    {
+        /** @var Recipe $recipe */
+        $recipe = Recipe::query()
+            ->where('id', $idOrTitle)
+            ->orWhere('title', $idOrTitle)
+            ->first();
+        return $recipe;
+    }
 }

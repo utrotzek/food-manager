@@ -87,11 +87,20 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Recipe $recipe)
+    public function show(string $slugOrId)
     {
-        return new Response(
-            new RecipeResource($recipe)
-        );
+        $recipe = $this->recipeRepository->findByIdOrSlug($slugOrId);
+
+        if ($recipe) {
+            return new Response(
+                new RecipeResource($recipe)
+            );
+        } else {
+            return new Response(
+                sprintf('recipe "%1$s" could not be found.', $slugOrId),
+                404
+            );
+        }
     }
 
     /**
@@ -101,7 +110,7 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Recipe $recipe)
+    public function update(Request $request, string $slugOrId)
     {
         $response = [];
         $rules = [
@@ -118,17 +127,24 @@ class RecipeController extends Controller
             $response['message'] = $validator->messages();
             $statusCode = 500;
         } else {
-            $newItem = $this->recipeRepository->update($request->input(), $recipe);
-            $actualSteps = $this->stepRepository->syncStepsWithDescriptionList(
-                $newItem->steps()->get(),
-                $request->input('steps')
-            );
-            $newItem->steps()->saveMany($actualSteps);
-            $newItem->tags()->sync($request->input('tags'));
+            $recipe = $this->recipeRepository->findByIdOrSlug($slugOrId);
 
-            $response['item'] = new RecipeResource($newItem->fresh());
-            $response['message'] = sprintf('Recipe %1$s successfully updated', $newItem['title']);
-            $statusCode = 200;
+            if ($recipe) {
+                $newItem = $this->recipeRepository->update($request->input(), $recipe);
+                $actualSteps = $this->stepRepository->syncStepsWithDescriptionList(
+                    $newItem->steps()->get(),
+                    $request->input('steps')
+                );
+                $newItem->steps()->saveMany($actualSteps);
+                $newItem->tags()->sync($request->input('tags'));
+
+                $response['item'] = new RecipeResource($newItem->fresh());
+                $response['message'] = sprintf('Recipe %1$s successfully updated', $newItem['title']);
+                $statusCode = 200;
+            } else {
+                $response['message'] = sprintf('recipe "%1$s" could not be found.', $slugOrId);
+                $statusCode = 404;
+            }
         }
 
         return new Response($response, $statusCode);
@@ -140,8 +156,9 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Recipe $recipe)
+    public function destroy(string $slugOrId)
     {
+        $recipe = $this->recipeRepository->findByIdOrSlug($slugOrId);
         $recipe->delete();
 
         return new Response(
