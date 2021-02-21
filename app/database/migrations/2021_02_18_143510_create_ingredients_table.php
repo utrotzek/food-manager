@@ -15,15 +15,10 @@ class CreateIngredientsTable extends Migration
     {
         Schema::create('ingredients', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('good_id')->references('id')->on('goods');
-            $table->foreignId('unit_id')->references('id')->on('units');
+            $table->foreignId('good_id')->references('id')->on('goods')->onDelete('cascade');
+            $table->foreignId('unit_id')->references('id')->on('units')->onDelete('cascade');
             $table->integer('unit_amount');
-            $table->foreignId('recipe_id')->references('id')->on('recipes');
-            $table->string('title');
-            $table->integer('carbs');
-            $table->integer('fat');
-            $table->integer('protein');
-            $table->integer('kcal');
+            $table->foreignId('recipe_id')->references('id')->on('recipes')->onDelete('cascade');
             $table->timestamps();
         });
     }

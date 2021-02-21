@@ -1,18 +1,25 @@
 <?php
 namespace Database\Seeders\Development;
 
+use App\Models\Ingredient;
 use App\Models\Recipe;
 use App\Models\Step;
- use App\Repositories\TagRepository;
+use App\Repositories\GoodRepository;
+use App\Repositories\TagRepository;
+use App\Repositories\UnitRepository;
 use Illuminate\Database\Seeder;
 
 class RecipeSeeder extends Seeder
 {
     protected TagRepository $tagRepository;
+    protected GoodRepository $goodRepository;
+    protected UnitRepository $unitRepository;
 
-    public function run(TagRepository $tagRepository)
+    public function run(TagRepository $tagRepository, GoodRepository $goodRepository, UnitRepository $unitRepository)
     {
         $this->tagRepository = $tagRepository;
+        $this->goodRepository = $goodRepository;
+        $this->unitRepository = $unitRepository;
 
         $chiliConCarne = new Recipe([
             'title' => 'Chili con Carne',
@@ -31,6 +38,11 @@ class RecipeSeeder extends Seeder
             ],
             [
                 'Eintopf'
+            ],
+            [
+                $this->createIngredient('Hackfleisch', 'Gramm', 500),
+                $this->createIngredient('Tomatenmark', 'Gramm', 200),
+                $this->createIngredient('Paprikapulver', 'El', 2)
             ]
         );
 
@@ -54,11 +66,16 @@ class RecipeSeeder extends Seeder
             [
                 'IQs Kitchen',
                 'Diät'
+            ],
+            [
+                $this->createIngredient('Gnocchis', 'Gramm', 500),
+                $this->createIngredient('frischer Spinat', 'Gramm', 500),
+                $this->createIngredient('fettarmer Frischkäse', 'El', 2)
             ]
         );
     }
 
-    protected function addRelations(Recipe $recipe, array $stepDescriptions, array $tagNames): void
+    protected function addRelations(Recipe $recipe, array $stepDescriptions, array $tagNames, array $ingredients): void
     {
         $steps = [];
         $i = 10;
@@ -76,5 +93,17 @@ class RecipeSeeder extends Seeder
             $tags[] = $this->tagRepository->findByTitle($tagName);
         }
         $recipe->tags()->saveMany($tags);
+        $recipe->ingredients()->saveMany($ingredients);
+    }
+
+    protected function createIngredient(string $goodTitle, string $unitTitle, int $amount)
+    {
+        $good = $this->goodRepository->findByIdOrSlug($goodTitle);
+        $unit = $this->unitRepository->findByIdOrSlug($unitTitle);
+
+        $ingredient = new Ingredient(['unit_amount' => $amount]);
+        $ingredient->good()->associate($good);
+        $ingredient->unit()->associate($unit);
+        return $ingredient;
     }
 }

@@ -28,7 +28,7 @@ it('Can insert entries sorted last', function () {
     $subject->createLast('TestTitle');
 
     $goodGorup = $subject->findByTitle('TestTitle');
-    expect($goodGorup['sort'])->toBe(80);
+    expect($goodGorup['sort'])->toBe(100);
 });
 
 it('Can insert after sort entry', function () {
@@ -69,7 +69,7 @@ it('Can resort item as last element', function () {
 
     $subject->resortLast($goodGroupToResort);
     $goodGroupResorted = $subject->findById(2);
-    expect($goodGroupResorted['sort'])->toBe(80);
+    expect($goodGroupResorted['sort'])->toBe(100);
 });
 
 it('Can resort item after certain item', function () {

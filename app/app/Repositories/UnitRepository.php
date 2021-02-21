@@ -35,4 +35,14 @@ class UnitRepository implements UnitRepositoryInterface
         $unit->save();
         return $unit->fresh();
     }
+
+    public function findByIdOrSlug(string $idOrTitle): ?Unit
+    {
+        /** @var Unit $unit */
+        $unit = Unit::query()
+            ->where('id', $idOrTitle)
+            ->orWhere('title', $idOrTitle)
+            ->first();
+        return $unit;
+    }
 }

@@ -22,4 +22,9 @@ class Recipe extends Model
     {
         return $this->belongsToMany(Tag::class);
     }
+
+    public function ingredients(): HasMany
+    {
+        return $this->hasMany(Ingredient::class);
+    }
 }

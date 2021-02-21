@@ -29,6 +29,23 @@ class GoodSeeder extends Seeder
             'kcal' => 210,
             'piece_in_gramm' => 500
         ]);
+        $grainGoods[] = new Good([
+            'title' => 'Reis',
+            'carbs' => 60,
+            'fat' => 10,
+            'protein' => 10,
+            'kcal' => 210,
+            'piece_in_gramm' => 500
+        ]);
+
+        $grainGoods[] = new Good([
+            'title' => 'Gnocchis',
+            'carbs' => 60,
+            'fat' => 10,
+            'protein' => 10,
+            'kcal' => 210,
+            'piece_in_gramm' => 500
+        ]);
         $this->saveGoodsToGroup($goodGroupRepository->findByTitle('Getreideprodukte'), $grainGoods);
 
         $fruitAndVeggieGoods = [];
@@ -42,7 +59,16 @@ class GoodSeeder extends Seeder
         ]);
 
         $fruitAndVeggieGoods[] = new Good([
-            'title' => 'Spinat',
+            'title' => 'TK Spinat',
+            'carbs' => 10,
+            'fat' => 10,
+            'protein' => 5,
+            'kcal' => 50,
+            'piece_in_gramm' => 500
+        ]);
+
+        $fruitAndVeggieGoods[] = new Good([
+            'title' => 'frischer Spinat',
             'carbs' => 10,
             'fat' => 10,
             'protein' => 5,
@@ -60,6 +86,15 @@ class GoodSeeder extends Seeder
             'kcal' => 210,
             'piece_in_gramm' => 500
         ]);
+        $meatGoods[] = new Good([
+            'title' => 'Hackfleisch',
+            'carbs' => 5,
+            'fat' => 20,
+            'protein' => 35,
+            'kcal' => 210,
+            'piece_in_gramm' => 500
+        ]);
+
         $this->saveGoodsToGroup($goodGroupRepository->findByTitle('Fleisch'), $meatGoods);
 
         $fishGoods = [];
@@ -82,7 +117,39 @@ class GoodSeeder extends Seeder
             'kcal' => 150,
             'piece_in_gramm' => 20
         ]);
+
+        $cheeseGoods = [];
+        $cheeseGoods[] = new Good([
+            'title' => 'fettarmer Frischkäse',
+            'carbs' => 10,
+            'fat' => 45,
+            'protein' => 10,
+            'kcal' => 150,
+            'piece_in_gramm' => 20
+        ]);
         $this->saveGoodsToGroup($goodGroupRepository->findByTitle('Käse'), $cheeseGoods);
+
+        $tomatoGoods = [];
+        $tomatoGoods[] = new Good([
+            'title' => 'Tomatenmark',
+            'carbs' => 10,
+            'fat' => 45,
+            'protein' => 10,
+            'kcal' => 150,
+            'piece_in_gramm' => 20
+        ]);
+        $this->saveGoodsToGroup($goodGroupRepository->findByTitle('Tomatenprodukte'), $tomatoGoods);
+
+        $spicesGoods = [];
+        $spicesGoods[] = new Good([
+            'title' => 'Paprikapulver',
+            'carbs' => 10,
+            'fat' => 45,
+            'protein' => 10,
+            'kcal' => 150,
+            'piece_in_gramm' => 20
+        ]);
+        $this->saveGoodsToGroup($goodGroupRepository->findByTitle('Gewürze'), $spicesGoods);
     }
 
     protected function saveGoodsToGroup(GoodGroup $goodGroup, array $goods)

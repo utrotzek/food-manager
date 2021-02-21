@@ -42,4 +42,14 @@ class GoodRepository implements GoodRepositoryInterface
         $good->save();
         return $good->fresh();
     }
+
+    public function findByIdOrSlug(string $idOrTitle): ?Good
+    {
+        /** @var Good $good */
+        $good = Good::query()
+            ->where('id', $idOrTitle)
+            ->orWhere('title', $idOrTitle)
+            ->first();
+        return $good;
+    }
 }

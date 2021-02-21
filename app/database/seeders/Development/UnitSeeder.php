@@ -32,5 +32,15 @@ class UnitSeeder extends Seeder
             'title' => 'Tl',
             'average_gram' => '5'
         ]);
+
+        Unit::create([
+            'title' => 'L',
+            'average_gram' => '1000'
+        ]);
+
+        Unit::create([
+            'title' => 'ml',
+            'average_gram' => '1'
+        ]);
     }
 }

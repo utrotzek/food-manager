@@ -51,5 +51,17 @@ class GoodGroupSeeder extends Seeder
             'title' => 'Käse',
             'sort' => 70
         ]);
+
+        GoodGroup::create([
+            'id' => 8,
+            'title' => 'Tomatenprodukte',
+            'sort' => 80
+        ]);
+
+        GoodGroup::create([
+            'id' => 9,
+            'title' => 'Gewürze',
+            'sort' => 90
+        ]);
     }
 }
