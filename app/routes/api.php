@@ -24,7 +24,6 @@ Route::apiResources([
     'goodGroups' => GoodGroupController::class,
     'ingredients' => IngredientController::class,
     'recipes' => RecipeController::class,
-    'steps' => StepController::class,
     'tags' => TagController::class,
     'units' => UnitController::class
 ]);
