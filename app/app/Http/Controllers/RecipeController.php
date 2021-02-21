@@ -55,7 +55,8 @@ class RecipeController extends Controller
             'title' => 'required|max:255',
             'rating' => 'numeric',
             'portion' => 'required|int',
-            'steps' => 'array'
+            'steps' => 'array',
+            'tags' => 'array'
 
         ];
         $validator = Validator::make($request->all(), $rules);
@@ -70,6 +71,7 @@ class RecipeController extends Controller
                 $steps = $this->stepRepository->prepareByDescriptionArray($request->input('steps'));
                 $newItem->steps()->saveMany($steps);
             }
+            $newItem->tags()->sync($request->input('tags'));
 
             $response['item'] = new RecipeResource($newItem);
             $response['message'] = sprintf('Recipe %1$s successfully created', $newItem['title']);
@@ -105,7 +107,9 @@ class RecipeController extends Controller
         $rules = [
             'title' => 'required|max:255',
             'rating' => 'numeric',
-            'portion' => 'required|int'
+            'portion' => 'required|int',
+            'steps' => 'array',
+            'tags' => 'array',
 
         ];
         $validator = Validator::make($request->all(), $rules);
@@ -120,6 +124,8 @@ class RecipeController extends Controller
                 $request->input('steps')
             );
             $newItem->steps()->saveMany($actualSteps);
+            $newItem->tags()->sync($request->input('tags'));
+
             $response['item'] = new RecipeResource($newItem->fresh());
             $response['message'] = sprintf('Recipe %1$s successfully updated', $newItem['title']);
             $statusCode = 200;

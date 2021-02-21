@@ -15,7 +15,7 @@ class CreateStepsTable extends Migration
     {
         Schema::create('steps', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('recipe_id')->references('id')->on('recipes');
+            $table->foreignId('recipe_id')->references('id')->on('recipes')->onDelete('cascade');
             $table->longText('description');
             $table->integer('sort');
             $table->timestamps();
