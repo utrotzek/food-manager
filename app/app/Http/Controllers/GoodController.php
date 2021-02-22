@@ -67,15 +67,16 @@ class GoodController extends Controller
     /**
      * Return a certain good
      */
-    public function show(Good $good): Response
+    public function show(string $slugOrId): Response
     {
+        $good = $this->goodRepository->findByIdOrSlug($slugOrId);
         return new Response(new GoodResource($good));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Good $good, GoodGroupRepository $goodGroupRepository)
+    public function update(Request $request, string $slugOrId, GoodGroupRepository $goodGroupRepository)
     {
         $response = [];
         $rules = [
@@ -93,6 +94,7 @@ class GoodController extends Controller
             $response['message'] = $validator->messages();
             $statusCode = 500;
         } else {
+            $good = $this->goodRepository->findByIdOrSlug($slugOrId);
             $group = $goodGroupRepository->findById($request->input('good_group_id'));
             $newItem = $this->goodRepository->update($request->input(), $good, $group);
             $response['item'] = new GoodResource($newItem);
@@ -109,8 +111,9 @@ class GoodController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Good $good)
+    public function destroy(string $slugOrId)
     {
+        $good = $this->goodRepository->findByIdOrSlug($slugOrId);
         $good->delete();
 
         return new Response([

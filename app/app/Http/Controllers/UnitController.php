@@ -71,8 +71,9 @@ class UnitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Unit $unit)
+    public function show(string $slugOrId)
     {
+        $unit = $this->unitRepository->findByIdOrSlug($slugOrId);
         return new Response(
             new UnitResource($unit)
         );
@@ -81,8 +82,9 @@ class UnitController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Unit $unit)
+    public function update(Request $request, string $slugOrId)
     {
+        $unit = $this->unitRepository->findByIdOrSlug($slugOrId);
         $response = [];
         $rules = [
             'title' => 'required|max:255',
@@ -110,8 +112,9 @@ class UnitController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Unit $unit)
+    public function destroy(string $slugOrId)
     {
+        $unit = $this->unitRepository->findByIdOrSlug($slugOrId);
         $unit->delete();
 
         return new Response(

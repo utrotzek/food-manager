@@ -78,12 +78,10 @@ class GoodGroupController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
      */
-    public function show(GoodGroup $goodGroup)
+    public function show(string $slugOrId)
     {
+        $goodGroup = $this->goodGroupRepository->findByTitle($slugOrId);
         return new Response(
             new GoodGroupResource(
                 $goodGroup
@@ -93,13 +91,11 @@ class GoodGroupController extends Controller
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, GoodGroup $goodGroup)
+    public function update(Request $request, string $slugOrId)
     {
+        $goodGroup = $this->goodGroupRepository->findByTitle($slugOrId);
+
         $rules = ['title' => 'required|max:255'];
         $validator = Validator::make($request->all(), $rules);
 
@@ -117,8 +113,9 @@ class GoodGroupController extends Controller
         return new Response($response, $statusCode);
     }
 
-    public function resort(Request $request, GoodGroup $goodGroup)
+    public function resort(Request $request, string $slugOrId)
     {
+        $goodGroup = $this->goodGroupRepository->findByTitle($slugOrId);
         $rules = ['sort_type' => 'required'];
         $validator = Validator::make($request->all(), $rules);
 
@@ -161,8 +158,9 @@ class GoodGroupController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(GoodGroup $goodGroup)
+    public function destroy(string $slugOrId)
     {
+        $goodGroup = $this->goodGroupRepository->findByTitle($slugOrId);
         $goodGroup->delete();
         return new Response(
             sprintf('Good %1$s successfully deleted', $goodGroup['title'])

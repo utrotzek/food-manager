@@ -19,6 +19,16 @@ class GoodGroupRepository implements GoodGroupRepositoryInterface
         return GoodGroup::all();
     }
 
+    public function findByIdOrTitle(string $idOrTitle): ?GoodGroup
+    {
+        /** @var GoodGroup $goodGroup */
+        $goodGroup = GoodGroup::query()
+            ->where('title', $idOrTitle)
+            ->orWhere('id', $idOrTitle)
+            ->first();
+        return $goodGroup;
+    }
+
     public function findByTitle(string $title): ?GoodGroup
     {
         return GoodGroup::where('title', $title)->first();

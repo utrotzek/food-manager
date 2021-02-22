@@ -22,6 +22,16 @@ class TagRepository implements TagRepositoryInterface
         return Tag::where('title', $title)->first();
     }
 
+    public function findByIdOrTitle(string $slugOrId): ?Tag
+    {
+        /** @var Tag $tag */
+        $tag = Tag::query()
+            ->where('title', $slugOrId)
+            ->orWhere('id', $slugOrId)
+            ->first();
+        return $tag;
+    }
+
     /**
      * @codeCoverageIgnore
      * Just glue code. No tests necessary

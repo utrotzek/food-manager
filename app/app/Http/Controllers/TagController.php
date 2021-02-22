@@ -67,8 +67,9 @@ class TagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Tag $tag)
+    public function show(string $slugOrId)
     {
+        $tag = $this->tagRespository->findByIdOrTitle($slugOrId);
         return new Response(
             new TagResource($tag)
         );
@@ -77,8 +78,9 @@ class TagController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Tag $tag)
+    public function update(Request $request, string $slugOrId)
     {
+        $tag = $this->tagRespository->findByIdOrTitle($slugOrId);
         $response = [];
         $rules = [
             'title' => 'required|max:255',
@@ -104,8 +106,9 @@ class TagController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tag $tag)
+    public function destroy(string $slugOrId)
     {
+        $tag = $this->tagRespository->findByIdOrTitle($slugOrId);
         $tag->delete();
 
         return new Response(
