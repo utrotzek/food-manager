@@ -17,6 +17,7 @@ class CreateRecipesTable extends Migration
             $table->id();
             $table->string('title')->unique();
             $table->float('rating')->nullable();
+            $table->string('image')->nullable();
             $table->integer('portion');
             $table->longText('comments')->nullable();
             $table->timestamps();

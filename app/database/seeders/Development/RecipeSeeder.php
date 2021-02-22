@@ -8,6 +8,7 @@ use App\Repositories\GoodRepository;
 use App\Repositories\TagRepository;
 use App\Repositories\UnitRepository;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class RecipeSeeder extends Seeder
 {
@@ -24,6 +25,7 @@ class RecipeSeeder extends Seeder
         $chiliConCarne = new Recipe([
             'title' => 'Chili con Carne',
             'rating' => 4.5,
+            'image' => '1.jpg',
             'portion' => 4,
             'comments' => "Could you move it a tad to the left make it pop can it be more retro, so we are a non-profit organization, that will be a conversation piece can it be more retro is there a way we can make the page feel more introductory without being cheesy.\n Can't you just take a picture from the internet? give us a complimentary logo along with the website, can you make the font bigger?\n and the website doesn't have the theme i was going for."
         ]);
@@ -45,10 +47,12 @@ class RecipeSeeder extends Seeder
                 $this->createIngredient('Paprikapulver', 'El', 2)
             ]
         );
+        Storage::disk('public')->put('recipe-images/1.jpg', file_get_contents(__DIR__.'/../../../resources/images/fixture-images/chili-con-carne.jpg'));
 
         $gnocchiPan = new Recipe([
             'title' => 'Gnocchi-Pfanne mit Spinat',
             'rating' => 5,
+            'image' => '2.png',
             'portion' => 4,
             'comments' => null
         ]);
@@ -73,6 +77,7 @@ class RecipeSeeder extends Seeder
                 $this->createIngredient('fettarmer Frischkäse', 'El', 2)
             ]
         );
+        Storage::disk('public')->put('recipe-images/2.png', file_get_contents(__DIR__.'/../../../resources/images/fixture-images/gnocchi-pfanne-mit-spinat.png'));
     }
 
     protected function addRelations(Recipe $recipe, array $stepDescriptions, array $tagNames, array $ingredients): void

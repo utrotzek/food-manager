@@ -11,7 +11,7 @@ class Recipe extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'rating', 'portion', 'comments'];
+    protected $fillable = ['title', 'rating', 'portion', 'comments', 'image'];
 
     public function steps(): HasMany
     {
