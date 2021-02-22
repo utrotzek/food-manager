@@ -13,9 +13,7 @@
 </head>
 <body>
     <div id="app">
-        <div>
-            <app></app>
-        </div>
+        <app></app>
     </div>
 
     <!-- Bootstrap core JavaScript-->
