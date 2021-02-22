@@ -38,23 +38,9 @@ Vue.component('ValidationProvider', ValidationProvider);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import App from '../js/components/App';
-import Home from '../js/components/Home';
-
+import App from '../js/App';
 import store from '../js/store';
-
-const router = new VueRouter({
-    mode: "history",
-    linkActiveClass: "active",
-    linkExactActiveClass: "exact-active",
-    routes: [
-        {
-            path: "/",
-            name: "home",
-            component: Home
-        },
-    ]
-});
+import router from '../js/router';
 
 const app = new Vue({
     el: '#app',

@@ -1,19 +1,17 @@
 <template>
-  <div>
-    <vue-topprogress ref="topProgress" />
-    <router-view />
-    <b-button
-      variant="primary"
-      @click="start"
-    >
-      Start
-    </b-button>
-  </div>
+  <component :is="layout">
+    <router-view :layout.sync="layout" />
+  </component>
 </template>
 
 
 <script>
 export default {
+    data() {
+        return {
+            layout: 'div',
+        };
+    },
     methods: {
         start() {
             this.$refs.topProgress.start();
