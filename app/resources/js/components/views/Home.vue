@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import LayoutDefaultDynamic from './layouts/LayoutDefaultDynamic.js';
+import LayoutDefaultDynamic from '../layouts/LayoutDefaultDynamic.js';
 
 export default {
     name: 'Home',
@@ -25,11 +25,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '../../sass/_variables.scss';
+@import '../../../sass/_variables.scss';
 
 .Home {
     color: $white;
-    background-image: url(../../images/layout/home-image2.jpg);
+    background-image: url(../../../images/layout/home-image2.jpg);
     background-repeat: no-repeat;
     padding: 1em;
     font-size: 3em;

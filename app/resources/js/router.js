@@ -1,6 +1,6 @@
 import VueRouter from "vue-router";
-import Home from "./components/Home";
-import Recipes from "./components/Recipes";
+import Home from "./components/views/Home";
+import Recipes from "./components/views/Recipes";
 
 export default new VueRouter({
     mode: "history",
