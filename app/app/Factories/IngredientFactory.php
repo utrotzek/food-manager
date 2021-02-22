@@ -11,17 +11,25 @@ class IngredientFactory
     protected GoodRepository $goodRepository;
     protected UnitRepository $unitRepository;
 
+    /**
+     * @codeCoverageIgnore
+     * Just glue code. No tests necessary
+     */
     public function __construct(GoodRepository $goodRepository, UnitRepository $unitRepository)
     {
         $this->goodRepository = $goodRepository;
         $this->unitRepository = $unitRepository;
     }
 
-    public function newIngredientList(array $ingredientList): Collection
+    /**
+     * @codeCoverageIgnore
+     * Just glue code. No tests necessary
+     */
+    public function createIngredientList(array $ingredientList): Collection
     {
         $itemCollection = new Collection();
         foreach ($ingredientList as $ingredientItem) {
-            $item = $this->newIngredient(
+            $item = $this->createIngredient(
                 $ingredientItem['unitId'],
                 $ingredientItem['goodId'],
                 $ingredientItem['amount']
@@ -31,7 +39,11 @@ class IngredientFactory
         return $itemCollection;
     }
 
-    public function newIngredient(int $unitId, int $goodId, int $amount): Ingredient
+    /**
+     * @codeCoverageIgnore
+     * Just glue code. No tests necessary
+     */
+    public function createIngredient(int $unitId, int $goodId, int $amount): Ingredient
     {
         $ingredient = new Ingredient(['unit_amount' => $amount]);
 

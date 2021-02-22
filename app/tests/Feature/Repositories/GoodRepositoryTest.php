@@ -1,7 +1,5 @@
 <?php
-
 use App\Repositories\GoodRepository;
-use App\Repositories\RecipeRepository;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 
@@ -15,8 +13,8 @@ beforeEach(function () {
 });
 
 it('Can find items by id or slug', function () {
-    $subject = new RecipeRepository();
+    $subject = new GoodRepository();
     $itemById = $subject->findByIdOrSlug('1');
-    $itemBySlug = $subject->findByIdOrSlug('Chili con Carne');
+    $itemBySlug = $subject->findByIdOrSlug('Mehl');
     expect($itemById)->toEqual($itemBySlug);
 });

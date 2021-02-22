@@ -16,6 +16,14 @@ class IngredientRepository implements IngredientRepositoryInterface
     }
 
     /**
+     * @codeCoverageIgnore
+     */
+    public function findById(int $id): ?Ingredient
+    {
+        return Ingredient::find($id);
+    }
+
+    /**
      * Deletes all items of $existingItems which are not present in $actualItems
      *
      * @throws \Exception

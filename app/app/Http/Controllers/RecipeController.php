@@ -88,7 +88,7 @@ class RecipeController extends Controller
             $newItem = $this->recipeRepository->create($request->input());
 
             if ($request->has('ingredients')) {
-                $ingredients = $this->ingredientFactory->newIngredientList(
+                $ingredients = $this->ingredientFactory->createIngredientList(
                     $request->input('ingredients')
                 );
                 $newItem->ingredients()->saveMany($ingredients);
@@ -164,7 +164,7 @@ class RecipeController extends Controller
                 );
                 $newItem->steps()->saveMany($actualSteps);
                 $newItem->tags()->sync($request->input('tags'));
-                $actualIngredients = $this->ingredientFactory->newIngredientList($request->input('ingredients'));
+                $actualIngredients = $this->ingredientFactory->createIngredientList($request->input('ingredients'));
                 $this->ingredientRepository->deleteRemovedItems($newItem->ingredients()->get(), $actualIngredients);
                 $newItem->ingredients()->saveMany($actualIngredients);
 

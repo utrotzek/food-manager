@@ -1,5 +1,4 @@
 <?php
-
 use App\Repositories\GoodGroupRepository;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
