@@ -14,6 +14,11 @@ class UnitSeeder extends Seeder
         ]);
 
         Unit::create([
+            'title' => 'Dose',
+            'is_piece' => true
+        ]);
+
+        Unit::create([
             'title' => 'Gramm',
             'average_gram' => '1'
         ]);

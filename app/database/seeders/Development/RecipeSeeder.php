@@ -33,10 +33,14 @@ class RecipeSeeder extends Seeder
         $this->addRelations(
             $chiliConCarne,
             [
-            'Hackfleisch anbraten. Immer umrühren, sodass nichts am Topfboden anbrennt',
-            'Zwiebeln glasig andünsten',
-            'Tomatenmark hinzufügen und anschwitzen',
-            'Gewürze hinzufügen'
+                'Zwiebeln kleinwürfeln, Bohnen und Mais abtropfen lassen',
+                'Hackfleisch anbraten. Dabei immer umrühren, sodass nichts am Topfboden anbrennt. Zwischendurch immer wieder mit Gemüsebrühe ablöschen und den Boden freikratzen. Der Boden muss blank bleiben.',
+                'Zwiebeln hinzugeben und glasig andünsten.',
+                'Tomatenmark hinzufügen und anschwitzen. Dann gewürze hinzugeben und scharf anbraten. Wir wollen an die ätherischen Öle.',
+                'Anschließend mit der restlichen Gemüsebrühe ablöschen und die passierten Tomaten hinzugeben.',
+                'Die Zimtstangen hinzugeben und den Eintopf bei geringer Hitze 45 Minuten lang köcheln lassen. Zwischndurch umrühren.',
+                'Als letztes die Bohnen und ggf. weiteres Gemüse hinzugeben und weitere 30 Minuten köcheln lassen.',
+                'Zimtstangen entfernen und servieren. Guten Apetit!'
             ],
             [
                 'Eintopf'
@@ -44,7 +48,13 @@ class RecipeSeeder extends Seeder
             [
                 $this->createIngredient('Hackfleisch', 'Gramm', 500),
                 $this->createIngredient('Tomatenmark', 'Gramm', 200),
-                $this->createIngredient('Paprikapulver', 'El', 2)
+                $this->createIngredient('Zimtstange', 'Stück', 2),
+                $this->createIngredient('Kreuzkümmel', 'Tl', 2),
+                $this->createIngredient('passierte Tomaten', 'Gramm', 500),
+                $this->createIngredient('Kidneybohnen a.d. Dose', 'Gramm', 200),
+                $this->createIngredient('Brechbohneen a.d. Glas', 'Gramm', 200),
+                $this->createIngredient('Mais a.d. Dose', 'Dose', 1),
+                $this->createIngredient('Paprikapulver', 'El', 2),
             ]
         );
         Storage::disk('public')->put('recipe-images/1.jpg', file_get_contents(__DIR__.'/../../../resources/images/fixture-images/chili-con-carne.jpg'));

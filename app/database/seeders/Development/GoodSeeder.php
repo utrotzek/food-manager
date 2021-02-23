@@ -176,7 +176,53 @@ class GoodSeeder extends Seeder
             'kcal' => 150,
             'piece_in_gramm' => 20
         ]);
+
+        $spicesGoods[] = new Good([
+            'title' => 'Zimtstange',
+            'carbs' => 10,
+            'fat' => 45,
+            'protein' => 10,
+            'kcal' => 150,
+            'piece_in_gramm' => 20
+        ]);
+
+        $spicesGoods[] = new Good([
+            'title' => 'Kreuzkümmel',
+            'carbs' => 10,
+            'fat' => 45,
+            'protein' => 10,
+            'kcal' => 150,
+            'piece_in_gramm' => 20
+        ]);
         $this->saveGoodsToGroup($goodGroupRepository->findByTitle('Gewürze'), $spicesGoods);
+
+        $cannedGoods[] = new Good([
+            'title' => 'Kidneybohnen a.d. Dose',
+            'carbs' => 10,
+            'fat' => 45,
+            'protein' => 10,
+            'kcal' => 150,
+            'piece_in_gramm' => 20
+        ]);
+
+        $cannedGoods[] = new Good([
+            'title' => 'Brechbohneen a.d. Glas',
+            'carbs' => 10,
+            'fat' => 45,
+            'protein' => 10,
+            'kcal' => 150,
+            'piece_in_gramm' => 20
+        ]);
+
+        $cannedGoods[] = new Good([
+            'title' => 'Mais a.d. Dose',
+            'carbs' => 10,
+            'fat' => 45,
+            'protein' => 10,
+            'kcal' => 150,
+            'piece_in_gramm' => 20
+        ]);
+        $this->saveGoodsToGroup($goodGroupRepository->findByTitle('Konserven'), $cannedGoods);
     }
 
     protected function saveGoodsToGroup(GoodGroup $goodGroup, array $goods)
