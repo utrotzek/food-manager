@@ -34,14 +34,17 @@
         <div class="cookMode">
           <b-row>
             <b-col
-              cols="1"
+              cols="2"
               class="navigation-button"
             >
               <b-icon-caret-left v-if="!isFirst" />
             </b-col>
-            <b-col cols="9">
-              <div class="headline">
+            <b-col cols="8">
+              <div class="headline d-none d-md-block">
                 Schritt: {{ currentStep + 1 }} von {{ allSteps }}
+              </div>
+              <div class="headline-small d-block">
+                Schritt: {{ currentStep + 1 }}
               </div>
               {{ currentDescription }}
             </b-col>
@@ -82,7 +85,12 @@
         </b-row>
         <b-row>
           <b-col>
-            <b-button size="lg" @click="beginCookMode">Los</b-button>
+            <b-button
+              size="lg"
+              @click="beginCookMode"
+            >
+              Los
+            </b-button>
           </b-col>
         </b-row>
       </b-col>
@@ -114,11 +122,6 @@ export default {
       acknowledged: false
     }
   },
-  mounted() {
-    this.speech = new SpeechSynthesisUtterance();
-    this.synth = window.speechSynthesis;
-    this.speech.lang = 'de-DE';
-  },
   computed: {
     currentDescription() {
       return this.steps[this.currentStep].description;
@@ -132,6 +135,11 @@ export default {
     allSteps() {
       return this.steps.length;
     }
+  },
+  mounted() {
+    this.speech = new SpeechSynthesisUtterance();
+    this.synth = window.speechSynthesis;
+    this.speech.lang = 'de-DE';
   },
   methods: {
     beginCookMode() {
@@ -192,6 +200,20 @@ export default {
     height: 2em;
     line-height: 2em;
     width: 11em;
+    background-color: $gray-300;
+    border-radius: 45%;
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+  }
+
+  .headline-small {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    height: 2em;
+    line-height: 2em;
+    width: 6em;
     background-color: $gray-300;
     border-radius: 45%;
     text-align: center;

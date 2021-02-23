@@ -68,7 +68,9 @@
           order-md="1"
           class="mb-1"
         >
-          <h3 class="d-none">Zutaten</h3>
+          <h3 class="d-none">
+            Zutaten
+          </h3>
           <Ingredients :ingredients="recipe.ingredients" />
         </b-col>
       </b-row>
