@@ -95,7 +95,7 @@
                   <b-icon-heart />
                 </b-button>
                 <b-button class="mb-1">
-                  <b-icon-bell />
+                  <b-icon-bookmark />
                 </b-button>
                 <b-button
                   class="mb-1"
@@ -153,7 +153,7 @@
               <b-icon-heart /> Favorit
             </b-button>
             <b-button class="mb-1">
-              <b-icon-bell /> vormerken
+              <b-icon-bookmark /> vormerken
             </b-button>
             <b-button
               class="mb-1"
