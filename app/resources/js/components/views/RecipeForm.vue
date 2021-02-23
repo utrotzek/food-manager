@@ -5,6 +5,34 @@
       class="recipe"
     >
       <h2>{{ recipe.title }}</h2>
+      <b-row v-if="cooking">
+        <b-col class="text-right">
+          <span>
+            <toggle-button
+              v-model="showIngredients"
+              :width="100"
+              :font-size="15"
+              :labels="{checked: 'Zutaten', unchecked: 'Zutaten'}"
+            />
+          </span>
+          <span>
+            <toggle-button
+              v-model="enableSpeech"
+              :width="100"
+              :font-size="15"
+              :labels="{checked: 'Sprache', unchecked: 'Sprache'}"
+            />
+          </span>
+          <span>
+            <toggle-button
+              v-model="cookMode"
+              :width="110"
+              :font-size="15"
+              :labels="{checked: 'Kochmodus', unchecked: 'Kochmodus'}"
+            />
+          </span>
+        </b-col>
+      </b-row>
 
       <b-row
         v-if="!cooking"
@@ -61,6 +89,32 @@
               />
             </b-col>
           </b-row>
+          <b-row>
+            <b-col>
+              <b-button-group
+                class="text-left buttons small-device d-md-none"
+              >
+                <b-button class="mb-1">
+                  <b-icon-pen />
+                </b-button>
+                <b-button class="mb-1">
+                  <b-icon-trash />
+                </b-button>
+                <b-button class="mb-1">
+                  <b-icon-heart />
+                </b-button>
+                <b-button class="mb-1">
+                  <b-icon-bell />
+                </b-button>
+                <b-button
+                  class="mb-1"
+                  @click="startCooking"
+                >
+                  <b-icon-play-fill />
+                </b-button>
+              </b-button-group>
+            </b-col>
+          </b-row>
         </b-col>
         <b-col
           cols="12"
@@ -68,7 +122,7 @@
           order-md="1"
           class="mb-1"
         >
-          <h3 class="d-none">
+          <h3>
             Zutaten
           </h3>
           <Ingredients :ingredients="recipe.ingredients" />
@@ -87,28 +141,6 @@
           md="3"
           class="text-right mt-2"
         >
-          <b-button-group
-            class="text-left buttons small-device d-md-none"
-          >
-            <b-button class="mb-1">
-              <b-icon-pen />
-            </b-button>
-            <b-button class="mb-1">
-              <b-icon-trash />
-            </b-button>
-            <b-button class="mb-1">
-              <b-icon-heart />
-            </b-button>
-            <b-button class="mb-1">
-              <b-icon-bell />
-            </b-button>
-            <b-button
-              class="mb-1"
-              @click="startCooking"
-            >
-              <b-icon-play-fill />
-            </b-button>
-          </b-button-group>
           <b-button-group
             class="text-left buttons d-none d-md-block"
             vertical
@@ -137,23 +169,31 @@
 
       <b-row v-if="cooking">
         <b-col
+          v-if="showIngredients"
           cols="12"
           md="4"
         >
-          <h3>Zutaten</h3>
+          <h3
+            v-if="showIngredients"
+            class="d-inline"
+          >
+            Zutaten
+          </h3>
           <Ingredients
+            v-if="showIngredients"
             :ingredients="recipe.ingredients"
             :enable-checklist="true"
           />
         </b-col>
         <b-col
           cols="12"
-          md="8"
+          :md="stepsSize"
         >
           <h3>Zubereitung</h3>
           <Steps
             :steps="recipe.steps"
-            :enable-cook-mode="true"
+            :cook-mode="cookMode"
+            :enable-speech="enableSpeech"
           />
         </b-col>
       </b-row>
@@ -179,7 +219,10 @@ export default {
     return {
       recipe: null,
       loaded: false,
-      cooking: false
+      cooking: false,
+      showIngredients: true,
+      enableSpeech: false,
+      cookMode: false
     }
   },
   computed: {
@@ -195,6 +238,9 @@ export default {
     emptyStars() {
       const half = (this.hasHalfStars ? 0.5 : 0);
       return Math.floor(5 - this.fullStars - half) ;
+    },
+    stepsSize() {
+      return (this.showIngredients ? 8 : 12);
     }
   },
   mounted() {

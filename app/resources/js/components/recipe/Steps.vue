@@ -1,22 +1,5 @@
 <template>
   <div class="steps">
-    <b-row v-if="enableCookMode">
-      <b-col class="text-right">
-        <toggle-button
-          v-model="enableSpeech"
-          :width="130"
-          :font-size="15"
-          :labels="{checked: 'Sprache ein', unchecked: 'Sprache aus'}"
-        />
-
-        <toggle-button
-          v-model="cookMode"
-          :width="160"
-          :font-size="15"
-          :labels="{checked: 'Kochmodus ein', unchecked: 'Kochmodus aus'}"
-        />
-      </b-col>
-    </b-row>
     <b-row v-if="!cookMode">
       <b-col>
         <ul>
@@ -43,17 +26,21 @@
               <div class="headline d-none d-md-block">
                 Schritt: {{ currentStep + 1 }} von {{ allSteps }}
               </div>
-              <div class="headline-small d-block">
+              <div class="headline-small d-block d-md-none">
                 Schritt: {{ currentStep + 1 }}
               </div>
-              {{ currentDescription }}
             </b-col>
             <b-col
-              v-if="!isLast"
               cols="2"
               class="navigation-button text-right"
             >
-              <b-icon-caret-right />
+              <b-icon-caret-right v-if="!isLast" />
+              <b-icon-flag-fill v-else />
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col>
+              {{ currentDescription }}
             </b-col>
           </b-row>
           <b-row class="button-row">
@@ -75,15 +62,18 @@
         </div>
       </b-col>
     </b-row>
-    <b-row v-else>
+    <b-row
+      v-else
+      class="mb-5"
+    >
       <b-col>
-        <b-row class="mb-2">
+        <b-row>
           <b-col>
             <h3>Interaktiver Kochmodus</h3>
             Sie werden nun Schritt für Schritt durch den Kochprozess geführt. Sie können jederzeit zwischen den einzelnen Schitten hin und herschalten. Dabei wird jeder Text nur einmal vorgelesen, sofern der Sprachmodus eingeschaltet ist.
           </b-col>
         </b-row>
-        <b-row>
+        <b-row class="text-center mt-3">
           <b-col>
             <b-button
               size="lg"
@@ -106,18 +96,20 @@ export default {
       type: Array,
       required: true
     },
-    enableCookMode: {
+    cookMode: {
+      type: Boolean,
+      default: false
+    },
+    enableSpeech: {
       type: Boolean,
       default: false
     }
   },
   data() {
     return {
-      cookMode: false,
       currentStep: 0,
       speech: null,
       synth: null,
-      enableSpeech: false,
       spokenSteps: [],
       acknowledged: false
     }
@@ -176,9 +168,10 @@ export default {
 
   .steps ul {
     padding: 0;
+    counter-reset: step;
   }
 
-  .steps li::before {
+  .steps ul li::before {
     counter-increment: step;
     content: 'Schritt ' counter(step);
     display: block;
