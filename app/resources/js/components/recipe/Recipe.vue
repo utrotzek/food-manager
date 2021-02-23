@@ -35,22 +35,7 @@
         md="5"
         class="text-right"
       >
-        <div class="rating clearfix">
-          <b-icon-star-fill
-            v-for="(value, key) in fullStars"
-            :key="`full-star-${ key }`"
-            class="star-icon"
-          />
-          <b-icon-star-half
-            v-if="hasHalfStars"
-            class="star-icon"
-          />
-          <b-icon-star
-            v-for="(value, key) in emptyStars"
-            :key="`empty-star-${ key }`"
-            class="star-icon"
-          />
-        </div>
+        <Stars :rating="recipe.rating" />
       </b-col>
     </b-row>
 
@@ -66,8 +51,10 @@
 </template>
 
 <script>
+import Stars from "./Stars";
 export default {
     name: "Recipe",
+    components: {Stars},
     props: {
         recipe: {
             type: Object,
@@ -82,16 +69,6 @@ export default {
     computed: {
         imagePath() {
           return '/storage/recipe-images/' + this.recipe.image;
-        },
-        fullStars() {
-          return Math.floor(this.recipe.rating);
-        },
-        hasHalfStars() {
-           return (this.recipe.rating - this.fullStars) > 0;
-        },
-        emptyStars() {
-          const half = (this.hasHalfStars ? 0.5 : 0);
-          return Math.floor(5 - this.fullStars - half) ;
         }
     }
 }

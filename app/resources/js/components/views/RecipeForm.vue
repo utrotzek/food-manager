@@ -46,22 +46,7 @@
         >
           <b-row>
             <b-col>
-              <div class="rating clearfix">
-                <b-icon-star-fill
-                  v-for="(i, key) in fullStars"
-                  :key="key"
-                  class="star-icon"
-                />
-                <b-icon-star-half
-                  v-if="hasHalfStars"
-                  class="star-icon"
-                />
-                <b-icon-star
-                  v-for="(i, key) in emptyStars"
-                  :key="key"
-                  class="star-icon"
-                />
-              </div>
+              <Stars :rating="recipe.rating" />
             </b-col>
           </b-row>
           <b-row>
@@ -214,10 +199,11 @@
 import LayoutDefaultDynamic from "../layouts/LayoutDefaultDynamic";
 import Ingredients from "../recipe/Ingredients";
 import Steps from "../recipe/Steps";
+import Stars from "../recipe/Stars";
 
 export default {
   name: "RecipeForm",
-  components: {LayoutDefaultDynamic, Ingredients, Steps},
+  components: {LayoutDefaultDynamic, Ingredients, Steps, Stars},
 
   props: {
   },
@@ -234,16 +220,6 @@ export default {
   computed: {
     imagePath() {
       return '/storage/recipe-images/' + this.recipe.image;
-    },
-    fullStars() {
-      return Math.floor(this.recipe.rating);
-    },
-    hasHalfStars() {
-      return (this.recipe.rating - this.fullStars) > 0;
-    },
-    emptyStars() {
-      const half = (this.hasHalfStars ? 0.5 : 0);
-      return Math.floor(5 - this.fullStars - half) ;
     },
     stepsSize() {
       return (this.showIngredients ? 8 : 12);
@@ -290,14 +266,6 @@ export default {
   height: 12em;
   background-position: center;
   background-size: cover;
-}
-
-.rating {
-  float:right;
-}
-.rating .star-icon {
-  float:left;
-  display: block;
 }
 
 .tags {
