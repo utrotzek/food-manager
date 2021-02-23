@@ -13,6 +13,7 @@
               :width="100"
               :font-size="15"
               :labels="{checked: 'Zutaten', unchecked: 'Zutaten'}"
+              sync
             />
           </span>
           <span>
@@ -21,6 +22,7 @@
               :width="100"
               :font-size="15"
               :labels="{checked: 'Sprache', unchecked: 'Sprache'}"
+              sync
             />
           </span>
           <span>
@@ -29,6 +31,7 @@
               :width="110"
               :font-size="15"
               :labels="{checked: 'Kochmodus', unchecked: 'Kochmodus'}"
+              sync
             />
           </span>
         </b-col>
@@ -239,6 +242,13 @@ export default {
     },
     stepsSize() {
       return (this.showIngredients ? 8 : 12);
+    }
+  },
+  watch: {
+    cookMode(checked) {
+      if  (checked){
+        this.showIngredients = false;
+      }
     }
   },
   mounted() {
