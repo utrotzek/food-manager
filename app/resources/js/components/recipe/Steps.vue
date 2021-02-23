@@ -3,6 +3,13 @@
     <b-row v-if="enableCookMode">
       <b-col class="text-right">
         <toggle-button
+          v-model="enableSpeech"
+          :width="130"
+          :font-size="15"
+          :labels="{checked: 'Sprache ein', unchecked: 'Sprache aus'}"
+        />
+
+        <toggle-button
           v-model="cookMode"
           :width="160"
           :font-size="15"
@@ -15,14 +22,14 @@
         <ul>
           <li
             v-for="(step, i) in steps"
-            :key="i"
+            :key="`step-${i}`"
           >
             {{ step.description }}
           </li>
         </ul>
       </b-col>
     </b-row>
-    <b-row v-else>
+    <b-row v-else-if="acknowledged">
       <b-col>
         <div class="cookMode">
           <b-row>
@@ -65,6 +72,21 @@
         </div>
       </b-col>
     </b-row>
+    <b-row v-else>
+      <b-col>
+        <b-row class="mb-2">
+          <b-col>
+            <h3>Interaktiver Kochmodus</h3>
+            Sie werden nun Schritt für Schritt durch den Kochprozess geführt. Sie können jederzeit zwischen den einzelnen Schitten hin und herschalten. Dabei wird jeder Text nur einmal vorgelesen, sofern der Sprachmodus eingeschaltet ist.
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <b-button size="lg" @click="beginCookMode">Los</b-button>
+          </b-col>
+        </b-row>
+      </b-col>
+    </b-row>
   </div>
 </template>
 
@@ -84,8 +106,18 @@ export default {
   data() {
     return {
       cookMode: false,
-      currentStep: 0
+      currentStep: 0,
+      speech: null,
+      synth: null,
+      enableSpeech: false,
+      spokenSteps: [],
+      acknowledged: false
     }
+  },
+  mounted() {
+    this.speech = new SpeechSynthesisUtterance();
+    this.synth = window.speechSynthesis;
+    this.speech.lang = 'de-DE';
   },
   computed: {
     currentDescription() {
@@ -102,14 +134,29 @@ export default {
     }
   },
   methods: {
+    beginCookMode() {
+      this.acknowledged = true;
+      this.talk();
+    },
     forward() {
       if (!this.isLast){
         this.currentStep++;
+        this.talk();
       }
     },
     backward() {
       if (!this.isFirst){
         this.currentStep--;
+        this.talk();
+      }
+    },
+    talk(){
+      this.synth.cancel();
+      if (this.enableSpeech && !this.spokenSteps.includes(this.currentStep)){
+        this.spokenSteps.push(this.currentStep);
+        this.speech.text = this.currentDescription;
+
+        this.synth.speak(this.speech);
       }
     }
   }
@@ -119,11 +166,7 @@ export default {
 <style scoped lang="scss">
 @import '../../../sass/_variables.scss';
 
-  .steps {
-    counter-reset: step;
-  }
-
-  .steps {
+  .steps ul {
     padding: 0;
   }
 
