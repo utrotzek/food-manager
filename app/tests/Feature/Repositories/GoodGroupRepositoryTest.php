@@ -22,6 +22,14 @@ it('Can insert entries sorted first', function () {
     expect($goodGorup['sort'])->toBe(10);
 });
 
+it('Can find items by id or slug', function () {
+    $subject = new GoodGroupRepository();
+    $itemById = $subject->findByIdOrTitle('2');
+    $itemBySlug = $subject->findByIdOrTitle('Obst und Gemüse');
+    expect($itemById)->toEqual($itemBySlug);
+});
+
+
 it('Can insert entries sorted last', function () {
     $subject = new GoodGroupRepository();
     $subject->createLast('TestTitle');
