@@ -86,7 +86,7 @@ export default {
         },
         recipeClicked(recipe) {
           const recipeId = recipe.id;
-          this.$router.push({'name': 'recipe-form', params: {'id': recipeId}})
+          this.$router.push({'name': 'recipe', params: {'id': recipeId}})
         }
     }
 };

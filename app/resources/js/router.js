@@ -1,7 +1,7 @@
 import VueRouter from "vue-router";
 import Home from "./components/views/Home";
 import Recipes from "./components/views/Recipes";
-import RecipesForm from "./components/views/RecipeForm";
+import Recipe from "./components/views/Recipe";
 
 export default new VueRouter({
     mode: "history",
@@ -19,9 +19,9 @@ export default new VueRouter({
             component: Recipes
         },
         {
-            path: "/recipes-form/:id",
-            name: "recipe-form",
-            component: RecipesForm
+            path: "/recipe/:id",
+            name: "recipe",
+            component: Recipe
         },
     ],
     scrollBehavior() {

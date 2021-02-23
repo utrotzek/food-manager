@@ -221,7 +221,7 @@ import Steps from "../recipe/Steps";
 import Stars from "../recipe/Stars";
 
 export default {
-  name: "RecipeForm",
+  name: "Recipe",
   components: {LayoutDefaultDynamic, Ingredients, Steps, Stars},
 
   props: {
