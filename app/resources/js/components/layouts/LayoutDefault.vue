@@ -31,22 +31,8 @@
           </b-navbar-nav>
 
           <!-- Right aligned nav items -->
-          <b-navbar-nav class="ml-auto">
-            <b-nav-form>
-              <b-form-input
-                size="md"
-                class="mr-sm-2"
-                placeholder="Rezept suchen"
-              />
-              <b-button
-                size="sm"
-                class="my-2 my-sm-0"
-                type="submit"
-              >
-                Suchen
-              </b-button>
-            </b-nav-form>
-          </b-navbar-nav>
+          <!--          <b-navbar-nav class="ml-auto">-->
+          <!--          </b-navbar-nav>-->
         </b-collapse>
       </b-navbar>
       <main class="LayoutDefault__main h-100">

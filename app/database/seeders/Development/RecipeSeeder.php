@@ -51,7 +51,7 @@ class RecipeSeeder extends Seeder
 
         $gnocchiPan = new Recipe([
             'title' => 'Gnocchi-Pfanne mit Spinat',
-            'rating' => 5,
+            'rating' => 3,
             'image' => '2.png',
             'portion' => 4,
             'comments' => null

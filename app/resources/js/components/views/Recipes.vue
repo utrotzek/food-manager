@@ -3,8 +3,24 @@
     <div class="recipes">
       <b-row>
         <b-col>
-          <h3>Diese Rezepte kennst Du bereits</h3>
-          <b-row>
+          <h3>Das sind Deine Rezepte</h3>
+          <p>Hier siehst Du alle Rezepte in Deiner Bibliothek. Du kannst nach bestimmten Rezepten suchen oder einfach etwas stöbern um Dich inspierieren zu lassen. Wenn Du eine neue Entdeckung gemacht hast, kannst Du auch ein neues Repept einpflegen.</p>
+          <b-row class="mb-2">
+            <b-col cols="10">
+              <Search />
+            </b-col>
+            <b-col cols="2">
+              <b-btn
+                variant="link"
+                class="new-recipe"
+                size="lg"
+                block
+              >
+                <b-icon-plus-circle-fill class="icon" />
+              </b-btn>
+            </b-col>
+          </b-row>
+          <b-row class="mb-5">
             <b-col
               v-for="recipe in recipes"
               :key="recipe.id"
@@ -12,18 +28,12 @@
               cols="12"
               md="4"
             >
-              <Recipe :recipe="recipe" />
+              <Recipe
+                :recipe="recipe"
+                @clicked="recipeClicked"
+              />
             </b-col>
           </b-row>
-          <div class="fixed-bottom mb-3">
-            <b-row>
-              <b-col class="text-center">
-                <b-button size="lg">
-                  <b-icon-plus-circle-fill /> Neues Rezept anlegen
-                </b-button>
-              </b-col>
-            </b-row>
-          </div>
         </b-col>
       </b-row>
     </div>
@@ -32,10 +42,11 @@
 
 <script>
 import LayoutDefaultDynamic from '../layouts/LayoutDefaultDynamic.js';
+import Search from "../tools/Search";
 import Recipe from "../recipe/Recipe";
 export default {
     name: 'Recipes',
-    components: {LayoutDefaultDynamic, Recipe},
+    components: {LayoutDefaultDynamic, Recipe, Search},
     data () {
         return {
             recipes: []
@@ -49,6 +60,10 @@ export default {
     methods: {
         login() {
             this.$store.dispatch('auth/LOGIN', {userName: "Testuser"})
+        },
+        recipeClicked(recipe) {
+          const recipeId = recipe.id;
+          this.$router.push({'name': 'recipe-form', params: {'id': recipeId}})
         }
     }
 };
@@ -56,4 +71,9 @@ export default {
 
 <style lang="scss" scoped>
     @import '../../../sass/_variables.scss';
+
+    .new-recipe {
+      color: $dark;
+      padding: 0;
+    }
 </style>
