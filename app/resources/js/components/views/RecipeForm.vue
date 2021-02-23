@@ -82,7 +82,10 @@
                 <b-button class="mb-1">
                   <b-icon-pen />
                 </b-button>
-                <b-button class="mb-1">
+                <b-button
+                  v-b-modal.delete-recipe-modal
+                  class="mb-1"
+                >
                   <b-icon-trash />
                 </b-button>
                 <b-button class="mb-1">
@@ -137,7 +140,10 @@
             <b-button class="mb-1">
               <b-icon-pen /> Bearbeiten
             </b-button>
-            <b-button class="mb-1">
+            <b-button
+              v-b-modal.delete-recipe-modal
+              class="mb-1"
+            >
               <b-icon-trash /> Löschen
             </b-button>
             <b-button class="mb-1">
@@ -188,6 +194,16 @@
           />
         </b-col>
       </b-row>
+
+      <b-modal
+        id="delete-recipe-modal"
+        ref="delete-recipe-modal"
+        ok-title="Löschen"
+        ok-variant="danger"
+        @ok="deleteRecipe"
+      >
+        Wollen Sie das Rezept {{ recipe.title }} wirklich löschen?
+      </b-modal>
     </div>
     <div v-else>
       Daten werden geladen
@@ -242,6 +258,11 @@ export default {
       this.showIngredients = true;
       this.enableSpeech = false;
       this.cookMode = false;
+    },
+    deleteRecipe() {
+      axios.delete('/api/recipes/'+ this.recipe.id).then((res) => {
+        this.$router.push({name: 'recipes'});
+      });
     }
   }
 }

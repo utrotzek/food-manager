@@ -1,41 +1,59 @@
 <template>
   <layout-default-dynamic>
     <div class="recipes">
-      <b-row>
-        <b-col>
-          <h3>Das sind Deine Rezepte</h3>
-          <p>Hier siehst Du alle Rezepte in Deiner Bibliothek. Du kannst nach bestimmten Rezepten suchen oder einfach etwas stöbern um Dich inspierieren zu lassen. Wenn Du eine neue Entdeckung gemacht hast, kannst Du auch ein neues Repept einpflegen.</p>
-          <b-row class="mb-2">
-            <b-col cols="10">
-              <Search />
-            </b-col>
-            <b-col cols="2">
-              <b-btn
-                variant="link"
-                class="new-recipe"
-                size="lg"
-                block
-              >
-                <b-icon-plus-circle-fill class="icon" />
-              </b-btn>
-            </b-col>
-          </b-row>
-          <b-row class="mb-5">
-            <b-col
-              v-for="recipe in recipes"
-              :key="recipe.id"
-              class="mb-4"
-              cols="12"
-              md="4"
+      <div
+        v-if="!loading"
+        class="recipe-wrapper"
+      >
+        <b-row>
+          <b-col>
+            <h3>Das sind Deine Rezepte</h3>
+            <p>Hier siehst Du alle Rezepte in Deiner Bibliothek. Du kannst nach bestimmten Rezepten suchen oder einfach etwas stöbern um Dich inspierieren zu lassen. Wenn Du eine neue Entdeckung gemacht hast, kannst Du auch ein neues Repept einpflegen.</p>
+            <b-row class="mb-2">
+              <b-col cols="10">
+                <Search />
+              </b-col>
+              <b-col cols="2">
+                <b-btn
+                  variant="link"
+                  class="new-recipe"
+                  size="lg"
+                  block
+                >
+                  <b-icon-plus-circle-fill class="icon" />
+                </b-btn>
+              </b-col>
+            </b-row>
+            <b-row
+              v-if="recipes.length > 0"
+              class="mb-5"
             >
-              <Recipe
-                :recipe="recipe"
-                @clicked="recipeClicked"
-              />
-            </b-col>
-          </b-row>
-        </b-col>
-      </b-row>
+              <b-col
+                v-for="recipe in recipes"
+                :key="recipe.id"
+                class="mb-4"
+                cols="12"
+                md="4"
+              >
+                <Recipe
+                  :recipe="recipe"
+                  @clicked="recipeClicked"
+                />
+              </b-col>
+            </b-row>
+            <b-row v-else>
+              <b-col>
+                <b-alert
+                  variant="info"
+                  show
+                >
+                  Es sind aktuell keine Rezepte in der Datenbank vorhanden. Sie müssen Rezepte anlegen, damit sie hier erscheinen.
+                </b-alert>
+              </b-col>
+            </b-row>
+          </b-col>
+        </b-row>
+      </div>
     </div>
   </layout-default-dynamic>
 </template>
@@ -49,17 +67,22 @@ export default {
     components: {LayoutDefaultDynamic, Recipe, Search},
     data () {
         return {
-            recipes: []
+          recipes: [],
+          loading: false
         };
     },
     mounted() {
-        axios.get('/api/recipes').then((res) => {
-            this.recipes = res.data;
-        })
+      this.loading = true;
+      axios.get('/api/recipes').then((res) => {
+        this.recipes = res.data;
+        this.loading = false;
+      }).catch((error) => {
+        this.loading = false;
+      })
     },
     methods: {
         login() {
-            this.$store.dispatch('auth/LOGIN', {userName: "Testuser"})
+          this.$store.dispatch('auth/LOGIN', {userName: "Testuser"})
         },
         recipeClicked(recipe) {
           const recipeId = recipe.id;
