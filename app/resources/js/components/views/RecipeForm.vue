@@ -149,9 +149,15 @@
           md="8"
         >
           <h3>Zubereitung</h3>
-          <Steps :steps="recipe.steps" />
+          <Steps
+            :steps="recipe.steps"
+            :enable-cook-mode="true"
+          />
         </b-col>
       </b-row>
+    </div>
+    <div v-else>
+      Daten werden geladen
     </div>
   </layout-default-dynamic>
 </template>
