@@ -134,7 +134,11 @@
           md="9"
         >
           <h3>Zubereitung</h3>
-          <Steps :steps="recipe.steps" />
+          <Steps
+            :steps="recipe.steps"
+            :recipe-title="recipe.title"
+            @finished="cookingFinished"
+          />
         </b-col>
         <b-col
           cols="12"
@@ -194,6 +198,8 @@
             :steps="recipe.steps"
             :cook-mode="cookMode"
             :enable-speech="enableSpeech"
+            :recipe-title="recipe.title"
+            @finished="cookingFinished"
           />
         </b-col>
       </b-row>
@@ -254,6 +260,12 @@ export default {
   methods: {
     startCooking() {
       this.cooking = true;
+    },
+    cookingFinished() {
+      this.cooking = false;
+      this.showIngredients = true;
+      this.enableSpeech = false;
+      this.cookMode = false;
     }
   }
 }

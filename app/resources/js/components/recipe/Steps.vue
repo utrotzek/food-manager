@@ -85,6 +85,15 @@
         </b-row>
       </b-col>
     </b-row>
+    <b-modal
+      id="finish-modal"
+      ref="finish-modal"
+      title="Kochen beendet"
+      @ok="finished"
+    >
+      <p>Herzlichen Glückwunsch. Sie haben alle Arbeitsschritte des Rezeptes abgearbeitet. Jetzt heißt es genießen. Lassen Sie das Essen '{{ recipeTitle }}' schmecken! Guten Apetit!</p>
+      <p>Denken Sie daran das Gericht zu bewerten!</p>
+    </b-modal>
   </div>
 </template>
 
@@ -103,6 +112,10 @@ export default {
     enableSpeech: {
       type: Boolean,
       default: false
+    },
+    recipeTitle: {
+      type: String,
+      required: true
     }
   },
   data() {
@@ -111,7 +124,8 @@ export default {
       speech: null,
       synth: null,
       spokenSteps: [],
-      acknowledged: false
+      acknowledged: false,
+      finishStep: false
     }
   },
   computed: {
@@ -142,6 +156,8 @@ export default {
       if (!this.isLast){
         this.currentStep++;
         this.talk();
+      } else {
+        this.$refs['finish-modal'].show();
       }
     },
     backward() {
@@ -158,6 +174,10 @@ export default {
 
         this.synth.speak(this.speech);
       }
+    },
+    finished() {
+      this.$refs['finish-modal'].hide();
+      this.$emit('finished');
     }
   }
 }
