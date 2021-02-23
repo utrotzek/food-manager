@@ -6,7 +6,10 @@
     >
       <h2>{{ recipe.title }}</h2>
 
-      <b-row class="mb-2">
+      <b-row
+        v-if="!cooking"
+        class="mb-2"
+      >
         <b-col
           cols="12"
           md="4"
@@ -69,19 +72,44 @@
           <Ingredients :ingredients="recipe.ingredients" />
         </b-col>
       </b-row>
-
-      <b-row>
-        <b-col cols="9">
+      <b-row v-if="!cooking">
+        <b-col
+          cols="12"
+          md="9"
+        >
           <h3>Zubereitung</h3>
           <Steps :steps="recipe.steps" />
         </b-col>
         <b-col
-          cols="3"
+          cols="12"
+          md="3"
           class="text-right mt-2"
         >
           <b-button-group
+            class="text-left buttons small-device d-md-none"
+          >
+            <b-button class="mb-1">
+              <b-icon-pen />
+            </b-button>
+            <b-button class="mb-1">
+              <b-icon-trash />
+            </b-button>
+            <b-button class="mb-1">
+              <b-icon-heart />
+            </b-button>
+            <b-button class="mb-1">
+              <b-icon-bell />
+            </b-button>
+            <b-button
+              class="mb-1"
+              @click="startCooking"
+            >
+              <b-icon-play-fill />
+            </b-button>
+          </b-button-group>
+          <b-button-group
+            class="text-left buttons d-none d-md-block"
             vertical
-            class="text-left buttons"
           >
             <b-button class="mb-1">
               <b-icon-pen /> Bearbeiten
@@ -95,10 +123,33 @@
             <b-button class="mb-1">
               <b-icon-bell /> vormerken
             </b-button>
-            <b-button class="mb-1">
+            <b-button
+              class="mb-1"
+              @click="startCooking"
+            >
               <b-icon-play-fill /> Spontan kochen
             </b-button>
           </b-button-group>
+        </b-col>
+      </b-row>
+
+      <b-row v-if="cooking">
+        <b-col
+          cols="12"
+          md="4"
+        >
+          <h3>Zutaten</h3>
+          <Ingredients
+            :ingredients="recipe.ingredients"
+            :enable-checklist="true"
+          />
+        </b-col>
+        <b-col
+          cols="12"
+          md="8"
+        >
+          <h3>Zubereitung</h3>
+          <Steps :steps="recipe.steps" />
         </b-col>
       </b-row>
     </div>
@@ -119,7 +170,8 @@ export default {
   data() {
     return {
       recipe: null,
-      loaded: false
+      loaded: false,
+      cooking: false
     }
   },
   computed: {
@@ -144,6 +196,11 @@ export default {
       this.recipe = res.data;
       this.loaded = true;
     });
+  },
+  methods: {
+    startCooking() {
+      this.cooking = true;
+    }
   }
 }
 </script>
@@ -157,7 +214,10 @@ export default {
 
 .buttons button {
   text-align: left;
+}
 
+.buttons.small-device{
+  width: 100%;
 }
 
 .image {

@@ -37,8 +37,8 @@
       >
         <div class="rating clearfix">
           <b-icon-star-fill
-            v-for="(i, key) in fullStars"
-            :key="key"
+            v-for="(value, key) in fullStars"
+            :key="`full-star-${ key }`"
             class="star-icon"
           />
           <b-icon-star-half
@@ -46,8 +46,8 @@
             class="star-icon"
           />
           <b-icon-star
-            v-for="(i, key) in emptyStars"
-            :key="key"
+            v-for="(value, key) in emptyStars"
+            :key="`empty-star-${ key }`"
             class="star-icon"
           />
         </div>
