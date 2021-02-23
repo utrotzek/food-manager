@@ -23,5 +23,8 @@ export default new VueRouter({
             name: "recipe-form",
             component: RecipesForm
         },
-    ]
+    ],
+    scrollBehavior() {
+        document.getElementById('app').scrollIntoView();
+    }
 });
