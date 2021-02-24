@@ -19,6 +19,7 @@
                   class="new-recipe"
                   size="lg"
                   block
+                  @click="$router.push({'name': 'recipe-form'})"
                 >
                   <b-icon-plus-circle-fill class="icon" />
                 </b-btn>
