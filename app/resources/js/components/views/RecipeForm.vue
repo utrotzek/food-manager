@@ -18,47 +18,29 @@
                 :rules="{ required: true, min: 3, max: 40 }"
               >
                 <b-form-group
-                  id="example-input-group-1"
+                  id="title-group"
                   label="Titel"
-                  label-for="example-input-1"
+                  label-for="title"
                 >
                   <b-form-input
-                    id="example-input-1"
+                    id="title"
                     v-model="form.title"
-                    name="example-input-1"
+                    name="title"
+                    placeholder="Titel des Rezeptes"
                     :state="getValidationState(validationContext)"
-                    aria-describedby="input-1-live-feedback"
                   />
-                  <b-form-invalid-feedback id="input-1-live-feedback">
+                  <b-form-invalid-feedback id="title-feedback">
                     {{ validationContext.errors[0] }}
                   </b-form-invalid-feedback>
                 </b-form-group>
               </validation-provider>
 
-              <validation-provider
-                v-slot="validationContext"
-                name="Food"
-                :rules="{ required: true }"
+              <b-form-group
+                id="tag-selector"
+                label="Tags"
               >
-                <b-form-group
-                  id="example-input-group-2"
-                  label="Food"
-                  label-for="example-input-2"
-                >
-                  <b-form-select
-                    id="example-input-2"
-                    v-model="form.food"
-                    name="example-input-2"
-                    :options="foods"
-                    :state="getValidationState(validationContext)"
-                    aria-describedby="input-2-live-feedback"
-                  />
-
-                  <b-form-invalid-feedback id="input-2-live-feedback">
-                    {{ validationContext.errors[0] }}
-                  </b-form-invalid-feedback>
-                </b-form-group>
-              </validation-provider>
+                <TagSelector @updated="tagsUpdated" />
+              </b-form-group>
             </b-col>
             <b-col
               cols="12"
@@ -75,15 +57,18 @@
               >
                 Speichern
               </b-button>
-              <b-button
-                class="ml-2"
-                @click="resetForm()"
-              >
-                Reset
-              </b-button>
             </b-col>
           </b-row>
         </b-form>
+        <b-modal
+          ref="saved_modal"
+          title="Rezept gespeichert"
+          @ok="$router.push({name: 'recipes'})"
+        >
+          <div class="d-block text-center">
+            <p>Das Rezept "{{ form.title }}" wurde erfolgreich gespeichert.</p>
+          </div>
+        </b-modal>
       </validation-observer>
     </div>
   </layout-default-dynamic>
@@ -91,39 +76,76 @@
 
 <script>
 import LayoutDefaultDynamic from "../layouts/LayoutDefaultDynamic";
+import TagSelector from "../tools/TagSelector";
 
 export default {
   name: "RecipeForm",
-  components: {LayoutDefaultDynamic},
+  components: {LayoutDefaultDynamic, TagSelector},
   data() {
     return {
-      foods: [
-        { value: null, text: "Choose..." },
-        { value: "apple", text: "Apple" },
-        { value: "orange", text: "Orange" }
-      ],
       form: {
-        name: null,
-        food: null
-      }
+        title: null,
+        existingTags: [],
+        newTags: []
+      },
     };
+  },
+  mounted() {
+    this.$store.dispatch('recipe/updateTags');
   },
   methods: {
     getValidationState({ dirty, validated, valid = null }) {
       return dirty || validated ? valid : null;
     },
-    resetForm() {
-      this.form = {
-        name: null,
-        food: null
-      };
+    tagsUpdated(existingTags, newTags){
+      this.form.existingTags = [];
+      this.form.newTags = [];
+      existingTags.forEach(item => {
+        this.form.existingTags.push(item.id)
+      });
 
-      this.$nextTick(() => {
-        this.$refs.observer.reset();
+      newTags.forEach(item => {
+        this.form.newTags.push(item.text)
       });
     },
-    onSubmit() {
-      alert("Form submitted!");
+    async onSubmit() {
+      const allTagIds = await this.saveTags();
+      const recipe = {
+        title: this.form.title,
+        rating: 5,
+        portion: 4,
+        comments: "This is a wonderful comment",
+        steps: [
+          "Nudeln hinzugeben",
+          "Wasser zum kochen bringen",
+          "In der Zwischenzeit Hackfleisch anbraten"
+        ],
+        tags: allTagIds,
+        ingredients: [
+          {
+            unitId: 2,
+            amount: 500,
+            goodId: 10
+          }
+        ]
+      }
+
+      axios.post('/api/recipes', recipe).then(res => {
+        this.$refs['saved_modal'].show();
+      })
+    },
+    async saveTags() {
+      let allTagIds = [];
+      for (let i=0; i < this.form.newTags.length; i++) {
+        let item = this.form.newTags[i];
+        await this.$store.dispatch('recipe/createTag', item).then(res => {
+          allTagIds.push(res.id);
+        })
+      }
+      allTagIds = allTagIds.concat(this.form.existingTags);
+      this.form.newTags = [];
+      this.form.existingTags = allTagIds;
+      return allTagIds;
     }
   }
 }

@@ -18,6 +18,7 @@ Profclems aweseom postman collection generator (big thanks) is included. A fresh
 * (vue top progress) [https://github.com/dalphyx/vue-top-progress]
 * (vuex)[https://vuex.vuejs.org/]
 * (pest testing framework)[https://pestphp.com/]
+* (Tag selector)[http://www.vue-tags-input.com/#/examples/autocomplete]
 
 # docker setup
 TODO

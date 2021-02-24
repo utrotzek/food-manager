@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import VuexPersist from 'vuex-persist';
 
 import auth from './auth';
+import recipe from './recipe';
 
 Vue.use(Vuex);
 
@@ -14,6 +15,7 @@ const vuexStorage = new VuexPersist({
 export default new Vuex.Store({
     plugins: [vuexStorage.plugin],
     modules: {
-        auth: auth
+        auth: auth,
+        recipe: recipe
     }
 });
