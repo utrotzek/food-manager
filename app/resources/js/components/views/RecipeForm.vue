@@ -46,6 +46,14 @@
               cols="12"
               md="6"
             >
+              <b-row>
+                <b-col>
+                  <ImageUploader
+                    initial-image="2.png"
+                    @uploaded="fileUploaded"
+                  />
+                </b-col>
+              </b-row>
               <h3>Zubereitung</h3>
             </b-col>
           </b-row>
@@ -77,16 +85,18 @@
 <script>
 import LayoutDefaultDynamic from "../layouts/LayoutDefaultDynamic";
 import TagSelector from "../tools/TagSelector";
+import ImageUploader from "../tools/ImageUploader";
 
 export default {
   name: "RecipeForm",
-  components: {LayoutDefaultDynamic, TagSelector},
+  components: {LayoutDefaultDynamic, TagSelector, ImageUploader},
   data() {
     return {
       form: {
         title: null,
         existingTags: [],
-        newTags: []
+        newTags: [],
+        newFileId: null
       },
     };
   },
@@ -110,8 +120,11 @@ export default {
     },
     async onSubmit() {
       const allTagIds = await this.saveTags();
+      const image = await this.saveImage();
+
       const recipe = {
         title: this.form.title,
+        image: image,
         rating: 5,
         portion: 4,
         comments: "This is a wonderful comment",
@@ -146,6 +159,20 @@ export default {
       this.form.newTags = [];
       this.form.existingTags = allTagIds;
       return allTagIds;
+    },
+    async saveImage() {
+      const params = {
+        tempImage: this.form.newFileId
+      };
+      let filePath = null;
+      await axios.put('/api/images/save', params).then(res => {
+        filePath =  res.data;
+      });
+
+      return filePath;
+    },
+    fileUploaded(uploadId) {
+      this.form.newFileId = uploadId;
     }
   }
 }

@@ -85,7 +85,7 @@ export default {
     }
 
     .image {
-        height: 12em;
+        height: 200px;
         background-position: center;
         background-size: cover;
     }

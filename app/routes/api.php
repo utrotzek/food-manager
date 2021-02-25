@@ -1,9 +1,9 @@
 <?php
 use App\Http\Controllers\GoodController;
 use App\Http\Controllers\GoodGroupController;
+use App\Http\Controllers\ImageController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\RecipeController;
-use App\Http\Controllers\StepController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Route;
@@ -25,8 +25,11 @@ Route::apiResources([
     'ingredients' => IngredientController::class,
     'recipes' => RecipeController::class,
     'tags' => TagController::class,
-    'units' => UnitController::class
+    'units' => UnitController::class,
+    'images' => ImageController::class
 ]);
+
+Route::put('/api/images/save', [ImageController::class, 'save']);
 
 
 Route::put('/goodGroups/resort/{goodGroup}', [GoodGroupController::class, 'resort']);
