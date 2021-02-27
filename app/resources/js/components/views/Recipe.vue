@@ -295,7 +295,7 @@ export default {
 
 .image {
   height: 200px;
-  max-width: 300px;
+  max-width: 533px;
   background-position: center;
   background-size: cover;
 }

@@ -19,7 +19,7 @@ Profclems aweseom postman collection generator (big thanks) is included. A fresh
 * (vuex)[https://vuex.vuejs.org/]
 * (pest testing framework)[https://pestphp.com/]
 * (Tag selector)[http://www.vue-tags-input.com/#/examples/autocomplete]
-* (File pond image uploader)[https://github.com/pqina/vue-filepond]
+* (Advanced cropper)[https://norserium.github.io/vue-advanced-cropper/]
 
 # docker setup
 TODO
