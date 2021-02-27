@@ -10,9 +10,14 @@
         v-if="displayControls"
         class="controls"
       >
-        <b-button variant="link"><b-icon-cloud-arrow-up></b-icon-cloud-arrow-up></b-button>
+        <b-button variant="link">
+          <b-icon-cloud-arrow-up />
+        </b-button>
       </b-button-group>
-      <div class="text" v-if="!displayControls">
+      <div
+        v-if="!displayControls"
+        class="text"
+      >
         Dein Foto
       </div>
     </div>
