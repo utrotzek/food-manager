@@ -1,13 +1,22 @@
 <template>
   <div class="image-uploader">
-    <b-button @click="deleteImage">
-      Delete
-    </b-button>
+    <ImagePlaceholder
+      v-if="!previewImage && !editMode"
+      @click="$refs.file.click()"
+    >
+    </ImagePlaceholder>
+
     <div
-      v-if="croppedImage && !editMode"
+      v-if="previewImage && !editMode"
       class="preview"
-      :style="{ backgroundImage: 'url(' + croppedImage + ')' }"
-    />
+      :style="{ backgroundImage: 'url(' + previewImage + ')' }"
+      @mouseover="displayControls = true"
+      @mouseleave="displayControls = false"
+    >
+      <div class="overlay" v-if="displayControls">
+        <b-button class="delete-button" variant="link"><b-icon-x-circle @click="deleteImage"></b-icon-x-circle></b-button>
+      </div>
+    </div>
     <cropper
       v-if="editMode"
       class="cropper"
@@ -26,28 +35,42 @@
       image-restriction="stencil"
       @change="onChange"
     />
+    <b-button-group class="full-width" size="lg" v-if="editMode">
+      <b-button
+        variant="secondary"
+        class="mr-1"
+        @click="onSave"
+      >
+        <b-icon-check-square-fill />
+      </b-button>
+      <b-button
+        variant="secondary"
+        @click="deleteImage"
+      >
+        <b-icon-x-circle-fill></b-icon-x-circle-fill>
+      </b-button>
+    </b-button-group>
 
     <input
-      id="image"
+      id="image-input"
       ref="file"
       name="file"
       type="file"
       accept="image/*"
       @change="previewFile"
     >
-    <b-button @click="onSave">
-      Save
-    </b-button>
   </div>
 </template>
 
 <script>
 import { Cropper } from 'vue-advanced-cropper';
 import 'vue-advanced-cropper/dist/style.css';
+import ImagePlaceholder from "../recipe/ImagePlaceholder";
 
 export default {
   components: {
     Cropper,
+    ImagePlaceholder
   },
   model: {
     prop: 'image',
@@ -57,17 +80,18 @@ export default {
     return {
       editMode: false,
       img: '',
-      croppedImage: null,
+      previewImage: null,
       uploadId: null,
       canvas: null,
-      theImage: null
+      theImage: null,
+      displayControls: false
     }
   },
   prop: ['image'],
   methods: {
     onChange({ coordinates, canvas, }) {
       this.coordinates = coordinates;
-      this.croppedImage = canvas.toDataURL();
+      this.previewImage = canvas.toDataURL();
       this.canvas = canvas;
     },
     onSave() {
@@ -110,19 +134,55 @@ export default {
     },
     deleteImage() {
       this.img = undefined;
-      this.croppedImage = undefined;
-    }
+      this.previewImage = undefined;
+    },
   },
 }
 </script>
 
 <style scoped>
+  #image-input{
+    display: none;
+  }
+
   .preview {
     height: 20em;
     width: 30em;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
+    position: relative;
+  }
+
+  .preview .overlay {
+    background-color: rgba(106, 106, 106, 0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .btn-group.full-width {
+    display: flex;
+  }
+
+  .full-width .btn {
+    flex: 1;
+  }
+
+  .preview .delete-button {
+    color: white;
+    font-size: 1em;
+    position: absolute;
+    font-weight: bold;
+    right: 0;
+  }
+
+  .preview .delete-button.btn:active,
+  .preview .delete-button.btn:focus {
+    outline: none !important;
+    box-shadow: none;
   }
 </style>
 

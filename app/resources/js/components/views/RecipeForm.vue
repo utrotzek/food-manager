@@ -12,35 +12,42 @@
               cols="12"
               md="6"
             >
-              <validation-provider
-                v-slot="validationContext"
-                name="Titel"
-                :rules="{ required: true, min: 3, max: 40 }"
-              >
-                <b-form-group
-                  id="title-group"
-                  label="Titel"
-                  label-for="title"
-                >
-                  <b-form-input
-                    id="title"
-                    v-model="form.title"
-                    name="title"
-                    placeholder="Titel des Rezeptes"
-                    :state="getValidationState(validationContext)"
-                  />
-                  <b-form-invalid-feedback id="title-feedback">
-                    {{ validationContext.errors[0] }}
-                  </b-form-invalid-feedback>
-                </b-form-group>
-              </validation-provider>
-
-              <b-form-group
-                id="tag-selector"
-                label="Tags"
-              >
-                <TagSelector @updated="tagsUpdated" />
-              </b-form-group>
+              <b-row>
+                <b-col>
+                  <validation-provider
+                    v-slot="validationContext"
+                    name="Titel"
+                    :rules="{ required: true, min: 3, max: 40 }"
+                  >
+                    <b-form-group
+                      id="title-group"
+                      label="Titel"
+                      label-for="title"
+                    >
+                      <b-form-input
+                        id="title"
+                        v-model="form.title"
+                        name="title"
+                        placeholder="Titel des Rezeptes"
+                        :state="getValidationState(validationContext)"
+                      />
+                      <b-form-invalid-feedback id="title-feedback">
+                        {{ validationContext.errors[0] }}
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </validation-provider>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col>
+                  <h3>Zutaten</h3>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col>
+                  <h3>Zubereitung</h3>
+                </b-col>
+              </b-row>
             </b-col>
             <b-col
               cols="12"
@@ -50,10 +57,20 @@
                 <b-col>
                   <ImageUploader
                     v-model="form.image"
+                    class="image-uploader"
                   />
                 </b-col>
               </b-row>
-              <h3>Zubereitung</h3>
+              <b-row>
+                <b-col>
+                  <b-form-group
+                    id="tag-selector"
+                    label="Tags"
+                  >
+                    <TagSelector @updated="tagsUpdated" />
+                  </b-form-group>
+                </b-col>
+              </b-row>
             </b-col>
           </b-row>
           <b-row>
@@ -177,5 +194,8 @@ export default {
 </script>
 
 <style scoped>
-
+  .image-uploader {
+    margin-left: auto;
+    width: 30em;
+  }
 </style>
