@@ -1,6 +1,6 @@
 <template>
   <div class="LayoutDefault h-100">
-    <div class="container-fluid h-100">
+    <div class="container-lg h-100">
       <b-navbar toggleable="lg">
         <b-navbar-brand
           href="#"
@@ -29,10 +29,6 @@
               Essensplan
             </b-nav-item>
           </b-navbar-nav>
-
-          <!-- Right aligned nav items -->
-          <!--          <b-navbar-nav class="ml-auto">-->
-          <!--          </b-navbar-nav>-->
         </b-collapse>
       </b-navbar>
       <main class="LayoutDefault__main h-100">
