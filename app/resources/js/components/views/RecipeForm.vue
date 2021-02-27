@@ -71,6 +71,75 @@
                   </b-form-group>
                 </b-col>
               </b-row>
+              <b-row>
+                <b-col cols="6">
+                  <validation-provider
+                    v-slot="validationContext"
+                    name="Portionen"
+                    rules="required|numeric"
+                  >
+                    <b-form-group
+                      id="portion-group"
+                      label="Portionen"
+                      label-for="portion"
+                      description="Die angegebenen Zutaten ergeben X Portionen."
+                    >
+                      <b-form-input
+                        id="portion"
+                        v-model="form.portion"
+                        name="portion"
+                        placeholder="Anzahl Portionen"
+                        :state="getValidationState(validationContext)"
+                      />
+                      <b-form-invalid-feedback id="portion-feedback">
+                        {{ validationContext.errors[0] }}
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </validation-provider>
+                </b-col>
+                <b-col cols="6">
+                  <validation-provider
+                    v-slot="validationContext"
+                    name="Rating"
+                    :rules="{ regex: /^[1-5](\,5)?$/ }"
+                  >
+                    <b-form-group
+                      id="rating-group"
+                      label="Bewertung"
+                      label-for="rating"
+                    >
+                      <b-form-input
+                        id="rating"
+                        v-model="form.rating"
+                        name="rating"
+                        placeholder="0-5"
+                        :state="getValidationState(validationContext)"
+                      />
+                      <b-form-invalid-feedback id="rating-feedback">
+                        {{ validationContext.errors[0] }}
+                      </b-form-invalid-feedback>
+                    </b-form-group>
+                  </validation-provider>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col>
+                  <b-form-group
+                    id="comment-group"
+                    label="Kommentare"
+                    label-for="comment"
+                  >
+                    <b-form-textarea
+                      id="comment"
+                      v-model="form.comment"
+                      name="comment"
+                      placeholder="Kommentare zum Gericht"
+                      rows="3"
+                      max-rows="6"
+                    />
+                  </b-form-group>
+                </b-col>
+              </b-row>
             </b-col>
           </b-row>
           <b-row>
@@ -102,6 +171,7 @@
 import LayoutDefaultDynamic from "../layouts/LayoutDefaultDynamic";
 import TagSelector from "../tools/TagSelector";
 import ImageUploader from "../tools/ImageUploader";
+import { numeric } from 'vee-validate/dist/rules';
 
 export default {
   name: "RecipeForm",
@@ -113,7 +183,10 @@ export default {
         existingTags: [],
         newTags: [],
         image: null,
-        imageName: null
+        imageName: null,
+        rating: null,
+        portion: null,
+        comment: null
       },
     };
   },
@@ -142,9 +215,9 @@ export default {
       const recipe = {
         title: this.form.title,
         image: this.form.imageName,
-        rating: 5,
-        portion: 4,
-        comments: "This is a wonderful comment",
+        rating: this.form.rating,
+        portion: this.form.portion,
+        comments: this.form.comment,
         steps: [
           "Nudeln hinzugeben",
           "Wasser zum kochen bringen",
