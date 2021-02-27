@@ -92,9 +92,7 @@ export default {
       editMode: false,
       img: '',
       previewImage: null,
-      uploadId: null,
       canvas: null,
-      theImage: null,
       displayControls: false
     }
   },
@@ -144,8 +142,9 @@ export default {
       }
     },
     deleteImage() {
-      this.img = undefined;
-      this.previewImage = undefined;
+      this.img = null;
+      this.previewImage = null;
+      this.canvas = null;
     },
   },
 }
