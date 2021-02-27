@@ -3,8 +3,7 @@
     <ImagePlaceholder
       v-if="!previewImage && !editMode"
       @click="$refs.file.click()"
-    >
-    </ImagePlaceholder>
+    />
 
     <div
       v-if="previewImage && !editMode"
@@ -13,8 +12,16 @@
       @mouseover="displayControls = true"
       @mouseleave="displayControls = false"
     >
-      <div class="overlay" v-if="displayControls">
-        <b-button class="delete-button" variant="link"><b-icon-x-circle @click="deleteImage"></b-icon-x-circle></b-button>
+      <div
+        v-if="displayControls"
+        class="overlay"
+      >
+        <b-button
+          class="delete-button"
+          variant="link"
+        >
+          <b-icon-x-circle @click="deleteImage" />
+        </b-button>
       </div>
     </div>
     <cropper
@@ -35,7 +42,11 @@
       image-restriction="stencil"
       @change="onChange"
     />
-    <b-button-group class="full-width" size="lg" v-if="editMode">
+    <b-button-group
+      v-if="editMode"
+      class="full-width"
+      size="lg"
+    >
       <b-button
         variant="secondary"
         class="mr-1"
@@ -47,7 +58,7 @@
         variant="secondary"
         @click="deleteImage"
       >
-        <b-icon-x-circle-fill></b-icon-x-circle-fill>
+        <b-icon-x-circle-fill />
       </b-button>
     </b-button-group>
 
