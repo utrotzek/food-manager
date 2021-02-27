@@ -82,10 +82,11 @@ export default {
 
     .title:hover {
       text-decoration: underline;
+      cursor: pointer;
     }
 
     .image {
-        height: 250px;
+        height: 13em;
         background-position: center;
         background-size: cover;
     }
