@@ -23,21 +23,8 @@ class ImageController extends Controller
 
     public function store(Request $request)
     {
-        $file = $request->file('image');
-        $path = $file->store('temp');
-        return new Response($path);
-    }
-
-    public function update(Request $request)
-    {
-        $tempId = $request->input('tempImage');
-        $tempPath = Storage::disk('local')->path($tempId);
-        $pathParts = pathinfo($tempPath);
-        $extension = $pathParts['extension'];
-        $uniteFileName = uniqid('recipe-').'.'.$extension;
-
-        $newPath = '/public/recipe-images/'.$uniteFileName;
-        Storage::disk('local')->move($tempId, $newPath);
-        return new Response($uniteFileName);
+        $fileName = uniqid('recipe-').'.jpg';
+        $request->file('image')->storeAs('public/recipe-images', $fileName);
+        return new Response($fileName);
     }
 }

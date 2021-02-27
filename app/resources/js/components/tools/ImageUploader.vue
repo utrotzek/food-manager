@@ -4,23 +4,24 @@
       Delete
     </b-button>
     <div
-      v-if="resultImage && !editMode"
+      v-if="croppedImage && !editMode"
       class="preview"
-      :style="{ backgroundImage: 'url(' + resultImage + ')' }"
+      :style="{ backgroundImage: 'url(' + croppedImage + ')' }"
     />
     <cropper
       v-if="editMode"
       class="cropper"
       :src="img"
       :stencil-size="{
-        width: 533,
-        height: 300
+        width: 600,
+        height: 400
       }"
       :stencil-props="{
         handlers: {},
         movable: false,
         resizable: false,
-        aspectRatio: 16/9,
+        zoomable: true,
+        aspectRatio: 4/3,
       }"
       image-restriction="stencil"
       @change="onChange"
@@ -48,63 +49,68 @@ export default {
   components: {
     Cropper,
   },
+  model: {
+    prop: 'image',
+    event: 'changed'
+  },
   data() {
     return {
       editMode: false,
       img: '',
-      resultImage: null,
+      croppedImage: null,
       uploadId: null,
       canvas: null,
+      theImage: null
     }
   },
+  prop: ['image'],
   methods: {
     onChange({ coordinates, canvas, }) {
       this.coordinates = coordinates;
-      // You able to do different manipulations at a canvas
-      // but there we just get a cropped image, that can be used
-      // as src for <img/> to preview result
-      this.resultImage = canvas.toDataURL();
+      this.croppedImage = canvas.toDataURL();
       this.canvas = canvas;
     },
     onSave() {
-      let data = new FormData();
-      let vm = this;
-      this.canvas.toBlob(blob => {
-        data.append('image', blob);
-
-        axios
-          .post(`/api/images`, data, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          })
-          .then(res => {
-            console.log(res.data);
-            this.uploadId = res.data;
-            this.$emit('uploaded', this.uploadId);
-            this.editMode = false;
-          });
+      this.canvas.toBlob(fileBlob => {
+        this.$emit('changed', fileBlob);
+        this.editMode = false;
       });
     },
     previewFile() {
       const file = this.$refs.file.files[0];
-      const reader = new FileReader();
-
       if (file){
+        var reader = new FileReader();
+        reader.onload = (e) => {
+          var maxWidth = 800;
+          var maxHeight = 600;
+          var img = new Image();
+          img.src = e.target.result;
+
+          img.onload = () => {
+            var canvas = document.createElement("canvas");
+            var downScaleStep = 90;
+
+            //downscale images until max size and max height fit
+            while(img.width > maxWidth || img.height > maxHeight) {
+              img.width = (img.width * downScaleStep) / 100
+              img.height = (img.height * downScaleStep) / 100
+            }
+
+            var ctx = canvas.getContext("2d");
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0, img.width, img.height);
+            this.img = canvas.toDataURL('image/jpeg');
+            this.editMode = true;
+          }
+        };
         reader.readAsDataURL(file);
-        reader.onload = () => {
-          this.img = reader.result;
-          this.editMode = true;
-        };
-        reader.onerror = function (error) {
-          this.img = undefined;
-          this.editMode = false;
-        };
       }
     },
     deleteImage() {
       this.img = undefined;
-      this.resultImage = undefined;
+      this.croppedImage = undefined;
     }
   },
 }
@@ -112,16 +118,17 @@ export default {
 
 <style scoped>
   .preview {
-    height: 300px;
-    width: 533px;
+    height: 20em;
+    width: 30em;
     background-repeat: no-repeat;
     background-size: cover;
+    background-position: center;
   }
 </style>
 
 <style>
   .cropper {
-    width:533px;
+    height:20em;
     background: #DDD;
   }
 </style>

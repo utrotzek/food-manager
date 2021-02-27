@@ -49,8 +49,7 @@
               <b-row>
                 <b-col>
                   <ImageUploader
-                    initial-image="2.png"
-                    @uploaded="fileUploaded"
+                    v-model="form.image"
                   />
                 </b-col>
               </b-row>
@@ -96,7 +95,8 @@ export default {
         title: null,
         existingTags: [],
         newTags: [],
-        newFileId: null
+        image: null,
+        imageName: null
       },
     };
   },
@@ -120,11 +120,11 @@ export default {
     },
     async onSubmit() {
       const allTagIds = await this.saveTags();
-      const image = await this.saveImage();
+      await this.saveImage();
 
       const recipe = {
         title: this.form.title,
-        image: image,
+        image: this.form.imageName,
         rating: 5,
         portion: 4,
         comments: "This is a wonderful comment",
@@ -161,18 +161,16 @@ export default {
       return allTagIds;
     },
     async saveImage() {
-      const params = {
-        tempImage: this.form.newFileId
-      };
-      let filePath = null;
-      await axios.put('/api/images/save', params).then(res => {
-        filePath =  res.data;
-      });
+      let data = new FormData();
+      data.append('image', this.form.image);
 
-      return filePath;
-    },
-    fileUploaded(uploadId) {
-      this.form.newFileId = uploadId;
+      await axios.post(`/api/images`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }).then(res => {
+        this.form.imageName = res.data;
+      });
     }
   }
 }
