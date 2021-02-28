@@ -43,7 +43,7 @@
       >
         <b-col
           cols="12"
-          md="4"
+          md="6"
           order-md="2"
           class="text-right"
         >
@@ -109,7 +109,7 @@
         </b-col>
         <b-col
           cols="12"
-          md="8"
+          md="6"
           order-md="1"
           class="mb-1"
         >
@@ -294,8 +294,8 @@ export default {
 }
 
 .image {
-  height: 200px;
-  max-width: 533px;
+  height: 23em;
+  width: 30em;
   background-position: center;
   background-size: cover;
 }
