@@ -1,5 +1,5 @@
 <template>
-  <layout-default-dynamic>
+  <layout-full-width-dynamic>
     <div class="Home fill">
       <b-row>
         <b-col class="text-center">
@@ -10,16 +10,16 @@
         </b-col>
       </b-row>
     </div>
-  </layout-default-dynamic>
+  </layout-full-width-dynamic>
 </template>
 
 <script>
-import LayoutDefaultDynamic from '../layouts/LayoutDefaultDynamic.js';
+import LayoutFullWidthDynamic from "../layouts/LayoutFullWidthDynamic";
 
 export default {
     name: 'Home',
     components: {
-        LayoutDefaultDynamic,
+      LayoutFullWidthDynamic
     },
 };
 </script>
