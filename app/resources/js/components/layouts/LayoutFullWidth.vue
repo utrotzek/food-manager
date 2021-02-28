@@ -33,10 +33,7 @@
       </b-navbar>
       <main class="LayoutDefault__main h-100">
         <b-row>
-          <b-col
-            offset-xl="2"
-            xl="8"
-          >
+          <b-col>
             <slot />
           </b-col>
         </b-row>
