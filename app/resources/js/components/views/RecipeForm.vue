@@ -212,17 +212,17 @@ export default {
       });
     },
     async onSubmit() {
-      const allTagIds = await this.saveTags();
+      const tags = await this.saveTags();
       await this.saveImage();
-
+      const rating = this.form.rating.replace(',', '.');
       const recipe = {
         title: this.form.title,
         image: this.form.imageName,
-        rating: this.form.rating,
+        rating: rating,
         portion: this.form.portion,
         comments: this.form.comment,
         steps: this.form.steps,
-        tags: allTagIds,
+        tags: tags,
         ingredients: [
           {
             unitId: 2,
