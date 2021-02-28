@@ -46,6 +46,7 @@
               <b-row>
                 <b-col>
                   <h3>Zubereitung</h3>
+                  <StepsEdit v-model="form.steps" />
                 </b-col>
               </b-row>
             </b-col>
@@ -171,11 +172,12 @@
 import LayoutDefaultDynamic from "../layouts/LayoutDefaultDynamic";
 import TagSelector from "../tools/TagSelector";
 import ImageUploader from "../tools/ImageUploader";
+import StepsEdit from "../recipe/StepsEdit";
 import { numeric } from 'vee-validate/dist/rules';
 
 export default {
   name: "RecipeForm",
-  components: {LayoutDefaultDynamic, TagSelector, ImageUploader},
+  components: {StepsEdit, LayoutDefaultDynamic, TagSelector, ImageUploader},
   data() {
     return {
       form: {
@@ -186,7 +188,8 @@ export default {
         imageName: null,
         rating: null,
         portion: null,
-        comment: null
+        comment: null,
+        steps: []
       },
     };
   },
@@ -218,11 +221,7 @@ export default {
         rating: this.form.rating,
         portion: this.form.portion,
         comments: this.form.comment,
-        steps: [
-          "Nudeln hinzugeben",
-          "Wasser zum kochen bringen",
-          "In der Zwischenzeit Hackfleisch anbraten"
-        ],
+        steps: this.form.steps,
         tags: allTagIds,
         ingredients: [
           {
@@ -252,15 +251,18 @@ export default {
     },
     async saveImage() {
       let data = new FormData();
-      data.append('image', this.form.image);
 
-      await axios.post(`/api/images`, data, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      }).then(res => {
-        this.form.imageName = res.data;
-      });
+      if (this.form.image){
+        data.append('image', this.form.image);
+
+        await axios.post(`/api/images`, data, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }).then(res => {
+          this.form.imageName = res.data;
+        });
+      }
     }
   }
 }
