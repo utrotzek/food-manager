@@ -142,9 +142,12 @@ export default {
       }
     },
     deleteImage() {
-      this.img = null;
+      this.editMode = false;
       this.previewImage = null;
       this.canvas = null;
+      this.displayControls = false;
+      this.img = null;
+      this.$refs.file.value = null;
     },
   },
 }
@@ -156,7 +159,7 @@ export default {
   }
 
   .preview {
-    height: 20em;
+    height: 23em;
     width: 30em;
     background-repeat: no-repeat;
     background-size: cover;
@@ -198,7 +201,8 @@ export default {
 
 <style>
   .cropper {
-    height:20em;
+    height:23em;
+    width: 30em;
     background: #DDD;
   }
 </style>
