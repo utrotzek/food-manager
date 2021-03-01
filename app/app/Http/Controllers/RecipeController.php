@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Factories\IngredientFactory;
+use App\Http\Requests\RecipeStoreRequest;
 use App\Http\Resources\RecipeResource;
 use App\Http\Resources\RecipeResourceCollection;
 use App\Repositories\IngredientRepository;
@@ -45,6 +46,15 @@ class RecipeController extends Controller
         $this->ingredientFactory = $ingredientFactory;
         $this->ingredientRepository = $ingredientRepository;
     }
+
+    /**
+     * Validates the given request and nothing more
+     * @param RecipeStoreRequest $request
+     */
+    public function validateRequest(RecipeStoreRequest $request): void
+    {
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -65,47 +75,26 @@ class RecipeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RecipeStoreRequest $request)
     {
-        $response = [];
-        $rules = [
-            'title' => 'required|unique:recipes|max:255',
-            'rating' => 'numeric',
-            'portion' => 'required|int',
-            'steps' => 'array',
-            'tags' => 'array',
-            'ingredients.unitId' => 'int',
-            'ingredients.goodId' => 'int',
-            'ingredients.amount' => 'int',
+        $newItem = $this->recipeRepository->create($request->input());
 
-        ];
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            $response['message'] = $validator->messages();
-            $statusCode = 500;
-        } else {
-            $newItem = $this->recipeRepository->create($request->input());
-
-            if ($request->has('ingredients')) {
-                $ingredients = $this->ingredientFactory->createIngredientList(
-                    $request->input('ingredients')
-                );
-                $newItem->ingredients()->saveMany($ingredients);
-            }
-
-            if ($request->has('steps')) {
-                $steps = $this->stepRepository->prepareByDescriptionArray($request->input('steps'));
-                $newItem->steps()->saveMany($steps);
-            }
-            $newItem->tags()->sync($request->input('tags'));
-
-            $response['item'] = new RecipeResource($newItem);
-            $response['message'] = sprintf('Recipe %1$s successfully created', $newItem['title']);
-            $statusCode = 200;
+        if ($request->has('ingredients')) {
+            $ingredients = $this->ingredientFactory->createIngredientList(
+                $request->input('ingredients')
+            );
+            $newItem->ingredients()->saveMany($ingredients);
         }
 
-        return new Response($response, $statusCode);
+        if ($request->has('steps')) {
+            $steps = $this->stepRepository->prepareByDescriptionArray($request->input('steps'));
+            $newItem->steps()->saveMany($steps);
+        }
+        $newItem->tags()->sync($request->input('tags'));
+
+        $response['item'] = new RecipeResource($newItem);
+        $response['message'] = sprintf('Recipe %1$s successfully created', $newItem['title']);
+        return new Response($response);
     }
 
     /**

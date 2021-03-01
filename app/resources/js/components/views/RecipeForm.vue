@@ -16,6 +16,7 @@
                 <b-col>
                   <validation-provider
                     v-slot="validationContext"
+                    ref="title"
                     name="Titel"
                     :rules="{ required: true, min: 3, max: 40 }"
                   >
@@ -30,6 +31,7 @@
                         name="title"
                         placeholder="Titel des Rezeptes"
                         :state="getValidationState(validationContext)"
+                        @focusout="validateTitle"
                       />
                       <b-form-invalid-feedback id="title-feedback">
                         {{ validationContext.errors[0] }}
@@ -199,6 +201,18 @@ export default {
   methods: {
     getValidationState({ dirty, validated, valid = null }) {
       return dirty || validated ? valid : null;
+    },
+    validateTitle() {
+      axios.post('/api/recipes/validate', {title: this.form.title}).catch(err => {
+        if (err.response.data.errors.title !== undefined){
+          this.$refs.title.applyResult({
+            bails: true,
+            errors: err.response.data.errors.title,
+            valid: false,
+            failedRules: {}
+          });
+        }
+      });
     },
     tagsUpdated(existingTags, newTags){
       this.form.existingTags = [];
