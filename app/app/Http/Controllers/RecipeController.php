@@ -6,6 +6,7 @@ use App\Factories\IngredientFactory;
 use App\Http\Requests\RecipeStoreRequest;
 use App\Http\Resources\RecipeResource;
 use App\Http\Resources\RecipeResourceCollection;
+use App\Models\Recipe;
 use App\Repositories\IngredientRepository;
 use App\Repositories\RecipeRepository;
 use App\Repositories\StepRepository;
@@ -103,10 +104,8 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(string $slugOrId)
+    public function show(Recipe $recipe)
     {
-        $recipe = $this->recipeRepository->findByIdOrSlug($slugOrId);
-
         if ($recipe) {
             return new Response(
                 new RecipeResource($recipe)
@@ -126,47 +125,22 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $slugOrId)
+    public function update(RecipeStoreRequest $request, Recipe $recipe)
     {
-        $response = [];
-        $rules = [
-            'title' => 'required|max:255',
-            'rating' => 'numeric',
-            'portion' => 'required|int',
-            'steps' => 'array',
-            'tags' => 'array',
+        $newItem = $this->recipeRepository->update($request->input(), $recipe);
+        $actualSteps = $this->stepRepository->syncStepsWithDescriptionList(
+            $newItem->steps()->get(),
+            $request->input('steps')
+        );
+        $newItem->steps()->saveMany($actualSteps);
+        $newItem->tags()->sync($request->input('tags'));
+        $actualIngredients = $this->ingredientFactory->createIngredientList($request->input('ingredients'));
+        $this->ingredientRepository->deleteRemovedItems($newItem->ingredients()->get(), $actualIngredients);
+        $newItem->ingredients()->saveMany($actualIngredients);
 
-        ];
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            $response['message'] = $validator->messages();
-            $statusCode = 500;
-        } else {
-            $recipe = $this->recipeRepository->findByIdOrSlug($slugOrId);
-
-            if ($recipe) {
-                $newItem = $this->recipeRepository->update($request->input(), $recipe);
-                $actualSteps = $this->stepRepository->syncStepsWithDescriptionList(
-                    $newItem->steps()->get(),
-                    $request->input('steps')
-                );
-                $newItem->steps()->saveMany($actualSteps);
-                $newItem->tags()->sync($request->input('tags'));
-                $actualIngredients = $this->ingredientFactory->createIngredientList($request->input('ingredients'));
-                $this->ingredientRepository->deleteRemovedItems($newItem->ingredients()->get(), $actualIngredients);
-                $newItem->ingredients()->saveMany($actualIngredients);
-
-                $response['item'] = new RecipeResource($newItem->fresh());
-                $response['message'] = sprintf('Recipe %1$s successfully updated', $newItem['title']);
-                $statusCode = 200;
-            } else {
-                $response['message'] = sprintf('recipe "%1$s" could not be found.', $slugOrId);
-                $statusCode = 404;
-            }
-        }
-
-        return new Response($response, $statusCode);
+        $response['item'] = new RecipeResource($newItem->fresh());
+        $response['message'] = sprintf('Recipe %1$s successfully updated', $newItem['title']);
+        return new Response($response);
     }
 
     /**
@@ -175,11 +149,9 @@ class RecipeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(string $slugOrId)
+    public function destroy(Recipe $recipe)
     {
-        $recipe = $this->recipeRepository->findByIdOrSlug($slugOrId);
         $recipe->delete();
-
         return new Response(
             ['message' => sprintf('Recipe %1$s successfully deleted', $recipe['title'])]
         );

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use Illuminate\Validation\Rule;
+
 class RecipeStoreRequest extends BaseFormRequest
 {
     /**
@@ -22,7 +24,11 @@ class RecipeStoreRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'title' => 'required|unique:recipes|max:255',
+            'title' => [
+                'required',
+                Rule::unique('recipes')->ignore($this->recipe->id ?? null),
+                'max:255'
+            ],
             'rating' => 'numeric',
             'portion' => 'required|int',
             'steps' => 'array',
