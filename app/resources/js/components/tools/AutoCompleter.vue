@@ -7,8 +7,7 @@
       @keyup.tab="enableEditMode"
       @click="toggleEditMode"
       v-text="selectedItem ? selectedItem[searchKey] : placeholder"
-    >
-    </div>
+    />
 
     <div
       v-if="editMode"
@@ -20,14 +19,13 @@
         data-vue-test="autocompleter-input"
         class="form-control"
         type="text"
+        autofocus
         @keydown.up="keyUp"
         @keydown.down="keyDown"
         @keydown.enter="selectItem"
         @keydown.tab="disableEditMode"
         @blur="disableEditMode"
-        autofocus
       />
-<!--        @input="evt=>query=evt.target.value"-->
       <div class="result">
         <ul
           ref="resultList"
@@ -40,7 +38,7 @@
             :class="{'selected': (selected === index)}"
             @mousedown.prevent="itemClicked(index)"
             v-text="item[searchKey]"
-          ></li>
+          />
           <li
             v-if="emptySearchResult"
             class="notSelectable"
@@ -112,7 +110,7 @@ export default {
     return {
       selected: 0,
       selectedItem: null,
-      editMode: true,
+      editMode: false,
       query: "",
 
     };

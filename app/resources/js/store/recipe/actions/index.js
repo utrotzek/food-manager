@@ -22,5 +22,16 @@ export default {
                reject(err);
            })
         });
+    },
+    fetchIngredientItems({commit}) {
+        return new Promise((resolve, reject) => {
+            axios.all([
+                axios.get('/api/goods'),
+                axios.get('/api/units')
+            ]).then(axios.spread((goods, units) => {
+                commit('updateGoods', goods.data);
+                commit('updateUnits', units.data);
+            }));
+        });
     }
 }

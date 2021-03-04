@@ -4,5 +4,11 @@ export default {
     },
     addTag(state, payload) {
         state.tags.push(payload)
+    },
+    updateUnits(state, payload) {
+        state.units = payload;
+    },
+    updateGoods(state, payload) {
+        state.goods = payload;
     }
 }

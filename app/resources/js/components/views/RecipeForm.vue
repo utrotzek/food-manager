@@ -31,6 +31,7 @@
                         name="title"
                         placeholder="Titel des Rezeptes"
                         :state="getValidationState(validationContext)"
+                        autofocus
                         @focusout="validateTitle"
                       />
                       <b-form-invalid-feedback id="title-feedback">
@@ -43,6 +44,7 @@
               <b-row>
                 <b-col>
                   <h3>Zutaten</h3>
+                  <IngredientsEdit v-model="form.ingredients" />
                 </b-col>
               </b-row>
               <b-row>
@@ -79,7 +81,7 @@
                   <validation-provider
                     v-slot="validationContext"
                     name="Portionen"
-                    rules="required|numeric"
+                    :rules="{ required: true }"
                   >
                     <b-form-group
                       id="portion-group"
@@ -175,11 +177,11 @@ import LayoutDefaultDynamic from "../layouts/LayoutDefaultDynamic";
 import TagSelector from "../tools/TagSelector";
 import ImageUploader from "../tools/ImageUploader";
 import StepsEdit from "../recipe/StepsEdit";
-import { numeric } from 'vee-validate/dist/rules';
+import IngredientsEdit from "../recipe/IngredientsEdit";
 
 export default {
   name: "RecipeForm",
-  components: {StepsEdit, LayoutDefaultDynamic, TagSelector, ImageUploader},
+  components: {StepsEdit, LayoutDefaultDynamic, TagSelector, ImageUploader, IngredientsEdit},
   data() {
     return {
       form: {
@@ -191,12 +193,14 @@ export default {
         rating: null,
         portion: null,
         comment: null,
-        steps: []
+        steps: [],
+        ingredients: []
       },
     };
   },
-  mounted() {
+  created() {
     this.$store.dispatch('recipe/updateTags');
+    this.$store.dispatch('recipe/fetchIngredientItems');
   },
   methods: {
     getValidationState({ dirty, validated, valid = null }) {
@@ -229,6 +233,7 @@ export default {
       const tags = await this.saveTags();
       await this.saveImage();
       const rating = this.form.rating.replace(',', '.');
+
       const recipe = {
         title: this.form.title,
         image: this.form.imageName,
@@ -237,13 +242,7 @@ export default {
         comments: this.form.comment,
         steps: this.form.steps,
         tags: tags,
-        ingredients: [
-          {
-            unitId: 2,
-            amount: 500,
-            goodId: 10
-          }
-        ]
+        ingredients: this.form.ingredients
       }
 
       axios.post('/api/recipes', recipe).then(res => {
