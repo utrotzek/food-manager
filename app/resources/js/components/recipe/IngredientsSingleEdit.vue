@@ -1,7 +1,7 @@
 <template>
-  <div class="ingredients-edit">
+  <div class="ingredients-item mb-3">
     <b-form-row>
-      <b-col cols="2">
+      <b-col cols="4">
         <validation-provider
           v-slot="validationContext"
           ref="amount"
@@ -29,7 +29,7 @@
           </b-form-group>
         </validation-provider>
       </b-col>
-      <b-col cols="3">
+      <b-col cols="8">
         <b-form-group
           id="amount-group"
           label="Einheit"
@@ -47,7 +47,7 @@
           />
         </b-form-group>
       </b-col>
-      <b-col cols="6">
+      <b-col cols="10">
         <b-form-group
           id="amount-group"
           label="Zutat"
@@ -65,10 +65,7 @@
           />
         </b-form-group>
       </b-col>
-      <b-col
-        cols="1"
-        class="text-right"
-      >
+      <b-col cols="2" class="text-right">
         <b-button
           variant="link"
           class="icon-button"
@@ -162,6 +159,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import '../../../sass/_variables.scss';
 
+.ingredients-item {
+  border-bottom: 1px $gray-300 solid;
+}
 </style>

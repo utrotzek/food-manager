@@ -8,74 +8,48 @@
       >
         <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
           <b-row>
-            <b-col
-              cols="12"
-              md="6"
-            >
-              <b-row>
-                <b-col>
-                  <validation-provider
-                    v-slot="validationContext"
-                    ref="title"
-                    name="Titel"
-                    :rules="{ required: true, min: 3, max: 40 }"
-                  >
-                    <b-form-group
-                      id="title-group"
-                      label="Titel"
-                      label-for="title"
-                    >
-                      <b-form-input
-                        id="title"
-                        v-model="form.title"
-                        name="title"
-                        placeholder="Titel des Rezeptes"
-                        :state="getValidationState(validationContext)"
-                        autofocus
-                        @focusout="validateTitle"
-                      />
-                      <b-form-invalid-feedback id="title-feedback">
-                        {{ validationContext.errors[0] }}
-                      </b-form-invalid-feedback>
-                    </b-form-group>
-                  </validation-provider>
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col>
-                  <h3>Zutaten</h3>
-                  <IngredientsEdit v-model="form.ingredients" />
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col>
-                  <h3>Zubereitung</h3>
-                  <StepsEdit v-model="form.steps" />
-                </b-col>
-              </b-row>
-            </b-col>
-            <b-col
-              cols="12"
-              md="6"
-            >
-              <b-row>
-                <b-col>
-                  <ImageUploader
-                    v-model="form.image"
-                    class="image-uploader"
+            <b-col cols="12">
+              <validation-provider
+                v-slot="validationContext"
+                ref="title"
+                name="Titel"
+                :rules="{ required: true, min: 3, max: 40 }"
+              >
+                <b-form-group
+                  id="title-group"
+                  label="Titel"
+                  label-for="title"
+                >
+                  <b-form-input
+                    id="title"
+                    v-model="form.title"
+                    name="title"
+                    placeholder="Titel des Rezeptes"
+                    :state="getValidationState(validationContext)"
+                    autofocus
+                    @focusout="validateTitle"
                   />
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col>
-                  <b-form-group
-                    id="tag-selector"
-                    label="Tags"
-                  >
-                    <TagSelector @updated="tagsUpdated" />
-                  </b-form-group>
-                </b-col>
-              </b-row>
+                  <b-form-invalid-feedback id="title-feedback">
+                    {{ validationContext.errors[0] }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </validation-provider>
+            </b-col>
+            <b-col cols="12">
+              <ImageUploader
+                v-model="form.image"
+                class="image-uploader"
+              />
+            </b-col>
+            <b-col cols="12">
+              <b-form-group
+                id="tag-selector"
+                label="Tags"
+              >
+                <TagSelector @updated="tagsUpdated" />
+              </b-form-group>
+            </b-col>
+            <b-col cols="12">
               <b-row>
                 <b-col cols="6">
                   <validation-provider
@@ -127,27 +101,33 @@
                   </validation-provider>
                 </b-col>
               </b-row>
-              <b-row>
-                <b-col>
-                  <b-form-group
-                    id="comment-group"
-                    label="Kommentare"
-                    label-for="comment"
-                  >
-                    <b-form-textarea
-                      id="comment"
-                      v-model="form.comment"
-                      name="comment"
-                      placeholder="Kommentare zum Gericht"
-                      rows="3"
-                      max-rows="6"
-                    />
-                  </b-form-group>
-                </b-col>
-              </b-row>
+            </b-col>
+            <b-col cols="12">
+              <h3>Zutaten</h3>
+              <IngredientsEdit v-model="form.ingredients" class="mb-4" />
+            </b-col>
+            <b-col cols="12">
+              <h3>Zubereitung</h3>
+              <StepsEdit v-model="form.steps" class="mb-4" />
+            </b-col>
+            <b-col cols="12">
+              <b-form-group
+                id="comment-group"
+                label="Kommentare"
+                label-for="comment"
+              >
+                <b-form-textarea
+                  id="comment"
+                  v-model="form.comment"
+                  name="comment"
+                  placeholder="Kommentare zum Gericht"
+                  rows="3"
+                  max-rows="6"
+                />
+              </b-form-group>
             </b-col>
           </b-row>
-          <b-row>
+          <b-row class="mb-4">
             <b-col>
               <b-button
                 type="submit"
@@ -284,6 +264,6 @@ export default {
 <style scoped>
   .image-uploader {
     margin-left: auto;
-    width: 30em;
+    width: 100%;
   }
 </style>

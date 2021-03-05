@@ -160,7 +160,7 @@ export default {
 
   .preview {
     height: 23em;
-    width: 30em;
+    width: 100%;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;

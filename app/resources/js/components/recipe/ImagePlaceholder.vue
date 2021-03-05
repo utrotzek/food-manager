@@ -38,7 +38,7 @@ export default {
 <style scoped>
   .placeholder {
     height: 20em;
-    width: 30em;
+    width: 100%;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
