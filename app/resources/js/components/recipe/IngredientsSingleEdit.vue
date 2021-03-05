@@ -71,6 +71,7 @@
       >
         <b-button
           variant="link"
+          class="icon-button"
           @click="$emit('deleted')"
         >
           <b-icon-trash />

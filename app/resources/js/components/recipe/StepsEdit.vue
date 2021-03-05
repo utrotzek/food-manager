@@ -58,7 +58,10 @@
       Das Rezept enthält noch keine Schritte. So wird das nichts.
     </b-alert>
     <div class="buttons text-center">
-      <b-button @click="addStep">
+      <b-button
+        class="add-button"
+        @click="addStep"
+      >
         <b-icon-plus-circle /> Schritt hinzufügen
       </b-button>
     </div>

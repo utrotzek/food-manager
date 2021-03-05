@@ -21,6 +21,8 @@ body, html {
     border: solid thin black;
 }
 
+@import "buttons";
+
 
 // Then import Bootstrap an BootstrapVue SCSS files (order is important)
 @import '../../node_modules/bootstrap/scss/bootstrap.scss';

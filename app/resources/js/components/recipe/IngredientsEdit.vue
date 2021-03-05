@@ -9,9 +9,20 @@
       :good-id="item.goodId"
       @changed="onChange"
     />
-    <b-button @click="addIngredient">
-      Zutat hinzufügen
-    </b-button>
+    <b-alert
+      variant="info"
+      :show="form.ingredients.length === 0"
+    >
+      Das Rezept enthält noch keine Zutaten. So wird das nichts.
+    </b-alert>
+    <div class="text-center">
+      <b-button
+        class="add-button"
+        @click="addIngredient"
+      >
+        <b-icon-plus-circle /> Zutat hinzufügen
+      </b-button>
+    </div>
   </div>
 </template>
 
