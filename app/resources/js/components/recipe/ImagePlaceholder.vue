@@ -16,9 +16,9 @@
       </b-button-group>
       <div
         v-if="!displayControls"
-        class="text"
+        class="text text-center"
       >
-        Dein Foto
+        {{ placeholderText }}
       </div>
     </div>
   </div>
@@ -27,6 +27,12 @@
 <script>
 export default {
   name: "ImagePlaceholder",
+  props: {
+    placeholderText: {
+      type: String,
+      default: 'Dein Foto'
+    }
+  },
   data() {
     return {
       displayControls: false

@@ -6,7 +6,7 @@
           class="title"
           @click="$emit('clicked', recipe)"
         >
-          {{ recipe.title }}
+          {{ truncatedTitle }}
         </div>
       </b-col>
     </b-row>
@@ -42,8 +42,13 @@
     <b-row>
       <b-col>
         <div
+          v-if="recipe.image"
           class="image"
           :style="{ backgroundImage: 'url(' + imagePath + ')' }"
+        />
+        <ImagePlaceholder
+          v-else
+          :placeholder-text="truncatedPlaceholderTitle"
         />
       </b-col>
     </b-row>
@@ -52,14 +57,23 @@
 
 <script>
 import Stars from "./Stars";
+import ImagePlaceholder from "./ImagePlaceholder";
 export default {
     name: "Recipe",
-    components: {Stars},
+    components: {Stars, ImagePlaceholder},
     props: {
         recipe: {
             type: Object,
             default: null,
             required: true
+        },
+        maxPlaceholderTitleLength: {
+          type: Number,
+          default: 13
+        },
+        maxTitleLength: {
+          type: Number,
+          default: 25
         }
     },
     data() {
@@ -69,6 +83,18 @@ export default {
     computed: {
         imagePath() {
           return '/storage/recipe-images/' + this.recipe.image;
+        },
+        truncatedTitle() {
+          if (this.recipe.title.length > this.maxTitleLength){
+            return this.recipe.title.slice(0, this.maxTitleLength) + '...';
+          }
+          return this.recipe.title;
+        },
+        truncatedPlaceholderTitle() {
+          if (this.recipe.title.length > this.maxPlaceholderTitleLength){
+            return this.recipe.title.slice(0, this.maxPlaceholderTitleLength) + '...';
+          }
+          return this.recipe.title;
         }
     }
 }
@@ -94,9 +120,19 @@ export default {
     .rating {
       float:right;
     }
+
+    .tags {
+      height: 1.5em;
+    }
+
     .rating .star-icon {
       float:left;
       display: block;
     }
+</style>
 
+<style>
+  .recipe .placeholder {
+    height: 13em;
+  }
 </style>
