@@ -16,5 +16,8 @@ export default {
     },
     addGood(state, payload){
         state.goods.push(payload);
+    },
+    addGoodGroup(state, payload){
+        state.goodGroups.push(payload);
     }
 }

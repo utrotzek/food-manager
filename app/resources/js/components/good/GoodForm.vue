@@ -38,6 +38,7 @@
             :show-all-items-on-empty-query="true"
             :enable-inline-creation="true"
             @selected="onGoodGroupSelection"
+            @create="onCreateGoodGroup"
           />
         </b-form-group>
         <div class="text-right">
@@ -98,6 +99,9 @@ export default {
         title: this.goodTitle
       };
       this.$emit('save', data);
+    },
+    onCreateGoodGroup(title){
+      this.$store.dispatch('recipe/saveNewGoodGroup', {title: title});
     }
   }
 }

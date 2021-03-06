@@ -54,5 +54,19 @@ export default {
                reject(err);
            })
         });
+    },
+    saveNewGoodGroup({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            const data = {
+                title: payload.title,
+                sort_type: 'last',
+            };
+            axios.post('/api/goodGroups', data).then((res) => {
+                commit('addGoodGroup', res.data.item);
+                resolve();
+            }).catch(err => {
+                reject(err);
+            })
+        });
     }
 }
