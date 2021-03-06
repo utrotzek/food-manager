@@ -71,6 +71,7 @@
             :show-all-items-on-empty-query="false"
             :enable-inline-creation="true"
             @selected="goodUpdated"
+            @create="$emit('createGood', $event)"
           />
         </b-form-group>
       </b-col>
@@ -120,7 +121,8 @@ export default {
       form: {
         amount: this.amount,
         unitId: this.unitId,
-        goodId: this.goodId
+        goodId: this.goodId,
+        goodCreate: null
       }
     }
   },

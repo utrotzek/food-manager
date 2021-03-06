@@ -27,11 +27,32 @@ export default {
         return new Promise((resolve, reject) => {
             axios.all([
                 axios.get('/api/goods'),
-                axios.get('/api/units')
-            ]).then(axios.spread((goods, units) => {
+                axios.get('/api/units'),
+                axios.get('/api/goodGroups'),
+            ]).then(axios.spread((goods, units, goodGroups) => {
                 commit('updateGoods', goods.data);
                 commit('updateUnits', units.data);
+                commit('updateGoodGroups', goodGroups.data);
             }));
+        });
+    },
+    saveNewGood({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            const data = {
+                title: payload.title,
+                good_group_id: payload.goodGroupId,
+                carbs: 60,
+                fat: 30,
+                protein: 100,
+                kcal: 200,
+                piece_in_gramm: 250
+            };
+           axios.post('/api/goods', data).then((res) => {
+               commit('addGood', res.data.item);
+               resolve();
+           }).catch(err => {
+               reject(err);
+           })
         });
     }
 }

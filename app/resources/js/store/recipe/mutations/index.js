@@ -10,5 +10,11 @@ export default {
     },
     updateGoods(state, payload) {
         state.goods = payload;
+    },
+    updateGoodGroups(state, payload) {
+        state.goodGroups = payload;
+    },
+    addGood(state, payload){
+        state.goods.push(payload);
     }
 }

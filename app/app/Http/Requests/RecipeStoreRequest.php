@@ -29,7 +29,7 @@ class RecipeStoreRequest extends BaseFormRequest
                 Rule::unique('recipes')->ignore($this->recipe->id ?? null),
                 'max:255'
             ],
-            'rating' => 'numeric',
+            'rating' => 'numeric|nullable',
             'portion' => 'required|int',
             'steps' => 'array',
             'tags' => 'array',

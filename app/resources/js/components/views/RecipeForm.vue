@@ -257,7 +257,7 @@ export default {
     async onSubmit() {
       const tags = await this.saveTags();
       await this.saveImage();
-      const rating = this.form.rating.replace(',', '.');
+      const rating = this.form.rating ? this.form.rating.replace(',', '.') : null;
 
       const recipe = {
         title: this.form.title,

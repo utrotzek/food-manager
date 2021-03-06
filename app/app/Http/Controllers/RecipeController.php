@@ -10,9 +10,8 @@ use App\Models\Recipe;
 use App\Repositories\IngredientRepository;
 use App\Repositories\RecipeRepository;
 use App\Repositories\StepRepository;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class RecipeController extends Controller
 {
@@ -78,24 +77,30 @@ class RecipeController extends Controller
      */
     public function store(RecipeStoreRequest $request)
     {
-        $newItem = $this->recipeRepository->create($request->input());
+        try {
+            DB::transaction(function () use ($request) {
+                $newItem = $this->recipeRepository->create($request->input());
 
-        if ($request->has('ingredients')) {
-            $ingredients = $this->ingredientFactory->createIngredientList(
-                $request->input('ingredients')
-            );
-            $newItem->ingredients()->saveMany($ingredients);
+                if ($request->has('ingredients')) {
+                    $ingredients = $this->ingredientFactory->createIngredientList(
+                        $request->input('ingredients')
+                    );
+                    $newItem->ingredients()->saveMany($ingredients);
+                }
+
+                if ($request->has('steps')) {
+                    $steps = $this->stepRepository->prepareByDescriptionArray($request->input('steps'));
+                    $newItem->steps()->saveMany($steps);
+                }
+                $newItem->tags()->sync($request->input('tags'));
+
+                $response['item'] = new RecipeResource($newItem);
+                $response['message'] = sprintf('Recipe %1$s successfully created', $newItem['title']);
+                return new Response($response);
+            });
+        } catch (\Throwable $e) {
+            return new Response('Recipe could not be created', 500);
         }
-
-        if ($request->has('steps')) {
-            $steps = $this->stepRepository->prepareByDescriptionArray($request->input('steps'));
-            $newItem->steps()->saveMany($steps);
-        }
-        $newItem->tags()->sync($request->input('tags'));
-
-        $response['item'] = new RecipeResource($newItem);
-        $response['message'] = sprintf('Recipe %1$s successfully created', $newItem['title']);
-        return new Response($response);
     }
 
     /**
