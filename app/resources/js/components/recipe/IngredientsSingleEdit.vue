@@ -82,7 +82,7 @@
         <b-button
           variant="link"
           class="icon-button"
-          @click="$emit('deleted')"
+          @click="$emit('deleted', id)"
         >
           <b-icon-trash />
         </b-button>
@@ -110,7 +110,7 @@ export default {
       type: Number,
       default: null
     },
-    index: {
+    id: {
       type: Number,
       default: null
     }
@@ -118,9 +118,9 @@ export default {
   data() {
     return {
       form: {
-        amount: null,
-        unitId: null,
-        goodId: null
+        amount: this.amount,
+        unitId: this.unitId,
+        goodId: this.goodId
       }
     }
   },
@@ -131,11 +131,6 @@ export default {
     goods() {
       return this.$store.state.recipe.goods;
     }
-  },
-  mounted() {
-    this.form.amount = this.amount;
-    this.form.unitId = this.unitId;
-    this.form.goodId = this.goodId;
   },
   methods: {
     getValidationState({ dirty, validated, valid = null }) {
@@ -160,11 +155,12 @@ export default {
     },
     emitChanged(){
       this.$emit('changed', {
-        index: this.index,
+        id: this.id,
         data: {
-          unitId: this.form.unitId,
-          amount: this.form.amount,
-          goodId: this.form.goodId,
+          id: this.id,
+          unitId: parseInt(this.form.unitId),
+          amount: parseInt(this.form.amount),
+          goodId: parseInt(this.form.goodId),
         }
       });
     }

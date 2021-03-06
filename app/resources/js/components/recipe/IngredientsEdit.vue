@@ -1,13 +1,14 @@
 <template>
   <div class="ingredients-list-edit">
     <IngredientsSingleEdit
-      v-for="(item, index) in form.ingredients"
-      :key="`ingredient-${index}`"
-      :index="index"
+      v-for="item in form.ingredients"
+      :id="item.id"
+      :key="item.id"
       :amount="item.amount"
       :unit-id="item.unitId"
       :good-id="item.goodId"
       @changed="onChange"
+      @deleted="onDeleted"
     />
     <b-alert
       variant="info"
@@ -45,25 +46,30 @@ export default {
   data() {
     return {
       form: {
-        ingredients: _.clone(this.ingredientList)
+        ingredients: []
       }
     }
+  },
+  mounted() {
+    this.form.ingredients = _.clone(this.ingredientList)
   },
   methods: {
     addIngredient() {
       this.form.ingredients.push({
         amount: null,
         unitId: null,
-        goodId: null
+        goodId: null,
+        id: Date.now()
       });
     },
-    onChange(values){
-      this.form.ingredients[values.index] = {
-        amount: values.data.amount,
-        unitId: values.data.unitId,
-        goodId: values.data.goodId
-      };
+    onChange(values) {
+      const index = this.form.ingredients.findIndex((item) => item.id === values.id);
+      this.form.ingredients[index] = values.data;
       this.$emit('changed', this.form.ingredients);
+    },
+    onDeleted(id) {
+      const index = this.form.ingredients.findIndex((item) => item.id === id);
+      this.form.ingredients.splice(index, 1);
     }
   }
 }
