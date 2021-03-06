@@ -1,7 +1,10 @@
 <template>
   <div class="ingredients-item mb-3">
     <b-form-row>
-      <b-col cols="4">
+      <b-col
+        cols="4"
+        md="2"
+      >
         <validation-provider
           v-slot="validationContext"
           ref="amount"
@@ -29,7 +32,10 @@
           </b-form-group>
         </validation-provider>
       </b-col>
-      <b-col cols="8">
+      <b-col
+        cols="8"
+        md="3"
+      >
         <b-form-group
           id="amount-group"
           label="Einheit"
@@ -47,7 +53,10 @@
           />
         </b-form-group>
       </b-col>
-      <b-col cols="10">
+      <b-col
+        cols="10"
+        md="6"
+      >
         <b-form-group
           id="amount-group"
           label="Zutat"
@@ -65,7 +74,11 @@
           />
         </b-form-group>
       </b-col>
-      <b-col cols="2" class="text-right">
+      <b-col
+        cols="1"
+        md="1"
+        class="text-right"
+      >
         <b-button
           variant="link"
           class="icon-button"

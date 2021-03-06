@@ -165,13 +165,14 @@ export default {
     margin-right: auto;
     display: block;
     width: 20em;
-    border-radius: 50%;
+    border-radius: 8px;
     background-color: $gray-300;
     text-align: center;
     font-weight: bold;
     margin-bottom: 0.5em;
     height: 3em;
     line-height: 3em;
+    font-size: 1.1em;
   }
 
   .headline .controls .btn {
