@@ -35,7 +35,16 @@
         md="5"
         class="text-right"
       >
-        <Stars :rating="recipe.rating" />
+        <Stars
+          v-if="recipe.rating !== null"
+          :rating="recipe.rating"
+        />
+        <b-badge
+          v-else
+          variant="warning"
+        >
+          Nicht bewertet
+        </b-badge>
       </b-col>
     </b-row>
 
