@@ -70,6 +70,7 @@ export default {
     onDeleted(id) {
       const index = this.form.ingredients.findIndex((item) => item.id === id);
       this.form.ingredients.splice(index, 1);
+      this.$emit('changed', this.form.ingredients);
     }
   }
 }

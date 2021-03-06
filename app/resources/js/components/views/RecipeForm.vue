@@ -4,7 +4,7 @@
       <h1>Ein neues Rezept erstellen</h1>
       <validation-observer
         ref="observer"
-        v-slot="{ handleSubmit }"
+        v-slot="{ handleSubmit, invalid }"
       >
         <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
           <b-row>
@@ -115,14 +115,54 @@
               md="6"
             >
               <h3>Zutaten</h3>
-              <IngredientsEdit v-model="form.ingredients" />
+              <validation-provider
+                v-slot="validationContext"
+                ref="ingredients"
+                name="Zutaten"
+                :rules="{ required:true }"
+              >
+                <b-form-group
+                  id="ingredients-group"
+                  label="Zutaten"
+                  label-for="ingredients"
+                  label-sr-only
+                >
+                  <b-form-invalid-feedback
+                    id="ingredients-feedback"
+                    force-show
+                  >
+                    {{ validationContext.errors[0] }}
+                  </b-form-invalid-feedback>
+                  <IngredientsEdit v-model="form.ingredients" />
+                </b-form-group>
+              </validation-provider>
             </b-col>
             <b-col
               cols="12"
               md="6"
             >
               <h3>Zubereitung</h3>
-              <StepsEdit v-model="form.steps" />
+              <validation-provider
+                v-slot="validationContext"
+                ref="steps"
+                name="Zubereitung"
+                :rules="{ required:true }"
+              >
+                <b-form-group
+                  id="steps-group"
+                  label="Zubereitung"
+                  label-for="steps"
+                  label-sr-only
+                >
+                  <b-form-invalid-feedback
+                    id="steps-feedback"
+                    force-show
+                  >
+                    {{ validationContext.errors[0] }}
+                  </b-form-invalid-feedback>
+                  <StepsEdit v-model="form.steps" />
+                </b-form-group>
+              </validation-provider>
             </b-col>
           </b-row>
           <b-row class="justify-content-md-center">
@@ -135,6 +175,7 @@
                 type="submit"
                 variant="primary"
                 class="save-button"
+                :disabled="invalid"
                 block
               >
                 <b-icon-check /> Speichern
