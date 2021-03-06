@@ -125,15 +125,22 @@
               <StepsEdit v-model="form.steps" />
             </b-col>
           </b-row>
-          <div class="mt-5 mb-5 text-center">
-            <b-button
-              type="submit"
-              variant="primary"
-              class="save-button"
+          <b-row class="justify-content-md-center">
+            <b-col
+              class="mt-5 mb-2"
+              cols="12"
+              md="4"
             >
-              <b-icon-check /> Speichern
-            </b-button>
-          </div>
+              <b-button
+                type="submit"
+                variant="primary"
+                class="save-button"
+                block
+              >
+                <b-icon-check /> Speichern
+              </b-button>
+            </b-col>
+          </b-row>
         </b-form>
         <b-modal
           ref="saved_modal"
@@ -265,7 +272,6 @@ export default {
   }
 
   .save-button {
-    width: 10em;
     height: 2.5em;
     font-size: 1.3em;
     margin-bottom: 1em;

@@ -34,8 +34,8 @@
       <main class="LayoutDefault__main h-100">
         <b-row>
           <b-col
-            offset-xl="2"
-            xl="8"
+            offset-xl="1"
+            xl="10"
           >
             <slot />
           </b-col>
