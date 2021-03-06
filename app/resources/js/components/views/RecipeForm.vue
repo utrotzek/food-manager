@@ -309,7 +309,7 @@ export default {
 <style scoped>
   .image-uploader {
     margin-left: auto;
-    width: 100%;
+    width: 30em;
   }
 
   .save-button {
