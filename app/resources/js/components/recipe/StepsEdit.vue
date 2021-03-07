@@ -75,7 +75,12 @@ export default {
     prop: 'steps',
     event: 'changed'
   },
-  prop: ['steps'],
+  props: {
+    steps: {
+      type: Array,
+      default: function () {return []}
+    }
+  },
   data() {
     return {
       moveMode: false,
@@ -90,7 +95,16 @@ export default {
       return this.moveIndex === index;
     }
   },
+  mounted() {
+    this.parseStepsProp();
+  },
   methods: {
+    parseStepsProp() {
+      this.form.steps = [];
+      this.steps.forEach(item => {
+        this.form.steps.push({description: item});
+      })
+    },
     addStep() {
       this.form.steps.push({description: ''});
       this.emitChangedEvent();

@@ -48,6 +48,7 @@
             value-key="id"
             :items="units"
             :show-all-items-on-empty-query="true"
+            :preselected-value="form.unitId"
             :enable-inline-creation="true"
             @selected="unitUpdated"
           />

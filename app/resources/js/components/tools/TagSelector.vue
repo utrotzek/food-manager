@@ -2,7 +2,7 @@
   <div class="tag-selector">
     <vue-tags-input
       v-model="tag"
-      :tags="tags"
+      :tags="form.tags"
       :autocomplete-items="filteredItems"
       :max-tags="5"
       placeholder="Schlagworte"
@@ -17,10 +17,18 @@ import VueTagsInput from "@johmun/vue-tags-input";
 export default {
   name: "TagSelector",
   components: {VueTagsInput},
+  props: {
+    tags: {
+      type: Array,
+      default: function () {return []}
+    }
+  },
   data() {
     return {
       tag: '',
-      tags: [],
+      form: {
+        tags: []
+      },
       existingTags: [],
       newTags: [],
     }
@@ -42,7 +50,13 @@ export default {
       });
     },
   },
+  mounted() {
+    this.parseTagsProp();
+  },
   methods: {
+    findTagById(id){
+      return this.autocompleteItems.find(item => {return item.id === id});
+    },
     update(newTags) {
       this.existingTags = newTags.filter(item => {
         return item.hasOwnProperty('id');
@@ -51,9 +65,16 @@ export default {
       this.newTags = newTags.filter(item => {
         return !item.hasOwnProperty('id');
       });
-      this.tags = newTags;
+      this.form.tags = newTags;
       this.$emit('updated', this.existingTags, this.newTags);
     },
+    parseTagsProp() {
+      let tags = [];
+      this.tags.forEach(item => {
+        let tagItem = this.findTagById(item);
+        this.form.tags.push(tagItem);
+      });
+    }
   }
 }
 </script>

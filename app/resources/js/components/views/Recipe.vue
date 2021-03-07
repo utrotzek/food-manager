@@ -140,7 +140,10 @@
             class="text-left buttons d-none d-md-block"
             vertical
           >
-            <b-button class="mb-1">
+            <b-button
+              class="mb-1"
+              @click="$router.push({name: 'recipe-form', params: {id: recipe.id}})"
+            >
               <b-icon-pen /> Bearbeiten
             </b-button>
             <b-button

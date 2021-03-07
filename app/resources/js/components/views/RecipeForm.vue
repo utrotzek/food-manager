@@ -1,225 +1,233 @@
 <template>
   <layout-default-dynamic>
-    <div class="recipe-form">
-      <h1>Ein neues Rezept erstellen</h1>
-      <validation-observer
-        ref="observer"
-        v-slot="{ handleSubmit, invalid }"
+    <div class="recipe-form-wrapper">
+      <div
+        v-if="(editMode && !loading) || !editMode"
+        class="recipe-form"
       >
-        <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
-          <b-row>
-            <b-col
-              cols="12"
-              md="6"
-            >
-              <b-row>
-                <b-col>
-                  <validation-provider
-                    v-slot="validationContext"
-                    ref="title"
-                    name="Titel"
-                    :rules="{ required: true, min: 3, max: 40 }"
-                  >
-                    <b-form-group
-                      id="title-group"
-                      label="Titel"
-                      label-for="title"
-                    >
-                      <b-form-input
-                        id="title"
-                        v-model="form.title"
-                        name="title"
-                        placeholder="Titel des Rezeptes"
-                        :state="getValidationState(validationContext)"
-                        autofocus
-                        @focusout="validateTitle"
-                      />
-                      <b-form-invalid-feedback id="title-feedback">
-                        {{ validationContext.errors[0] }}
-                      </b-form-invalid-feedback>
-                    </b-form-group>
-                  </validation-provider>
-                  <b-form-group
-                    id="tag-selector"
-                    label="Tags"
-                  >
-                    <TagSelector @updated="tagsUpdated" />
-                  </b-form-group>
-                </b-col>
-              </b-row>
-              <b-row>
-                <b-col cols="6">
-                  <validation-provider
-                    v-slot="validationContext"
-                    name="Portionen"
-                    :rules="{ required: true }"
-                  >
-                    <b-form-group
-                      id="portion-group"
-                      label="Portionen"
-                      label-for="portion"
-                      description="Die angegebenen Zutaten ergeben X Portionen."
-                    >
-                      <b-form-input
-                        id="portion"
-                        v-model="form.portion"
-                        name="portion"
-                        placeholder="Anzahl Portionen"
-                        :state="getValidationState(validationContext)"
-                      />
-                      <b-form-invalid-feedback id="portion-feedback">
-                        {{ validationContext.errors[0] }}
-                      </b-form-invalid-feedback>
-                    </b-form-group>
-                  </validation-provider>
-                </b-col>
-                <b-col cols="6">
-                  <validation-provider
-                    v-slot="validationContext"
-                    name="Rating"
-                    :rules="{ regex: /^[1-5](\,5)?$/ }"
-                  >
-                    <b-form-group
-                      id="rating-group"
-                      label="Bewertung"
-                      label-for="rating"
-                    >
-                      <b-form-input
-                        id="rating"
-                        v-model="form.rating"
-                        name="rating"
-                        placeholder="0-5"
-                        :state="getValidationState(validationContext)"
-                      />
-                      <b-form-invalid-feedback id="rating-feedback">
-                        {{ validationContext.errors[0] }}
-                      </b-form-invalid-feedback>
-                    </b-form-group>
-                  </validation-provider>
-                </b-col>
-              </b-row>
-            </b-col>
-            <b-col
-              cols="12"
-              md="6"
-            >
-              <ImageUploader
-                v-model="form.image"
-                class="image-uploader"
-              />
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col
-              cols="12"
-              md="6"
-            >
-              <h3>Zutaten</h3>
-              <validation-provider
-                v-slot="validationContext"
-                ref="ingredients"
-                name="Zutaten"
-                :rules="{ required:true }"
-              >
-                <b-form-group
-                  id="ingredients-group"
-                  label="Zutaten"
-                  label-for="ingredients"
-                  label-sr-only
-                >
-                  <b-form-invalid-feedback
-                    id="ingredients-feedback"
-                    force-show
-                  >
-                    {{ validationContext.errors[0] }}
-                  </b-form-invalid-feedback>
-                  <IngredientsEdit v-model="form.ingredients" />
-                </b-form-group>
-              </validation-provider>
-            </b-col>
-            <b-col
-              cols="12"
-              md="6"
-            >
-              <h3>Zubereitung</h3>
-              <validation-provider
-                v-slot="validationContext"
-                ref="steps"
-                name="Zubereitung"
-                :rules="{ required:true }"
-              >
-                <b-form-group
-                  id="steps-group"
-                  label="Zubereitung"
-                  label-for="steps"
-                  label-sr-only
-                >
-                  <b-form-invalid-feedback
-                    id="steps-feedback"
-                    force-show
-                  >
-                    {{ validationContext.errors[0] }}
-                  </b-form-invalid-feedback>
-                  <StepsEdit v-model="form.steps" />
-                </b-form-group>
-              </validation-provider>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <validation-provider
-                v-slot="validationContext"
-                name="Notizen"
-                :rules="{ max:255 }"
-              >
-                <b-form-group
-                  id="comments-group"
-                  label="Notizen"
-                  label-for="comments"
-                >
-                  <b-form-invalid-feedback
-                    id="comments-feedback"
-                    force-show
-                  >
-                    {{ validationContext.errors[0] }}
-                  </b-form-invalid-feedback>
-                  <b-textarea
-                    v-model="form.comment"
-                    rows="4"
-                    max-rows="8"
-                  />
-                </b-form-group>
-              </validation-provider>
-            </b-col>
-          </b-row>
-          <b-row class="justify-content-md-center">
-            <b-col
-              class="mt-5 mb-2"
-              cols="12"
-              md="4"
-            >
-              <b-button
-                type="submit"
-                variant="primary"
-                class="save-button"
-                :disabled="invalid"
-                block
-              >
-                <b-icon-check /> Speichern
-              </b-button>
-            </b-col>
-          </b-row>
-        </b-form>
-        <b-modal
-          ref="saved_modal"
-          title="Rezept gespeichert"
-          @ok="$router.push({name: 'recipes'})"
+        <h1>Ein neues Rezept erstellen</h1>
+        <validation-observer
+          ref="observer"
+          v-slot="{ handleSubmit, invalid }"
         >
-          <div class="d-block text-center">
-            <p>Das Rezept "{{ form.title }}" wurde erfolgreich gespeichert.</p>
-          </div>
-        </b-modal>
-      </validation-observer>
+          <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
+            <b-row>
+              <b-col
+                cols="12"
+                md="6"
+              >
+                <b-row>
+                  <b-col>
+                    <validation-provider
+                      v-slot="validationContext"
+                      ref="title"
+                      name="Titel"
+                      :rules="{ required: true, min: 3, max: 40 }"
+                    >
+                      <b-form-group
+                        id="title-group"
+                        label="Titel"
+                        label-for="title"
+                      >
+                        <b-form-input
+                          id="title"
+                          v-model="form.title"
+                          name="title"
+                          placeholder="Titel des Rezeptes"
+                          :state="getValidationState(validationContext)"
+                          autofocus
+                          @focusout="validateTitle"
+                        />
+                        <b-form-invalid-feedback id="title-feedback">
+                          {{ validationContext.errors[0] }}
+                        </b-form-invalid-feedback>
+                      </b-form-group>
+                    </validation-provider>
+                    <b-form-group
+                      id="tag-selector"
+                      label="Tags"
+                    >
+                      <TagSelector
+                        :tags="form.existingTags"
+                        @updated="tagsUpdated"
+                      />
+                    </b-form-group>
+                  </b-col>
+                </b-row>
+                <b-row>
+                  <b-col cols="6">
+                    <validation-provider
+                      v-slot="validationContext"
+                      name="Portionen"
+                      :rules="{ required: true }"
+                    >
+                      <b-form-group
+                        id="portion-group"
+                        label="Portionen"
+                        label-for="portion"
+                        description="Die angegebenen Zutaten ergeben X Portionen."
+                      >
+                        <b-form-input
+                          id="portion"
+                          v-model="form.portion"
+                          name="portion"
+                          placeholder="Anzahl Portionen"
+                          :state="getValidationState(validationContext)"
+                        />
+                        <b-form-invalid-feedback id="portion-feedback">
+                          {{ validationContext.errors[0] }}
+                        </b-form-invalid-feedback>
+                      </b-form-group>
+                    </validation-provider>
+                  </b-col>
+                  <b-col cols="6">
+                    <validation-provider
+                      v-slot="validationContext"
+                      name="Rating"
+                      :rules="{ regex: /^[1-5](\,5)?$/ }"
+                    >
+                      <b-form-group
+                        id="rating-group"
+                        label="Bewertung"
+                        label-for="rating"
+                      >
+                        <b-form-input
+                          id="rating"
+                          v-model="form.rating"
+                          name="rating"
+                          placeholder="0-5"
+                          :state="getValidationState(validationContext)"
+                        />
+                        <b-form-invalid-feedback id="rating-feedback">
+                          {{ validationContext.errors[0] }}
+                        </b-form-invalid-feedback>
+                      </b-form-group>
+                    </validation-provider>
+                  </b-col>
+                </b-row>
+              </b-col>
+              <b-col
+                cols="12"
+                md="6"
+              >
+                <ImageUploader
+                  v-model="form.image"
+                  class="image-uploader"
+                />
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col
+                cols="12"
+                md="6"
+              >
+                <h3>Zutaten</h3>
+                <validation-provider
+                  v-slot="validationContext"
+                  ref="ingredients"
+                  name="Zutaten"
+                  :rules="{ required:true }"
+                >
+                  <b-form-group
+                    id="ingredients-group"
+                    label="Zutaten"
+                    label-for="ingredients"
+                    label-sr-only
+                  >
+                    <b-form-invalid-feedback
+                      id="ingredients-feedback"
+                      force-show
+                    >
+                      {{ validationContext.errors[0] }}
+                    </b-form-invalid-feedback>
+                    <IngredientsEdit v-model="form.ingredients" />
+                  </b-form-group>
+                </validation-provider>
+              </b-col>
+              <b-col
+                cols="12"
+                md="6"
+              >
+                <h3>Zubereitung</h3>
+                <validation-provider
+                  v-slot="validationContext"
+                  ref="steps"
+                  name="Zubereitung"
+                  :rules="{ required:true }"
+                >
+                  <b-form-group
+                    id="steps-group"
+                    label="Zubereitung"
+                    label-for="steps"
+                    label-sr-only
+                  >
+                    <b-form-invalid-feedback
+                      id="steps-feedback"
+                      force-show
+                    >
+                      {{ validationContext.errors[0] }}
+                    </b-form-invalid-feedback>
+                    <StepsEdit v-model="form.steps" />
+                  </b-form-group>
+                </validation-provider>
+              </b-col>
+            </b-row>
+            <b-row>
+              <b-col>
+                <validation-provider
+                  v-slot="validationContext"
+                  name="Notizen"
+                  :rules="{ max:255 }"
+                >
+                  <b-form-group
+                    id="comments-group"
+                    label="Notizen"
+                    label-for="comments"
+                  >
+                    <b-form-invalid-feedback
+                      id="comments-feedback"
+                      force-show
+                    >
+                      {{ validationContext.errors[0] }}
+                    </b-form-invalid-feedback>
+                    <b-textarea
+                      v-model="form.comment"
+                      rows="4"
+                      max-rows="8"
+                    />
+                  </b-form-group>
+                </validation-provider>
+              </b-col>
+            </b-row>
+            <b-row class="justify-content-md-center">
+              <b-col
+                class="mt-5 mb-2"
+                cols="12"
+                md="4"
+              >
+                <b-button
+                  type="submit"
+                  variant="primary"
+                  class="save-button"
+                  :disabled="invalid"
+                  block
+                >
+                  <b-icon-check /> Speichern
+                </b-button>
+              </b-col>
+            </b-row>
+          </b-form>
+          <b-modal
+            ref="saved_modal"
+            title="Rezept gespeichert"
+            @ok="$router.push({name: 'recipes'})"
+          >
+            <div class="d-block text-center">
+              <p>Das Rezept "{{ form.title }}" wurde erfolgreich gespeichert.</p>
+            </div>
+          </b-modal>
+        </validation-observer>
+      </div>
     </div>
   </layout-default-dynamic>
 </template>
@@ -236,7 +244,10 @@ export default {
   components: {StepsEdit, LayoutDefaultDynamic, TagSelector, ImageUploader, IngredientsEdit},
   data() {
     return {
+      editMode: false,
+      loading: false,
       form: {
+        id: null,
         title: null,
         existingTags: [],
         newTags: [],
@@ -253,14 +264,29 @@ export default {
   created() {
     this.$store.dispatch('recipe/updateTags');
     this.$store.dispatch('recipe/fetchIngredientItems');
+
+    if (this.$route.params.id !== undefined) {
+      this.editMode = true;
+      this.loading = true;
+      axios.get('/api/recipes/' + this.$route.params.id).then(res => {
+        this.loadRecipeData(res.data);
+        this.loading = false;
+      });
+    }
   },
   methods: {
     getValidationState({ dirty, validated, valid = null }) {
       return dirty || validated ? valid : null;
     },
     validateTitle() {
-      if (this.form.title !== null && this.form.title.length > 3){
-        axios.post('/api/recipes/validate', this.form).catch(err => {
+      if (this.form.title !== null && this.form.title.length > 3) {
+        let validateUri = '/api/recipes/validate';
+
+        if (this.editMode){
+          validateUri = validateUri + '/' + this.form.id;
+        }
+
+        axios.post(validateUri, this.form).catch(err => {
           if (err.response.data.errors.title !== undefined){
             this.$refs.title.applyResult({
               bails: true,
@@ -286,7 +312,8 @@ export default {
     async onSubmit() {
       const tags = await this.saveTags();
       await this.saveImage();
-      const rating = this.form.rating ? this.form.rating.replace(',', '.') : null;
+
+      const rating = this.form.rating ? String(this.form.rating).replace(',', '.') : null;
 
       const recipe = {
         title: this.form.title,
@@ -299,17 +326,30 @@ export default {
         ingredients: this.form.ingredients
       }
 
-      axios.post('/api/recipes', recipe).then(res => {
-        this.$refs['saved_modal'].show();
-      })
+      if (this.editMode){
+        axios.put('/api/recipes/' + this.form.id, recipe).then(res => {
+          this.$refs['saved_modal'].show();
+
+          if (window.history.length > 2){
+            this.$router.go(-1);
+          }
+        });
+      }else {
+        axios.post('/api/recipes', recipe).then(res => {
+          this.$refs['saved_modal'].show();
+        });
+      }
     },
     async saveTags() {
       let allTagIds = [];
-      for (let i=0; i < this.form.newTags.length; i++) {
-        let item = this.form.newTags[i];
-        await this.$store.dispatch('recipe/createTag', item).then(res => {
-          allTagIds.push(res.id);
-        })
+
+      if (this.form.newTags !== undefined){
+        for (let i=0; i < this.form.newTags.length; i++) {
+          let item = this.form.newTags[i];
+          await this.$store.dispatch('recipe/createTag', item).then(res => {
+            allTagIds.push(res.id);
+          })
+        }
       }
       allTagIds = allTagIds.concat(this.form.existingTags);
       this.form.newTags = [];
@@ -330,6 +370,40 @@ export default {
           this.form.imageName = res.data;
         });
       }
+    },
+    loadRecipeData(data) {
+      let ingredients = [];
+      let steps = [];
+      data.steps.forEach(item => {
+        steps.push(item.description);
+      });
+
+      let tags = [];
+      data.tags.forEach(item => {
+        tags.push(item.id);
+      });
+
+      data.ingredients.forEach(item => {
+        ingredients.push({
+          amount: item.unit_amount,
+          unitId: item.unit.id,
+          goodId: item.good.id
+        });
+      });
+
+      const formData = {
+        id: data.id,
+        title: data.title,
+        existingTags: tags,
+        imageName: data.image,
+        rating: String(data.rating).replace('.', ','),
+        portion: data.portion,
+        comment: data.comments,
+        steps: steps,
+        ingredients: ingredients
+      };
+
+      this.$set(this, 'form', formData);
     }
   }
 }

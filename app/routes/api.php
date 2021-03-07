@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/recipes/validate', [RecipeController::class, 'validateRequest']);
+Route::post('/recipes/validate/{recipe?}', [RecipeController::class, 'validateRequest']);
 
 Route::apiResources([
     'goods' => GoodController::class,
