@@ -1,14 +1,14 @@
 <template>
   <div class="image-uploader">
     <ImagePlaceholder
-      v-if="!previewImage && !editMode"
+      v-if="!previewImage && !previewImagePath && !editMode"
       @click="$refs.file.click()"
     />
 
     <div
-      v-if="previewImage && !editMode"
+      v-else-if="(previewImage || previewImagePath) && !editMode"
       class="preview"
-      :style="{ backgroundImage: 'url(' + previewImage + ')' }"
+      :style="{ backgroundImage: 'url(' + computedPreviewPath + ')' }"
       @mouseover="displayControls = true"
       @mouseleave="displayControls = false"
     >
@@ -87,16 +87,32 @@ export default {
     prop: 'image',
     event: 'changed'
   },
+  props: {
+    image: {
+      type: [String, Blob],
+      default: null
+    }
+  },
   data() {
     return {
       editMode: false,
-      img: '',
+      img: null,
       previewImage: null,
+      previewImagePath: null,
       canvas: null,
       displayControls: false
     }
   },
-  prop: ['image'],
+  computed: {
+    computedPreviewPath() {
+      return this.previewImagePath ?? this.previewImage;
+    }
+  },
+  mounted() {
+    if (typeof this.image === "string"){
+      this.previewImagePath = this.image;
+    }
+  },
   methods: {
     onChange({ coordinates, canvas, }) {
       this.coordinates = coordinates;
@@ -144,10 +160,12 @@ export default {
     deleteImage() {
       this.editMode = false;
       this.previewImage = null;
+      this.previewImagePath = null;
       this.canvas = null;
       this.displayControls = false;
       this.img = null;
       this.$refs.file.value = null;
+      this.$emit('changed', null);
     },
   },
 }

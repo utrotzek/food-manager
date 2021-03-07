@@ -82,7 +82,10 @@
               <b-button-group
                 class="text-left buttons small-device d-md-none"
               >
-                <b-button class="mb-1">
+                <b-button
+                  class="mb-1"
+                  @click="$router.push({name: 'recipe-form', params: {id: recipe.id}})"
+                >
                   <b-icon-pen />
                 </b-button>
                 <b-button

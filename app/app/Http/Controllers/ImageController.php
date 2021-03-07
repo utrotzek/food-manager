@@ -27,4 +27,22 @@ class ImageController extends Controller
         $request->file('image')->storeAs('public/recipe-images', $fileName);
         return new Response($fileName);
     }
+
+    public function update(Request $request, string $imageId)
+    {
+        $request->file('image')->storeAs('public/recipe-images', $imageId);
+        return new Response($imageId);
+    }
+
+    public function destroy(Request $request, string $imageId): Response
+    {
+        $storage = Storage::disk('local');
+        ;
+        if ($storage->exists('/public/recipe-images/'.$imageId)) {
+            Storage::disk('local')->delete('/public/recipe-images/'.$imageId);
+            return new Response(sprintf('image "%1$s" successfully deleted', $imageId));
+        } else {
+            return new Response(sprintf('image "%1$s" does not exist', $imageId), 404);
+        }
+    }
 }

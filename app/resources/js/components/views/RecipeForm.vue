@@ -112,6 +112,7 @@
               >
                 <ImageUploader
                   v-model="form.image"
+                  :image-path="form.image"
                   class="image-uploader"
                 />
               </b-col>
@@ -177,7 +178,7 @@
                 <validation-provider
                   v-slot="validationContext"
                   name="Notizen"
-                  :rules="{ max:255 }"
+                  :rules="{ max:500 }"
                 >
                   <b-form-group
                     id="comments-group"
@@ -269,7 +270,8 @@ export default {
       this.editMode = true;
       this.loading = true;
       axios.get('/api/recipes/' + this.$route.params.id).then(res => {
-        this.loadRecipeData(res.data);
+        const recipeData = res.data;
+        this.loadRecipeData(recipeData);
         this.loading = false;
       });
     }
@@ -314,6 +316,7 @@ export default {
       await this.saveImage();
 
       const rating = this.form.rating ? String(this.form.rating).replace(',', '.') : null;
+      console.log('rating: ' + rating);
 
       const recipe = {
         title: this.form.title,
@@ -359,46 +362,68 @@ export default {
     async saveImage() {
       let data = new FormData();
 
-      if (this.form.image){
-        data.append('image', this.form.image);
+      if (this.form.image) {
+        if (typeof this.form.image !== "string") {
+          data.append('image', this.form.image);
 
-        await axios.post(`/api/images`, data, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        }).then(res => {
-          this.form.imageName = res.data;
-        });
+          if (this.editMode && this.form.imageName !== null) {
+            await axios.post('/api/images/' + this.form.imageName + '?_method=put', data, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            }).then(res => {
+              this.form.imageName = res.data;
+            });
+          }else {
+            await axios.post('/api/images', data, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+            }).then(res => {
+              this.form.imageName = res.data;
+            });
+          }
+        }
+      }else{
+        if (this.editMode && this.form.imageName !== null){
+          await axios.delete('/api/images/' + this.form.imageName).then(res => {
+            this.form.imageName = null;
+          });
+        }
       }
     },
-    loadRecipeData(data) {
+    loadRecipeData(recipeData) {
       let ingredients = [];
       let steps = [];
-      data.steps.forEach(item => {
+      recipeData.steps.forEach(item => {
         steps.push(item.description);
       });
 
       let tags = [];
-      data.tags.forEach(item => {
+      recipeData.tags.forEach(item => {
         tags.push(item.id);
       });
 
-      data.ingredients.forEach(item => {
+      recipeData.ingredients.forEach(item => {
         ingredients.push({
           amount: item.unit_amount,
           unitId: item.unit.id,
           goodId: item.good.id
         });
       });
-
+      let imagePath = null;
+      if (recipeData.image !== null){
+        imagePath = '/storage/recipe-images/' + recipeData.image;
+      }
       const formData = {
-        id: data.id,
-        title: data.title,
+        id: recipeData.id,
+        title: recipeData.title,
+        imageName: recipeData.image,
+        image: imagePath,
         existingTags: tags,
-        imageName: data.image,
-        rating: String(data.rating).replace('.', ','),
-        portion: data.portion,
-        comment: data.comments,
+        rating: String(recipeData.rating).replace('.', ','),
+        portion: recipeData.portion,
+        comment: recipeData.comments,
         steps: steps,
         ingredients: ingredients
       };
