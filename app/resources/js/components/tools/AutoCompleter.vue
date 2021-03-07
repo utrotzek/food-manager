@@ -140,6 +140,11 @@ export default {
       return filteredItems;
     }
   },
+  watch: {
+    preselectedValue: function() {
+      this.preselectConfiguredItem();
+    }
+  },
   mounted() {
     if (this.preselectedValue !== null){
       this.preselectConfiguredItem();

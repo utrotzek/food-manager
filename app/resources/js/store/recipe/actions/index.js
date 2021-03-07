@@ -49,7 +49,7 @@ export default {
             };
            axios.post('/api/goods', data).then((res) => {
                commit('addGood', res.data.item);
-               resolve();
+               resolve(res.data.item);
            }).catch(err => {
                reject(err);
            })

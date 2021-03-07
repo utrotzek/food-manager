@@ -9,7 +9,7 @@
       :good-id="item.goodId"
       @changed="onChange"
       @deleted="onDeleted"
-      @createGood="onCreateGood"
+      @createGood="onCreateGood(item, $event)"
     />
     <b-alert
       variant="info"
@@ -34,7 +34,7 @@
       hide-footer
     >
       <GoodForm
-        v-model="form.newGoodTitle"
+        v-model="form.newGood.title"
         @abort="onAbortGood"
         @save="onSaveGood"
       />
@@ -63,12 +63,15 @@ export default {
     return {
       form: {
         ingredients: [],
-        newGoodTitle: null
+        newGood: {
+          title: null,
+          item: null
+        }
       }
     }
   },
   mounted() {
-    this.form.ingredients = _.clone(this.ingredientList)
+    this.form.ingredients = this.ingredientList
   },
   methods: {
     addIngredient() {
@@ -89,16 +92,23 @@ export default {
       this.form.ingredients.splice(index, 1);
       this.$emit('changed', this.form.ingredients);
     },
-    onCreateGood(newTitle){
-      this.form.newGoodTitle = newTitle;
+    onCreateGood(item, newTitle){
+      this.form.newGood.title = newTitle;
+      this.form.newGood.item = item;
       this.$refs['add-good-modal'].show();
     },
     onAbortGood(){
       this.$refs['add-good-modal'].hide();
     },
     onSaveGood(data) {
-      this.$store.dispatch('recipe/saveNewGood', data).then(() => {
+      this.$store.dispatch('recipe/saveNewGood', data).then(res => {
+        const itemIndex = this.form.ingredients.findIndex((item) => { return item.id === this.form.newGood.item.id });
         this.$refs['add-good-modal'].hide();
+        if (itemIndex > -1) {
+          let updatedItem  =this.form.ingredients[itemIndex];
+          updatedItem.goodId = res.id;
+          this.$set(this.form.ingredients, itemIndex, updatedItem);
+        }
       }).catch(err => {
         console.log(err);
       })

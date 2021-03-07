@@ -70,6 +70,7 @@
             :items="goods"
             :show-all-items-on-empty-query="false"
             :enable-inline-creation="true"
+            :preselected-value="form.goodId"
             @selected="goodUpdated"
             @create="$emit('createGood', $event)"
           />
@@ -132,6 +133,11 @@ export default {
     },
     goods() {
       return this.$store.state.recipe.goods;
+    }
+  },
+  watch: {
+    goodId: function (newVal) {
+      this.form.goodId = newVal;
     }
   },
   methods: {
