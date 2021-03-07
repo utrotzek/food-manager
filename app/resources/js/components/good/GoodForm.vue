@@ -37,6 +37,7 @@
             :items="goodGroups"
             :show-all-items-on-empty-query="true"
             :enable-inline-creation="true"
+            :preselected-value="goodGroupId"
             @selected="onGoodGroupSelection"
             @create="onCreateGoodGroup"
           />
@@ -101,7 +102,9 @@ export default {
       this.$emit('save', data);
     },
     onCreateGoodGroup(title){
-      this.$store.dispatch('recipe/saveNewGoodGroup', {title: title});
+      this.$store.dispatch('recipe/saveNewGoodGroup', {title: title}).then((res) => {
+        this.goodGroupId = res.id;
+      });
     }
   }
 }

@@ -63,7 +63,7 @@ export default {
             };
             axios.post('/api/goodGroups', data).then((res) => {
                 commit('addGoodGroup', res.data.item);
-                resolve();
+                resolve(res.data.item);
             }).catch(err => {
                 reject(err);
             })
