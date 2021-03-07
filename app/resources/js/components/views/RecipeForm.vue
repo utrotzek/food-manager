@@ -165,6 +165,33 @@
               </validation-provider>
             </b-col>
           </b-row>
+          <b-row>
+            <b-col>
+              <validation-provider
+                v-slot="validationContext"
+                name="Notizen"
+                :rules="{ max:255 }"
+              >
+                <b-form-group
+                  id="comments-group"
+                  label="Notizen"
+                  label-for="comments"
+                >
+                  <b-form-invalid-feedback
+                    id="comments-feedback"
+                    force-show
+                  >
+                    {{ validationContext.errors[0] }}
+                  </b-form-invalid-feedback>
+                  <b-textarea
+                    v-model="form.comment"
+                    rows="4"
+                    max-rows="8"
+                  />
+                </b-form-group>
+              </validation-provider>
+            </b-col>
+          </b-row>
           <b-row class="justify-content-md-center">
             <b-col
               class="mt-5 mb-2"
@@ -232,16 +259,18 @@ export default {
       return dirty || validated ? valid : null;
     },
     validateTitle() {
-      axios.post('/api/recipes/validate', {title: this.form.title}).catch(err => {
-        if (err.response.data.errors.title !== undefined){
-          this.$refs.title.applyResult({
-            bails: true,
-            errors: err.response.data.errors.title,
-            valid: false,
-            failedRules: {}
-          });
-        }
-      });
+      if (this.form.title !== null && this.form.title.length > 3){
+        axios.post('/api/recipes/validate', this.form).catch(err => {
+          if (err.response.data.errors.title !== undefined){
+            this.$refs.title.applyResult({
+              bails: true,
+              errors: err.response.data.errors.title,
+              valid: false,
+              failedRules: {}
+            });
+          }
+        });
+      }
     },
     tagsUpdated(existingTags, newTags){
       this.form.existingTags = [];
