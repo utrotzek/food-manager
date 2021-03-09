@@ -15,13 +15,23 @@
             class="moveControls"
             @click="dropMovedItem(index)"
           >
-            Drop
+            Einfügen
           </div>
           <div
             v-else-if="moveIndex !== index"
             class="stepHeadline"
           >
             Schritt: {{ index + 1 }}
+          </div>
+          <div v-else>
+            <b-button
+              variant="link"
+              class="icon-button"
+              title="Abbrechen"
+              @click="abortMoveMode"
+            >
+              <b-icon-x-circle-fill />
+            </b-button>
           </div>
 
           <div
@@ -112,6 +122,10 @@ export default {
     startMoveMode(index) {
       this.moveMode = true;
       this.moveIndex= index;
+    },
+    abortMoveMode(index) {
+      this.moveMode = false;
+      this.moveIndex= null;
     },
     dropMovedItem(dropIndex){
       const dragIndex = this.moveIndex;
