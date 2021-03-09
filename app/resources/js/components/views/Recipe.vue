@@ -181,10 +181,11 @@
         <b-row v-if="recipe.comments">
           <b-col>
             <div>
-              <b-card title="Kommentare">
-                <b-card-text>
-                  {{ recipe.comments }}
-                </b-card-text>
+              <b-card
+                title="Kommentare"
+                class="comments"
+              >
+                <b-card-text>{{ recipe.comments }}</b-card-text>
               </b-card>
             </div>
           </b-col>
@@ -316,6 +317,10 @@ export default {
 </script>
 
 <style scoped>
+
+.comments{
+  white-space: pre;
+}
 
 .title {
   font-size: 1.5em;
