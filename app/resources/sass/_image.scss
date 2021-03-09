@@ -1,0 +1,42 @@
+
+.image-uploader {
+    margin-left: auto;
+    margin-right: auto;
+    height: $image-height;
+    width: $image-width;
+}
+
+.cropper {
+    margin-left: auto;
+    margin-right: auto;
+    height: $image-height;
+    width: $image-width;
+    background: #DDD;
+}
+
+.image {
+    margin-left: auto;
+    margin-right: auto;
+    height: $image-height;
+    width: $image-width;
+    background-position: center;
+    background-size: cover;
+}
+
+// X-tra small devices (landscape phones)
+@media (max-width: 575.98px) {
+    .image-uploader {
+        width: 100%;
+    }
+
+    .cropper {
+        width: 100%;
+    }
+}
+
+// Small devices (landscape phones)
+@media (max-width: 767.98px) {
+    .image {
+        width: 100%;
+    }
+}

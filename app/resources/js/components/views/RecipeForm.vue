@@ -435,11 +435,6 @@ export default {
 </script>
 
 <style scoped>
-  .image-uploader {
-    margin-left: auto;
-    width: 30em;
-  }
-
   .save-button {
     height: 2.5em;
     font-size: 1.3em;

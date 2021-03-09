@@ -16,7 +16,7 @@
               <b-col cols="2">
                 <b-btn
                   variant="link"
-                  class="new-recipe"
+                  class="new-recipe h-100"
                   size="lg"
                   block
                   @click="$router.push({'name': 'recipe-form'})"

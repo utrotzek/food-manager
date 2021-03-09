@@ -216,11 +216,3 @@ export default {
     box-shadow: none;
   }
 </style>
-
-<style>
-  .cropper {
-    height:23em;
-    width: 30em;
-    background: #DDD;
-  }
-</style>

@@ -299,13 +299,6 @@ export default {
   width: 100%;
 }
 
-.image {
-  height: 23em;
-  width: 30em;
-  background-position: center;
-  background-size: cover;
-}
-
 .tags {
   float:left;
 }
