@@ -250,13 +250,6 @@ export default {
       return (this.showIngredients ? 8 : 12);
     }
   },
-  watch: {
-    cookMode(checked) {
-      if  (checked){
-        this.showIngredients = false;
-      }
-    }
-  },
   mounted() {
     const recipeId = this.$route.params.id;
 
