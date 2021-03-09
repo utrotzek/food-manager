@@ -7,33 +7,42 @@
       <h2>{{ recipe.title }}</h2>
       <b-row v-if="cooking">
         <b-col class="text-right">
-          <span>
-            <toggle-button
-              v-model="showIngredients"
-              :width="100"
-              :font-size="15"
-              :labels="{checked: 'Zutaten', unchecked: 'Zutaten'}"
-              sync
-            />
-          </span>
-          <span>
-            <toggle-button
-              v-model="enableSpeech"
-              :width="100"
-              :font-size="15"
-              :labels="{checked: 'Sprache', unchecked: 'Sprache'}"
-              sync
-            />
-          </span>
-          <span>
-            <toggle-button
-              v-model="cookMode"
-              :width="110"
-              :font-size="15"
-              :labels="{checked: 'Kochmodus', unchecked: 'Kochmodus'}"
-              sync
-            />
-          </span>
+          <div class="cooking-menu">
+            <span>
+              <toggle-button
+                v-model="showIngredients"
+                :width="100"
+                :font-size="15"
+                :labels="{checked: 'Zutaten', unchecked: 'Zutaten'}"
+                sync
+              />
+            </span>
+            <span>
+              <toggle-button
+                v-model="enableSpeech"
+                :width="100"
+                :font-size="15"
+                :labels="{checked: 'Sprache', unchecked: 'Sprache'}"
+                sync
+              />
+            </span>
+            <span>
+              <toggle-button
+                v-model="cookMode"
+                :width="110"
+                :font-size="15"
+                :labels="{checked: 'Kochmodus', unchecked: 'Kochmodus'}"
+                sync
+              />
+            </span>
+            <span>
+              <b-button
+                v-b-modal.abort-cookmode-modal
+                class="icon-button"
+                variant="link"
+              ><b-icon-x-circle-fill /></b-button>
+            </span>
+          </div>
         </b-col>
       </b-row>
 
@@ -221,9 +230,20 @@
         ref="delete-recipe-modal"
         ok-title="Löschen"
         ok-variant="danger"
+        centered
         @ok="deleteRecipe"
       >
         Wollen Sie das Rezept {{ recipe.title }} wirklich löschen?
+      </b-modal>
+
+      <b-modal
+        id="abort-cookmode-modal"
+        ref="modal1"
+        title="Kochmodus beenden"
+        centered
+        @ok="cookingAbort"
+      >
+        Wollen Sie den Kochmodus wirklich abbrechen?
       </b-modal>
     </div>
     <div v-else>
@@ -280,6 +300,12 @@ export default {
       this.enableSpeech = false;
       this.cookMode = false;
     },
+    cookingAbort() {
+      this.cooking = false;
+      this.showIngredients = true;
+      this.enableSpeech = false;
+      this.cookMode = false;
+    },
     deleteRecipe() {
       axios.delete('/api/recipes/'+ this.recipe.id).then((res) => {
         this.$router.push({name: 'recipes'});
@@ -310,6 +336,10 @@ export default {
 
 .tags {
   float:left;
+}
+
+.cooking-menu label {
+  margin: 0;
 }
 
 </style>
