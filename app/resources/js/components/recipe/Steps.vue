@@ -3,12 +3,12 @@
     <b-row v-if="!cookMode">
       <b-col>
         <ul>
+          /* eslint-disable */
           <li
             v-for="(step, i) in steps"
             :key="`step-${i}`"
-          >
-            {{ step.description }}
-          </li>
+            class="description"
+          >{{ step.description }}</li>
         </ul>
       </b-col>
     </b-row>
@@ -186,7 +186,9 @@ export default {
 
 <style scoped lang="scss">
 @import '../../../sass/_variables.scss';
-
+  .description {
+    white-space: pre;
+  }
   .steps ul {
     padding: 0;
     counter-reset: step;
