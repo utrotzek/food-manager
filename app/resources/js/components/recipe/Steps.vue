@@ -115,7 +115,8 @@ export default {
     },
     recipeTitle: {
       type: String,
-      required: true
+      required: false,
+      default: ""
     }
   },
   data() {

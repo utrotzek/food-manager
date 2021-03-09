@@ -176,9 +176,11 @@ export default {
     display: none;
   }
 
+  .image-uploader {
+    position: relative;
+  }
+
   .preview {
-    height: 23em;
-    width: 100%;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;

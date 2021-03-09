@@ -2,7 +2,7 @@
   <layout-default-dynamic>
     <div
       v-if="loaded"
-      class="recipe"
+      class="recipe-detail"
     >
       <h2>{{ recipe.title }}</h2>
       <b-row v-if="cooking">
@@ -37,140 +37,152 @@
         </b-col>
       </b-row>
 
-      <b-row
+      <!-- recipe details-->
+      <div
         v-if="!cooking"
-        class="mb-2"
+        class="recipe-details"
       >
-        <b-col
-          cols="12"
-          md="6"
-          order-md="2"
-          class="text-right"
+        <b-row
+          class="mb-2"
         >
-          <b-row>
-            <b-col>
-              <Stars :rating="recipe.rating" />
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <div
-                v-if="recipe.tags"
-                class="tags mb-1"
-              >
-                <b-badge
-                  v-for="tag in recipe.tags"
-                  :key="tag.id"
-                  class="mr-1"
-                  variant="secondary"
-                >
-                  {{ tag.title }}
-                </b-badge>
-              </div>
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <div
-                class="image"
-                :style="{ backgroundImage: 'url(' + imagePath + ')' }"
-              />
-            </b-col>
-          </b-row>
-          <b-row>
-            <b-col>
-              <b-button-group
-                class="text-left buttons small-device d-md-none"
-              >
-                <b-button
-                  class="mb-1"
-                  @click="$router.push({name: 'recipe-form', params: {id: recipe.id}})"
-                >
-                  <b-icon-pen />
-                </b-button>
-                <b-button
-                  v-b-modal.delete-recipe-modal
-                  class="mb-1"
-                >
-                  <b-icon-trash />
-                </b-button>
-                <b-button class="mb-1">
-                  <b-icon-heart />
-                </b-button>
-                <b-button class="mb-1">
-                  <b-icon-bookmark />
-                </b-button>
-                <b-button
-                  class="mb-1"
-                  @click="startCooking"
-                >
-                  <b-icon-play-fill />
-                </b-button>
-              </b-button-group>
-            </b-col>
-          </b-row>
-        </b-col>
-        <b-col
-          cols="12"
-          md="6"
-          order-md="1"
-          class="mb-1"
-        >
-          <h3>
-            Zutaten
-          </h3>
-          <Ingredients :ingredients="recipe.ingredients" />
-        </b-col>
-      </b-row>
-      <b-row v-if="!cooking">
-        <b-col
-          cols="12"
-          md="9"
-        >
-          <h3>Zubereitung</h3>
-          <Steps
-            :steps="recipe.steps"
-            :recipe-title="recipe.title"
-            @finished="cookingFinished"
-          />
-        </b-col>
-        <b-col
-          cols="12"
-          md="3"
-          class="text-right mt-2"
-        >
-          <b-button-group
-            class="text-left buttons d-none d-md-block"
-            vertical
+          <b-col
+            cols="12"
+            md="6"
+            order-md="2"
+            class="text-right"
           >
-            <b-button
-              class="mb-1"
-              @click="$router.push({name: 'recipe-form', params: {id: recipe.id}})"
+            <div class="image-wrapper">
+              <b-row>
+                <b-col>
+                  <Stars :rating="recipe.rating" />
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col>
+                  <div
+                    v-if="recipe.tags"
+                    class="tags mb-1"
+                  >
+                    <b-badge
+                      v-for="tag in recipe.tags"
+                      :key="tag.id"
+                      class="mr-1"
+                      variant="secondary"
+                    >
+                      {{ tag.title }}
+                    </b-badge>
+                  </div>
+                </b-col>
+              </b-row>
+              <b-row>
+                <b-col>
+                  <div
+                    class="image"
+                    :style="{ backgroundImage: 'url(' + imagePath + ')' }"
+                  />
+                  <div class="d-block d-md-none">
+                    <b-button-group
+                      class="text-left buttons small-device d-md-none"
+                    >
+                      <b-button
+                        class="mb-1"
+                        @click="$router.push({name: 'recipe-form', params: {id: recipe.id}})"
+                      >
+                        <b-icon-pen />
+                      </b-button>
+                      <b-button
+                        v-b-modal.delete-recipe-modal
+                        class="mb-1"
+                      >
+                        <b-icon-trash />
+                      </b-button>
+                      <b-button class="mb-1">
+                        <b-icon-heart />
+                      </b-button>
+                      <b-button class="mb-1">
+                        <b-icon-bookmark />
+                      </b-button>
+                      <b-button
+                        class="mb-1"
+                        @click="startCooking"
+                      >
+                        <b-icon-play-fill />
+                      </b-button>
+                    </b-button-group>
+                  </div>
+                </b-col>
+              </b-row>
+            </div>
+          </b-col>
+          <b-col
+            cols="12"
+            md="6"
+            order-md="1"
+          >
+            <h3>Zutaten</h3>
+            <Ingredients :ingredients="recipe.ingredients" />
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col
+            cols="12"
+            md="6"
+          >
+            <h3>Zubereitung</h3>
+            <Steps
+              :steps="recipe.steps"
+            />
+          </b-col>
+          <b-col
+            cols="12"
+            md="6"
+            class="d-none d-md-block text-right"
+          >
+            <b-button-group
+              class="buttons medium-devices"
+              vertical
             >
-              <b-icon-pen /> Bearbeiten
-            </b-button>
-            <b-button
-              v-b-modal.delete-recipe-modal
-              class="mb-1"
-            >
-              <b-icon-trash /> Löschen
-            </b-button>
-            <b-button class="mb-1">
-              <b-icon-heart /> Favorit
-            </b-button>
-            <b-button class="mb-1">
-              <b-icon-bookmark /> vormerken
-            </b-button>
-            <b-button
-              class="mb-1"
-              @click="startCooking"
-            >
-              <b-icon-play-fill /> Kochen
-            </b-button>
-          </b-button-group>
-        </b-col>
-      </b-row>
+              <b-button
+                class="mb-1"
+                @click="$router.push({name: 'recipe-form', params: {id: recipe.id}})"
+              >
+                <b-icon-pen /> Bearbeiten
+              </b-button>
+              <b-button
+                v-b-modal.delete-recipe-modal
+                class="mb-1"
+              >
+                <b-icon-trash /> Löschen
+              </b-button>
+              <b-button class="mb-1">
+                <b-icon-heart /> Favorit
+              </b-button>
+              <b-button class="mb-1">
+                <b-icon-bookmark /> vormerken
+              </b-button>
+              <b-button
+                class="mb-1"
+                @click="startCooking"
+              >
+                <b-icon-play-fill /> Kochen
+              </b-button>
+            </b-button-group>
+          </b-col>
+        </b-row>
+        <b-row v-if="recipe.comments">
+          <b-col>
+            <div>
+              <b-card title="Kommentare">
+                <b-card-text>
+                  {{ recipe.comments }}
+                </b-card-text>
+              </b-card>
+            </div>
+          </b-col>
+        </b-row>
+      </div>
 
+      <!-- cooking mode -->
       <b-row v-if="cooking">
         <b-col
           v-if="showIngredients"
@@ -290,6 +302,10 @@ export default {
 
 .buttons.small-device{
   width: 100%;
+}
+
+.buttons.medium-devices {
+  width: 15em;
 }
 
 .tags {

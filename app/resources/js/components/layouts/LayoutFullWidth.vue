@@ -1,5 +1,5 @@
 <template>
-  <div class="LayoutDefault h-100">
+  <div class="LayoutDefault">
     <div class="container-fluid h-100">
       <b-navbar toggleable="lg">
         <b-navbar-brand
