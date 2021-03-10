@@ -3,12 +3,13 @@
     <b-row v-if="!cookMode">
       <b-col>
         <ul>
-          /* eslint-disable */
           <li
             v-for="(step, i) in steps"
             :key="`step-${i}`"
             class="description"
-          >{{ step.description }}</li>
+          >
+            <span>{{ step.description }}</span>
+          </li>
         </ul>
       </b-col>
     </b-row>
@@ -187,7 +188,7 @@ export default {
 <style scoped lang="scss">
 @import '../../../sass/_variables.scss';
   .description {
-    white-space: pre;
+    white-space: pre-wrap;
   }
   .steps ul {
     padding: 0;
@@ -196,17 +197,19 @@ export default {
 
   .steps ul li::before {
     counter-increment: step;
-    content: 'Schritt ' counter(step);
+    content: "Schritt " counter(step);
     display: block;
-    height: 2em;
-    line-height: 2em;
-    width: 6em;
+    height: 3em;
+    line-height: 3em;
+    width: 8em;
     white-space: pre-wrap;
-    background-color: $gray-300;
+    background-color: #dee2e6;
     border-radius: 45%;
     text-align: center;
     font-weight: bold;
-    margin-bottom: 0.5em;
+    margin-bottom: 1.5em;
+    margin-top: 1em;
+    margin-left: 1em;
   }
 
   .headline {
