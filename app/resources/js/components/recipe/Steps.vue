@@ -8,7 +8,12 @@
             :key="`step-${i}`"
             class="description"
           >
-            <span>{{ step.description }}</span>
+            <p
+              v-for="(str, index) of step.description.split('\n')"
+              :key="`step-description-index-${index}`"
+            >
+              {{ str }}
+            </p>
           </li>
         </ul>
       </b-col>
@@ -187,9 +192,6 @@ export default {
 
 <style scoped lang="scss">
 @import '../../../sass/_variables.scss';
-  .description {
-    white-space: pre-wrap;
-  }
   .steps ul {
     padding: 0;
     counter-reset: step;

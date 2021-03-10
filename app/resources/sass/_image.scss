@@ -34,15 +34,10 @@
 // Small devices (landscape phones)
 @media (max-width: 767.98px) {
     .recipe-detail .image,
-    .recipe-detail .image-wrapper {
-        width: 100%;
-    }
-
-    .image-uploader {
-        width: 100%;
-    }
-
-    .cropper {
+    .recipe-detail .image-wrapper,
+    .image-uploader,
+    .cropper,
+    .recipe-form .preview {
         width: 100%;
     }
 }

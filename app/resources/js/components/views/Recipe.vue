@@ -185,7 +185,14 @@
                 title="Kommentare"
                 class="comments"
               >
-                <b-card-text>{{ recipe.comments }}</b-card-text>
+                <b-card-text>
+                  <p
+                    v-for="(str, index) of recipe.comments.split('\n')"
+                    :key="`comment-paragraph-${index}`"
+                  >
+                    {{ str }}
+                  </p>
+                </b-card-text>
               </b-card>
             </div>
           </b-col>
@@ -318,8 +325,13 @@ export default {
 
 <style scoped>
 
-.comments{
-  white-space: pre;
+.comments p {
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
 }
 
 .title {

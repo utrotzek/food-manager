@@ -12,7 +12,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
-    <div id="app" class="pb-5">
+    <div id="app" class="pb-5 mb-5">
         <app></app>
     </div>
 
