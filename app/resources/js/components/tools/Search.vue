@@ -2,7 +2,7 @@
   <div class="search-wrapper">
     <!-- Search form -->
     <b-form
-      class="search-form form-inline md-form form-sm mt-0"
+      class="search-form md-form form-sm mt-0"
       @submit="onSubmit"
     >
       <b-icon-search class="search-icon" />
@@ -56,6 +56,7 @@ export default {
 
 .search-wrapper {
     position: relative;
+    width: 100%;
 }
 .search-control {
     padding: 0 30px 0 30px;

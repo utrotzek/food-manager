@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Repositories\RecipeRepository;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
@@ -27,6 +28,14 @@ class RouteServiceProvider extends ServiceProvider
      * @var string|null
      */
     // protected $namespace = 'App\\Http\\Controllers';
+
+    protected RecipeRepository $recipeReposotiry;
+
+    public function __construct($app)
+    {
+        parent::__construct($app);
+        $this->recipeReposotiry = $app->make(RecipeRepository::class);
+    }
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -58,6 +67,15 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+        });
+    }
+
+    public function register()
+    {
+        parent::register();
+
+        $this->app['router']->bind('recipe', function ($value, $route) {
+            return $this->recipeReposotiry->findByIdOrSlug($value);
         });
     }
 }

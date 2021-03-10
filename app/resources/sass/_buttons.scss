@@ -1,0 +1,16 @@
+.icon-button:active,
+.icon-button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.icon-button {
+    cursor: pointer;
+    color: $black !important;
+}
+
+.add-button {
+    width: 18em;
+    height: 3em;
+    border-radius: 16px !important;
+}

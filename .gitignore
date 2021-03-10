@@ -9,3 +9,4 @@ app/.coverage/php/*
 app/.coverage/js/*
 !app/.coverage/js/.gitkeep
 app/_ide_helper.php
+app/.phpstorm.meta.php

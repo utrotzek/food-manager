@@ -11,11 +11,15 @@ jobs:
         # Ignore the failure of a step and avoid terminating the job.
         continue-on-error: true
       - name: Build the stack
-        run: docker-compose -f docker-compose-testing.yml up --build -d
+        run: |
+          docker-compose -f docker-compose-testing.yml up --build -d
+          docker-compose -f docker-compose-testing.yml ps
       - name: Check PHP code style
         run: docker-compose -f docker-compose-testing.yml exec -T app composer run-script csFixer -- --dry-run
       - name: Check JS code style
         run: docker-compose -f docker-compose-testing.yml exec -T app yarn lint-dry
+      - name: Wait for the db to be u p
+        run: docker-compose -f docker-compose-testing.yml exec -T app wait-for --timeout=30 db:3306 -- echo "Database is up"
       - name: Test PHP
         run: docker-compose -f docker-compose-testing.yml exec -T app composer run-script test-coverage
       - name: Test JS

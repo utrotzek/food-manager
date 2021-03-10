@@ -1,0 +1,48 @@
+
+.image-uploader {
+    margin-left: auto;
+    width: $image-width;
+}
+
+.preview {
+    margin-left: auto;
+    height: $image-height;
+    width: $image-width;
+}
+
+.cropper {
+    margin-left: auto;
+    height: $image-height;
+    width: $image-width;
+    background: #DDD;
+}
+
+.recipe-detail .image-wrapper {
+    width: $image-width;
+    text-align: right;
+    margin-left: auto;
+}
+
+.recipe-detail .image {
+    margin-left: auto;
+    height: $image-height;
+    width: $image-width;
+    background-position: center;
+    background-size: cover;
+}
+
+// Small devices (landscape phones)
+@media (max-width: 767.98px) {
+    .recipe-detail .image,
+    .recipe-detail .image-wrapper {
+        width: 100%;
+    }
+
+    .image-uploader {
+        width: 100%;
+    }
+
+    .cropper {
+        width: 100%;
+    }
+}

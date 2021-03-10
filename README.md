@@ -6,12 +6,20 @@ Food Manager
 
 Start the environment: `bin/container start` (use -s flag to boot only the container)
 
+# Postman collection export
+
+Profclems aweseom postman collection generator (big thanks) is included. A fresh export can be done using:
+
+`bin/artisan.sh postman:collection:export MyNewExport --api`
+
 # Techstack
 
 * (vee validate)[https://vee-validate.logaretm.com/v4]
 * (vue top progress) [https://github.com/dalphyx/vue-top-progress]
 * (vuex)[https://vuex.vuejs.org/]
 * (pest testing framework)[https://pestphp.com/]
+* (Tag selector)[http://www.vue-tags-input.com/#/examples/autocomplete]
+* (Advanced cropper)[https://norserium.github.io/vue-advanced-cropper/]
 
 # docker setup
 TODO

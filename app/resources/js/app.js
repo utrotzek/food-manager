@@ -13,14 +13,31 @@ import VueRouter from 'vue-router'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue';
 import vueTopProgress from 'vue-top-progress';
 import '../sass/app.scss';
-import { ValidationProvider } from 'vee-validate';
+import {
+    ValidationObserver,
+    ValidationProvider,
+    extend,
+    localize
+} from "vee-validate";
+import de from "vee-validate/dist/locale/de.json";
+import * as rules from "vee-validate/dist/rules";
+import { ToggleButton } from 'vue-js-toggle-button'
+
+// Install VeeValidate rules and localization
+Object.keys(rules).forEach(rule => {
+    extend(rule, rules[rule]);
+});
+
+localize("de", de);
 
 Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(vueTopProgress)
 
+Vue.component('ToggleButton', ToggleButton)
 Vue.component('ValidationProvider', ValidationProvider);
+Vue.component('ValidationObserver', ValidationObserver);
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -38,23 +55,9 @@ Vue.component('ValidationProvider', ValidationProvider);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import App from '../js/components/App';
-import Home from '../js/components/Home';
-
+import App from '../js/App';
 import store from '../js/store';
-
-const router = new VueRouter({
-    mode: "history",
-    linkActiveClass: "active",
-    linkExactActiveClass: "exact-active",
-    routes: [
-        {
-            path: "/",
-            name: "home",
-            component: Home
-        },
-    ]
-});
+import router from '../js/router';
 
 const app = new Vue({
     el: '#app',
