@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Factories\IngredientFactory;
 use App\Http\Requests\RecipeStoreRequest;
+use App\Http\Resources\RecipeLightResource;
 use App\Http\Resources\RecipeResource;
 use App\Http\Resources\RecipeResourceCollection;
 use App\Models\Recipe;
@@ -62,11 +63,7 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        return new Response(
-            new RecipeResourceCollection(
-                $this->recipeRepository->all()
-            )
-        );
+        return \response()->json($this->recipeRepository->all());
     }
 
     /**

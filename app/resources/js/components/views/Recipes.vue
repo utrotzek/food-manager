@@ -41,6 +41,25 @@
                   @clicked="recipeClicked"
                 />
               </b-col>
+              <infinite-loading
+                @distance="1"
+                @infinite="infiniteHandler"
+              >
+                <div slot="no-more">
+                  <div class="col-12">
+                    <div class="alert alert-info">
+                      Keine weiteren Rezepte
+                    </div>
+                  </div>
+                </div>
+                <div slot="no-results">
+                  <div class="col-12">
+                    <div class="alert alert-info">
+                      Es wurden keine Rezepte gefunden
+                    </div>
+                  </div>
+                </div>
+              </infinite-loading>
             </b-row>
             <b-row v-else>
               <b-col>
@@ -69,13 +88,14 @@ export default {
     data () {
         return {
           recipes: [],
-          loading: false
+          loading: false,
+          page: 2
         };
     },
     mounted() {
       this.loading = true;
-      axios.get('/api/recipes').then((res) => {
-        this.recipes = res.data;
+      axios.get('/api/recipes?page=1').then((res) => {
+        this.recipes = res.data.data;
         this.loading = false;
       }).catch((error) => {
         this.loading = false;
@@ -88,7 +108,23 @@ export default {
         recipeClicked(recipe) {
           const recipeId = recipe.id;
           this.$router.push({'name': 'recipe', params: {'id': recipeId}})
-        }
+        },
+      infiniteHandler($state) {
+        axios.get('/api/recipes?page='+this.page)
+        .then(data => {
+          if (data.data.data.length > 0){
+            const recipes = this.recipes.concat(data.data.data);
+            this.$set(this, 'recipes', recipes);
+            // $.each(data.data.data, (key, value)=> {
+            //   this.recipes.push(value);
+            // });
+            $state.loaded();
+            this.page = this.page + 1;
+          } else {
+            $state.complete();
+          }
+        });
+      },
     }
 };
 </script>
@@ -100,4 +136,10 @@ export default {
       color: $dark;
       padding: 0;
     }
+</style>
+
+<style>
+  .infinite-loading-container {
+    width: 100%;
+  }
 </style>

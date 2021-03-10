@@ -11,7 +11,7 @@ class RecipeRepository implements RecipeRepositoryInterface
      */
     public function all()
     {
-        return Recipe::query()->orderBy('title')->get();
+        return Recipe::query()->orderBy('title')->paginate(6);
     }
 
     /**

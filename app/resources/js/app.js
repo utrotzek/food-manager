@@ -21,7 +21,9 @@ import {
 } from "vee-validate";
 import de from "vee-validate/dist/locale/de.json";
 import * as rules from "vee-validate/dist/rules";
-import { ToggleButton } from 'vue-js-toggle-button'
+import { ToggleButton } from 'vue-js-toggle-button';
+import VueResource from 'vue-resource';
+import InfiniteLoading from "vue-infinite-loading";
 
 // Install VeeValidate rules and localization
 Object.keys(rules).forEach(rule => {
@@ -34,6 +36,8 @@ Vue.use(VueRouter)
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
 Vue.use(vueTopProgress)
+Vue.use(VueResource);
+Vue.use(InfiniteLoading);
 
 Vue.component('ToggleButton', ToggleButton)
 Vue.component('ValidationProvider', ValidationProvider);
