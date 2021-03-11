@@ -47,7 +47,6 @@
               >
                 <div slot="no-more">
                   <div
-                    v-if="recipes.length > 6"
                     class="col-12"
                   >
                     <div class="alert alert-info">
@@ -65,12 +64,20 @@
               </infinite-loading>
             </b-row>
             <b-row v-else>
-              <b-col>
+              <b-col class="mt-4">
                 <b-alert
                   variant="info"
                   show
+                  v-if="!searchTerm"
                 >
                   Es sind aktuell keine Rezepte in der Datenbank vorhanden. Sie müssen Rezepte anlegen, damit sie hier erscheinen.
+                </b-alert>
+                <b-alert
+                  variant="info"
+                  show
+                  v-else
+                >
+                  Es konnten keine Gerichte gefunden werden
                 </b-alert>
               </b-col>
             </b-row>

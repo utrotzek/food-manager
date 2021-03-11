@@ -19,13 +19,20 @@ class RecipeRepository implements RecipeRepositoryInterface
     public function searchPaginated(?string $query): Paginator
     {
         $qb = Recipe::query();
+        $qb->leftJoin('ingredients', 'recipes.id', 'ingredients.recipe_id');
+        $qb->leftJoin('goods', 'goods.id', 'ingredients.good_id');
+        $qb->leftJoin('recipe_tag', 'recipes.id', 'recipe_tag.recipe_id');
+        $qb->leftJoin('tags', 'tags.id', 'recipe_tag.tag_id');
 
         if ($query) {
-            $qb->where('title', 'like', '%'.$query.'%');
+            $qb->where('recipes.title', 'like', '%'.$query.'%');
+            $qb->orWhere('goods.title', 'like', '%'.$query.'%');
+            $qb->orWhere('tags.title', 'like', '%'.$query.'%');
         }
-
-        return $qb->orderBy('title')
-            ->simplePaginate(6);
+        $qb->select('recipes.*');
+        $qb->distinct();
+        return $qb->orderBy('recipes.title')
+            ->simplePaginate(3);
     }
 
     /**
