@@ -272,9 +272,14 @@ export default {
       axios.get('/api/recipes/' + this.$route.params.id).then(res => {
         const recipeData = res.data;
         this.loadRecipeData(recipeData);
+        document.title = this.form.title + ' bearbeiten';
         this.loading = false;
       });
+    }else {
+      document.title = 'Neues Rezept anlegen';
     }
+  },
+  mounted() {
   },
   methods: {
     getValidationState({ dirty, validated, valid = null }) {

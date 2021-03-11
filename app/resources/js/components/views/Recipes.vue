@@ -95,6 +95,7 @@ import Search from "../tools/Search";
 import Recipe from "../recipe/Recipe";
 export default {
   name: 'Recipes',
+  title: 'Rezept Suche',
   components: {LayoutDefaultDynamic, Recipe, Search},
   data () {
       return {

@@ -287,7 +287,6 @@ import Stars from "../recipe/Stars";
 export default {
   name: "Recipe",
   components: {LayoutDefaultDynamic, Ingredients, Steps, Stars},
-
   props: {
   },
   data() {
@@ -306,7 +305,7 @@ export default {
     },
     stepsSize() {
       return (this.showIngredients ? 8 : 12);
-    }
+    },
   },
   mounted() {
     const recipeId = this.$route.params.id;
@@ -314,6 +313,7 @@ export default {
     axios.get('/api/recipes/'+ recipeId).then((res) => {
       this.recipe = res.data;
       this.loaded = true;
+      document.title = this.recipe.title;
     });
   },
   methods: {

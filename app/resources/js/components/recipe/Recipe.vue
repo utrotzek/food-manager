@@ -6,7 +6,9 @@
           class="title"
           @click="$emit('clicked', recipe)"
         >
-          {{ truncatedTitle }}
+          <router-link :to="{name: 'recipe', params: {id: recipe.id}}">
+            {{ truncatedTitle }}
+          </router-link>
         </div>
       </b-col>
     </b-row>
@@ -50,35 +52,37 @@
 
     <b-row>
       <b-col>
-        <div
-          v-if="recipe.image"
-          class="image"
-          :style="{ backgroundImage: 'url(' + imagePath + ')' }"
-        >
+        <router-link :to="{name: 'recipe', params: {id: recipe.id}}">
           <div
-            v-if="recipe.favorite || recipe.remember"
-            class="flag-overlay"
+            v-if="recipe.image"
+            class="image"
+            :style="{ backgroundImage: 'url(' + imagePath + ')' }"
           >
-            <div class="flags">
-              <b-icon-heart-fill v-if="recipe.favorite" />
-              <b-icon-bookmark-fill v-if="recipe.remember" />
+            <div
+              v-if="recipe.favorite || recipe.remember"
+              class="flag-overlay"
+            >
+              <div class="flags">
+                <b-icon-heart-fill v-if="recipe.favorite" />
+                <b-icon-bookmark-fill v-if="recipe.remember" />
+              </div>
             </div>
           </div>
-        </div>
-        <ImagePlaceholder
-          v-else
-          :placeholder-text="truncatedPlaceholderTitle"
-        >
-          <div
-            v-if="recipe.favorite || recipe.remember"
-            class="flag-overlay"
+          <ImagePlaceholder
+            v-else
+            :placeholder-text="truncatedPlaceholderTitle"
           >
-            <div class="flags">
-              <b-icon-heart-fill v-if="recipe.favorite" />
-              <b-icon-bookmark-fill v-if="recipe.remember" />
+            <div
+              v-if="recipe.favorite || recipe.remember"
+              class="flag-overlay"
+            >
+              <div class="flags">
+                <b-icon-heart-fill v-if="recipe.favorite" />
+                <b-icon-bookmark-fill v-if="recipe.remember" />
+              </div>
             </div>
-          </div>
-        </ImagePlaceholder>
+          </ImagePlaceholder>
+        </router-link>
       </b-col>
     </b-row>
   </div>
@@ -133,8 +137,13 @@ export default {
 @import '../../../sass/_variables.scss';
 
     .title {
-        font-size: 1.5em;
-        white-space: nowrap;
+      font-size: 1.5em;
+      white-space: nowrap;
+    }
+
+    .title a,
+    .title a:hover {
+      color: $black;
     }
 
     .title:hover {
