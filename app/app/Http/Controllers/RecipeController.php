@@ -160,4 +160,19 @@ class RecipeController extends Controller
             ['message' => sprintf('Recipe %1$s successfully deleted', $recipe['title'])]
         );
     }
+
+    public function flags(Request $request, Recipe $recipe)
+    {
+        if ($request->has('favorite')) {
+            $recipe->favorite = filter_var($request->input('favorite'), FILTER_VALIDATE_BOOLEAN);
+        }
+        if ($request->has('remember')) {
+            $recipe->remember = filter_var($request->input('remember'), FILTER_VALIDATE_BOOLEAN);
+        }
+        $recipe->save();
+        return new Response([
+           'message' => 'recipe flags successfully updated',
+           'item' => $recipe->fresh()
+        ]);
+    }
 }

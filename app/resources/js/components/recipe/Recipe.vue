@@ -54,11 +54,31 @@
           v-if="recipe.image"
           class="image"
           :style="{ backgroundImage: 'url(' + imagePath + ')' }"
-        />
+        >
+          <div
+            v-if="recipe.favorite || recipe.remember"
+            class="flag-overlay"
+          >
+            <div class="flags">
+              <b-icon-heart-fill v-if="recipe.favorite" />
+              <b-icon-bookmark-fill v-if="recipe.remember" />
+            </div>
+          </div>
+        </div>
         <ImagePlaceholder
           v-else
           :placeholder-text="truncatedPlaceholderTitle"
-        />
+        >
+          <div
+            v-if="recipe.favorite || recipe.remember"
+            class="flag-overlay"
+          >
+            <div class="flags">
+              <b-icon-heart-fill v-if="recipe.favorite" />
+              <b-icon-bookmark-fill v-if="recipe.remember" />
+            </div>
+          </div>
+        </ImagePlaceholder>
       </b-col>
     </b-row>
   </div>
@@ -109,7 +129,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import '../../../sass/_variables.scss';
+
     .title {
         font-size: 1.5em;
         white-space: nowrap;
@@ -121,9 +143,9 @@ export default {
     }
 
     .image {
-        height: 13em;
-        background-position: center;
-        background-size: cover;
+      height: 13em;
+      background-position: center;
+      background-size: cover;
     }
 
     .rating {
@@ -145,8 +167,39 @@ export default {
     }
 </style>
 
-<style>
+<style lang="scss">
+@import '../../../sass/_variables.scss';
+
   .recipe .placeholder {
     height: 13em;
+  }
+
+  .flag-overlay {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .flag-overlay::before {
+    content: '';
+    font-size: 1.5em;
+    text-align: right;
+    padding: 5px 8px 0 0;
+    width: 20%;
+    right: 0;
+    top: 0;
+    background-color: gray;
+    height: 100%;
+    mix-blend-mode: multiply;
+    position: absolute;
+    z-index: 1;
+  }
+
+  .flag-overlay .flags {
+    color: $yellow;
+    top: 5px;
+    right: 8px;
+    position: absolute;
+    z-index: 2;
   }
 </style>

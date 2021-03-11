@@ -30,6 +30,8 @@ class RecipeResource extends JsonResource
             'rating' => $this->rating,
             'portion' => $this->portion,
             'comments' => $this->comments,
+            'favorite' => $this->favorite,
+            'remember' => $this->remember,
             'steps' => new StepResourceCollection($this->steps()->get()),
             'tags' => new TagResourceCollection($this->tags()->get()),
             'ingredients' => new IngredientsResourceCollection($this->ingredients()->get())

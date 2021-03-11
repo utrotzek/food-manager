@@ -105,11 +105,19 @@
                       >
                         <b-icon-trash />
                       </b-button>
-                      <b-button class="mb-1">
-                        <b-icon-heart />
+                      <b-button
+                        class="mb-1"
+                        @click="onFavorite"
+                      >
+                        <b-icon-heart-fill v-if="recipe.favorite" />
+                        <b-icon-heart v-else />
                       </b-button>
-                      <b-button class="mb-1">
-                        <b-icon-bookmark />
+                      <b-button
+                        class="mb-1"
+                        @click="onRemember"
+                      >
+                        <b-icon-bookmark-fill v-if="recipe.remember" />
+                        <b-icon-bookmark v-else />
                       </b-button>
                       <b-button
                         class="mb-1"
@@ -163,11 +171,21 @@
               >
                 <b-icon-trash /> Löschen
               </b-button>
-              <b-button class="mb-1">
-                <b-icon-heart /> Favorit
+              <b-button
+                class="mb-1"
+                @click="onFavorite"
+              >
+                <b-icon-heart-fill v-if="recipe.favorite" />
+                <b-icon-heart v-else />
+                Favorit
               </b-button>
-              <b-button class="mb-1">
-                <b-icon-bookmark /> vormerken
+              <b-button
+                class="mb-1"
+                @click="onRemember"
+              >
+                <b-icon-bookmark-fill v-if="recipe.remember" />
+                <b-icon-bookmark v-else />
+                vormerken
               </b-button>
               <b-button
                 class="mb-1"
@@ -299,6 +317,18 @@ export default {
     });
   },
   methods: {
+    onFavorite() {
+      const newValue = !this.recipe.favorite;
+      axios.put('/api/recipes/flags/' + this.recipe.id, {favorite: newValue}).then(res => {
+        this.recipe.favorite = newValue;
+      });
+    },
+    onRemember() {
+      const newValue = !this.recipe.remember;
+      axios.put('/api/recipes/flags/' + this.recipe.id, {remember: newValue}).then(res => {
+        this.recipe.remember = newValue;
+      });
+    },
     startCooking() {
       this.cooking = true;
     },

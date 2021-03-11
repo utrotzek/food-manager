@@ -47,6 +47,7 @@
               >
                 <div slot="no-more">
                   <div
+                    v-if="recipes.length > 9"
                     class="col-12"
                   >
                     <div class="alert alert-info">

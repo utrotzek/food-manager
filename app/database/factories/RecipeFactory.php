@@ -26,7 +26,9 @@ class RecipeFactory extends Factory
             'rating' => $this->faker->numberBetween(1, 5),
             'image' => $this->faker->randomElement(['1.jpg', '2.png']),
             'portion' => $this->faker->numberBetween(2, 6),
-            'comments' => $this->faker->text(250)
+            'comments' => $this->faker->text(250),
+            'favorite' => $this->faker->boolean(30),
+            'remember' => $this->faker->boolean(30)
         ];
     }
 }
