@@ -66,16 +66,16 @@
             <b-row v-else>
               <b-col class="mt-4">
                 <b-alert
+                  v-if="!searchTerm"
                   variant="info"
                   show
-                  v-if="!searchTerm"
                 >
                   Es sind aktuell keine Rezepte in der Datenbank vorhanden. Sie müssen Rezepte anlegen, damit sie hier erscheinen.
                 </b-alert>
                 <b-alert
+                  v-else
                   variant="info"
                   show
-                  v-else
                 >
                   Es konnten keine Gerichte gefunden werden
                 </b-alert>

@@ -32,7 +32,7 @@ class RecipeRepository implements RecipeRepositoryInterface
         $qb->select('recipes.*');
         $qb->distinct();
         return $qb->orderBy('recipes.title')
-            ->simplePaginate(3);
+            ->simplePaginate(9);
     }
 
     /**
