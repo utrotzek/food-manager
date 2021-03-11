@@ -6,11 +6,11 @@ use App\Factories\IngredientFactory;
 use App\Http\Requests\RecipeStoreRequest;
 use App\Http\Resources\RecipeLightResource;
 use App\Http\Resources\RecipeResource;
-use App\Http\Resources\RecipeResourceCollection;
 use App\Models\Recipe;
 use App\Repositories\IngredientRepository;
 use App\Repositories\RecipeRepository;
 use App\Repositories\StepRepository;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
@@ -58,12 +58,14 @@ class RecipeController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request): Response
     {
-        return \response()->json($this->recipeRepository->all());
+        return new Response(
+            RecipeLightResource::collection(
+                $this->recipeRepository->searchPaginated($request->input('searchTerm'))
+            )
+        );
     }
 
     /**

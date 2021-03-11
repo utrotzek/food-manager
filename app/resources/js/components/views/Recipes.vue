@@ -11,7 +11,7 @@
             <p>Hier siehst Du alle Rezepte in Deiner Bibliothek. Du kannst nach bestimmten Rezepten suchen oder einfach etwas stöbern um Dich inspierieren zu lassen. Wenn Du eine neue Entdeckung gemacht hast, kannst Du auch ein neues Repept einpflegen.</p>
             <b-row class="mb-2">
               <b-col cols="10">
-                <Search />
+                <Search v-model="searchTerm" />
               </b-col>
               <b-col cols="2">
                 <b-btn
@@ -46,7 +46,10 @@
                 @infinite="infiniteHandler"
               >
                 <div slot="no-more">
-                  <div class="col-12">
+                  <div
+                    v-if="recipes.length > 6"
+                    class="col-12"
+                  >
                     <div class="alert alert-info">
                       Keine weiteren Rezepte
                     </div>
@@ -83,37 +86,61 @@ import LayoutDefaultDynamic from '../layouts/LayoutDefaultDynamic.js';
 import Search from "../tools/Search";
 import Recipe from "../recipe/Recipe";
 export default {
-    name: 'Recipes',
-    components: {LayoutDefaultDynamic, Recipe, Search},
-    data () {
-        return {
-          recipes: [],
-          loading: false,
-          page: 2
-        };
+  name: 'Recipes',
+  components: {LayoutDefaultDynamic, Recipe, Search},
+  data () {
+      return {
+        recipes: [],
+        loading: false,
+        page: 1,
+        searchTerm: null,
+        searched: false,
+        searchHandle: null
+      };
+  },
+  watch: {
+    searchTerm(term){
+      clearTimeout(this.searchHandle);
+      if ((term.length >= 3 || term.length === 0)) {
+        this.searchHandle = setTimeout(() => this.loadData(), 600);
+      }
+    }
+  },
+  mounted() {
+    this.loading = true;
+    this.loadData();
+  },
+  methods: {
+    login() {
+      this.$store.dispatch('auth/LOGIN', {userName: "Testuser"})
     },
-    mounted() {
-      this.loading = true;
-      axios.get('/api/recipes?page=1').then((res) => {
-        this.recipes = res.data.data;
+    recipeClicked(recipe) {
+      const recipeId = recipe.id;
+      this.$router.push({'name': 'recipe', params: {'id': recipeId}})
+    },
+    loadData(){
+      this.page = 1;
+
+      const queryParams = {
+        page: this.page,
+        searchTerm: this.searchTerm
+      };
+
+      axios.get('/api/recipes', {params: queryParams}).then((res) => {
+        this.recipes = res.data;
         this.loading = false;
+        this.searched = false;
+        this.page++;
       }).catch((error) => {
         this.loading = false;
       })
     },
-    methods: {
-        login() {
-          this.$store.dispatch('auth/LOGIN', {userName: "Testuser"})
-        },
-        recipeClicked(recipe) {
-          const recipeId = recipe.id;
-          this.$router.push({'name': 'recipe', params: {'id': recipeId}})
-        },
-      infiniteHandler($state) {
+    infiniteHandler($state) {
+      if (!this.loading){
         axios.get('/api/recipes?page='+this.page)
-        .then(data => {
-          if (data.data.data.length > 0){
-            $.each(data.data.data, (key, value)=> {
+        .then(res => {
+          if (res.data.length > 0){
+            $.each(res.data, (key, value)=> {
               this.recipes.push(value);
             });
             $state.loaded();
@@ -122,8 +149,9 @@ export default {
             $state.complete();
           }
         });
-      },
+      }
     }
+  }
 };
 </script>
 

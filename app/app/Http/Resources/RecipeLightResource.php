@@ -29,7 +29,8 @@ class RecipeLightResource extends JsonResource
             'image' => $this->image,
             'rating' => $this->rating,
             'portion' => $this->portion,
-            'comments' => $this->comments
+            'comments' => $this->comments,
+            'tags' => new TagResourceCollection($this->tags()->get()),
         ];
     }
 }

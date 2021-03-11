@@ -3,6 +3,8 @@ namespace App\Repositories;
 
 use App\Interfaces\RepositoryInterfaces\RecipeRepositoryInterface;
 use App\Models\Recipe;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\Paginator;
 
 class RecipeRepository implements RecipeRepositoryInterface
 {
@@ -11,7 +13,19 @@ class RecipeRepository implements RecipeRepositoryInterface
      */
     public function all()
     {
-        return Recipe::query()->orderBy('title')->paginate(6);
+        return Recipe::query()->get();
+    }
+
+    public function searchPaginated(?string $query): Paginator
+    {
+        $qb = Recipe::query();
+
+        if ($query) {
+            $qb->where('title', 'like', '%'.$query.'%');
+        }
+
+        return $qb->orderBy('title')
+            ->simplePaginate(6);
     }
 
     /**

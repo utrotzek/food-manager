@@ -28,9 +28,15 @@
 <script>
 export default {
     name: "SearchVue",
+    props: {
+      value: {
+        type: String,
+        default: ""
+      }
+    },
     data() {
         return {
-            query: "",
+            query: this.value,
             displayDelete: false
         };
     },
@@ -41,7 +47,7 @@ export default {
         },
         triggerSearch() {
             this.displayDelete = this.query.length > 0;
-            this.$emit("searched", this.query);
+            this.$emit("input", this.query);
         },
         clearQuery() {
             this.query = "";
