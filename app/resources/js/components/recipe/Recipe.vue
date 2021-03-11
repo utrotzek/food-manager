@@ -11,7 +11,7 @@
       </b-col>
     </b-row>
 
-    <b-row>
+    <b-row class="tags-and-rating">
       <b-col
         cols="8"
         md="7"
@@ -137,6 +137,11 @@ export default {
     .rating .star-icon {
       float:left;
       display: block;
+    }
+
+    .tags-and-rating {
+      height: 1.5em;
+      line-height: 1.5em;
     }
 </style>
 

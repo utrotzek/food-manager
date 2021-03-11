@@ -113,11 +113,9 @@ export default {
         axios.get('/api/recipes?page='+this.page)
         .then(data => {
           if (data.data.data.length > 0){
-            const recipes = this.recipes.concat(data.data.data);
-            this.$set(this, 'recipes', recipes);
-            // $.each(data.data.data, (key, value)=> {
-            //   this.recipes.push(value);
-            // });
+            $.each(data.data.data, (key, value)=> {
+              this.recipes.push(value);
+            });
             $state.loaded();
             this.page = this.page + 1;
           } else {
