@@ -2,7 +2,7 @@
   <layout-default-dynamic>
     <div class="recipes">
       <div
-        v-if="!loading"
+        v-if="initialized"
         class="recipe-wrapper"
       >
         <b-row>
@@ -56,29 +56,28 @@
                   </div>
                 </div>
                 <div slot="no-results">
-                  <div class="col-12">
-                    <div class="alert alert-info">
-                      Es wurden keine Rezepte gefunden
-                    </div>
-                  </div>
+                  <!-- nothing -->
                 </div>
               </infinite-loading>
             </b-row>
             <b-row v-else>
-              <b-col class="mt-4">
+              <b-col
+                v-if="!loading"
+                class="mt-4"
+              >
                 <b-alert
-                  v-if="!searchTerm"
+                  v-if="noSearchResult"
                   variant="info"
                   show
                 >
-                  Es sind aktuell keine Rezepte in der Datenbank vorhanden. Sie müssen Rezepte anlegen, damit sie hier erscheinen.
+                  Es konnten keine Gerichte gefunden werden
                 </b-alert>
                 <b-alert
                   v-else
                   variant="info"
                   show
                 >
-                  Es konnten keine Gerichte gefunden werden
+                  Es sind aktuell keine Rezepte in der Datenbank vorhanden. Sie müssen Rezepte anlegen, damit sie hier erscheinen.
                 </b-alert>
               </b-col>
             </b-row>
@@ -100,7 +99,9 @@ export default {
   data () {
       return {
         recipes: [],
+        initialized: false,
         loading: false,
+        noSearchResult: false,
         page: 1,
         searchTerm: null,
         searched: false,
@@ -109,6 +110,7 @@ export default {
   },
   watch: {
     searchTerm(term){
+      console.log('whazzup?');
       clearTimeout(this.searchHandle);
       if ((term.length >= 3 || term.length === 0)) {
         this.searchHandle = setTimeout(() => this.loadData(), 600);
@@ -116,8 +118,10 @@ export default {
     }
   },
   mounted() {
-    this.loading = true;
-    this.loadData();
+    this.initialized = false;
+    this.loadData().finally(() => {
+      this.initialized = true;
+    });
   },
   methods: {
     login() {
@@ -127,38 +131,50 @@ export default {
       const recipeId = recipe.id;
       this.$router.push({'name': 'recipe', params: {'id': recipeId}})
     },
+    fetchData(){
+      return new Promise((resolve, reject) => {
+        this.loading = true;
+        const queryParams = {
+          page: this.page,
+          searchTerm: this.searchTerm
+        };
+        axios.get('/api/recipes', {params: queryParams}).then((res) => {
+          this.noSearchResult = this.searchTerm !== "" && res.data.length === 0;
+          this.page++;
+          resolve(res);
+        }).catch(err => {
+          reject(err);
+        }).finally(() => {
+          this.loading = false;
+        });
+      });
+    },
     loadData(){
-      this.page = 1;
-
-      const queryParams = {
-        page: this.page,
-        searchTerm: this.searchTerm
-      };
-
-      axios.get('/api/recipes', {params: queryParams}).then((res) => {
-        this.recipes = res.data;
-        this.loading = false;
-        this.searched = false;
-        this.page++;
-      }).catch((error) => {
-        this.loading = false;
-      })
+      return new Promise((resolve, reject) => {
+        this.page = 1;
+        this.recipes = [];
+        this.fetchData().then(res => {
+          this.recipes = res.data;
+          resolve();
+        }).catch(err => {
+          console.log(err);
+          reject(err);
+        });
+      });
     },
     infiniteHandler($state) {
-      if (!this.loading){
-        axios.get('/api/recipes?page='+this.page)
-        .then(res => {
-          if (res.data.length > 0){
-            $.each(res.data, (key, value)=> {
-              this.recipes.push(value);
-            });
-            $state.loaded();
-            this.page = this.page + 1;
-          } else {
-            $state.complete();
-          }
-        });
-      }
+      this.fetchData().then(res => {
+        if (res.data.length > 0){
+          $.each(res.data, (key, value)=> {
+            this.recipes.push(value);
+          });
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      }).catch(err => {
+        console.log(err);
+      });
     }
   }
 };
