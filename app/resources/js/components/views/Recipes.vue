@@ -10,21 +10,33 @@
             <h3>Das sind Deine Rezepte</h3>
             <p>Hier siehst Du alle Rezepte in Deiner Bibliothek. Du kannst nach bestimmten Rezepten suchen oder einfach etwas stöbern um Dich inspierieren zu lassen. Wenn Du eine neue Entdeckung gemacht hast, kannst Du auch ein neues Repept einpflegen.</p>
             <b-row class="mb-2">
-              <b-col cols="10">
+              <b-col
+                cols="9"
+                sm="10"
+              >
                 <Search v-model="searchTerm" />
               </b-col>
-              <b-col cols="2">
-                <b-btn
-                  variant="link"
-                  class="new-recipe h-100"
-                  size="lg"
-                  block
+              <b-col
+                cols="3"
+                sm="2"
+                class="text-left"
+              >
+                <b-button
+                  variant="secondary"
                   @click="$router.push({'name': 'recipe-form'})"
                 >
                   <b-icon-plus-circle-fill class="icon" />
-                </b-btn>
+                  <span class="d-none d-lg-inline">Neues Rezept</span>
+                  <span class="d-none d-md-inline d-lg-none">Neu</span>
+                </b-button>
               </b-col>
             </b-row>
+            <b-row>
+              <b-col>
+                <RecipeFilter v-model="filter" />
+              </b-col>
+            </b-row>
+
             <b-row
               v-if="recipes.length > 0"
               class="mb-5"
@@ -92,10 +104,11 @@
 import LayoutDefaultDynamic from '../layouts/LayoutDefaultDynamic.js';
 import Search from "../tools/Search";
 import Recipe from "../recipe/Recipe";
+import RecipeFilter from "../recipe/RecipeFilter";
 export default {
   name: 'Recipes',
   title: 'Rezept Suche',
-  components: {LayoutDefaultDynamic, Recipe, Search},
+  components: {LayoutDefaultDynamic, Recipe, Search, RecipeFilter},
   data () {
       return {
         recipes: [],
@@ -103,14 +116,20 @@ export default {
         loading: false,
         noSearchResult: false,
         page: 1,
+        searchHandle: null,
         searchTerm: null,
-        searched: false,
-        searchHandle: null
+        filterVisible: false,
+        filter: {
+          remembered: false,
+          favorites: false,
+          random: false,
+          rating: null,
+          new: false,
+        }
       };
   },
   watch: {
     searchTerm(term){
-      console.log('whazzup?');
       clearTimeout(this.searchHandle);
       if ((term.length >= 3 || term.length === 0)) {
         this.searchHandle = setTimeout(() => this.loadData(), 600);
@@ -186,6 +205,14 @@ export default {
     .new-recipe {
       color: $dark;
       padding: 0;
+    }
+
+    .btn-group.full-width {
+      display: flex;
+    }
+
+    .full-width .btn {
+      flex: 1;
     }
 </style>
 
