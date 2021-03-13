@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Factories\IngredientFactory;
 use App\Http\Requests\RecipeStoreRequest;
+use App\Http\Resources\RecipeLightResource;
 use App\Http\Resources\RecipeResource;
-use App\Http\Resources\RecipeResourceCollection;
 use App\Models\Recipe;
 use App\Repositories\IngredientRepository;
 use App\Repositories\RecipeRepository;
 use App\Repositories\StepRepository;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 
@@ -57,14 +58,19 @@ class RecipeController extends Controller
 
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request): Response
     {
         return new Response(
-            new RecipeResourceCollection(
-                $this->recipeRepository->all()
+            RecipeLightResource::collection(
+                $this->recipeRepository->searchPaginated(
+                    $request->input('searchTerm'),
+                    filter_var($request->input('favorites'), FILTER_VALIDATE_BOOL),
+                    filter_var($request->input('remembered'), FILTER_VALIDATE_BOOL),
+                    $request->input('rating'),
+                    filter_var($request->input('unrated'), FILTER_VALIDATE_BOOL),
+                    filter_var($request->input('random'), FILTER_VALIDATE_BOOL),
+                )
             )
         );
     }
@@ -160,5 +166,20 @@ class RecipeController extends Controller
         return new Response(
             ['message' => sprintf('Recipe %1$s successfully deleted', $recipe['title'])]
         );
+    }
+
+    public function flags(Request $request, Recipe $recipe)
+    {
+        if ($request->has('favorite')) {
+            $recipe->favorite = filter_var($request->input('favorite'), FILTER_VALIDATE_BOOLEAN);
+        }
+        if ($request->has('remember')) {
+            $recipe->remember = filter_var($request->input('remember'), FILTER_VALIDATE_BOOLEAN);
+        }
+        $recipe->save();
+        return new Response([
+           'message' => 'recipe flags successfully updated',
+           'item' => $recipe->fresh()
+        ]);
     }
 }

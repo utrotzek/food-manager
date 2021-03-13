@@ -1,5 +1,7 @@
 .icon-button:active,
-.icon-button:focus {
+.icon-button:focus,
+.icon-button-default-color:active,
+.icon-button-default-color:focus {
     outline: none !important;
     box-shadow: none !important;
 }
@@ -7,6 +9,10 @@
 .icon-button {
     cursor: pointer;
     color: $black !important;
+}
+
+.icon-button-default-color {
+    cursor: pointer;
 }
 
 .add-button {

@@ -5,6 +5,7 @@
     @mouseover="displayControls = true"
     @mouseleave="displayControls = false"
   >
+    <slot />
     <div class="overlay">
       <b-button-group
         v-if="displayControls"

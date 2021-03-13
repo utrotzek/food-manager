@@ -4,7 +4,7 @@
       v-if="loaded"
       class="recipe-detail"
     >
-      <h2>{{ recipe.title }}</h2>
+      <h2>{{ recipe.title }} </h2>
       <b-row v-if="cooking">
         <b-col class="text-right">
           <div class="cooking-menu">
@@ -105,11 +105,19 @@
                       >
                         <b-icon-trash />
                       </b-button>
-                      <b-button class="mb-1">
-                        <b-icon-heart />
+                      <b-button
+                        class="mb-1"
+                        @click="onFavorite"
+                      >
+                        <b-icon-heart-fill v-if="recipe.favorite" />
+                        <b-icon-heart v-else />
                       </b-button>
-                      <b-button class="mb-1">
-                        <b-icon-bookmark />
+                      <b-button
+                        class="mb-1"
+                        @click="onRemember"
+                      >
+                        <b-icon-bookmark-fill v-if="recipe.remember" />
+                        <b-icon-bookmark v-else />
                       </b-button>
                       <b-button
                         class="mb-1"
@@ -128,7 +136,7 @@
             md="6"
             order-md="1"
           >
-            <h3>Zutaten</h3>
+            <h3>{{ ingredientsHeadline }}</h3>
             <Ingredients :ingredients="recipe.ingredients" />
           </b-col>
         </b-row>
@@ -163,11 +171,21 @@
               >
                 <b-icon-trash /> Löschen
               </b-button>
-              <b-button class="mb-1">
-                <b-icon-heart /> Favorit
+              <b-button
+                class="mb-1"
+                @click="onFavorite"
+              >
+                <b-icon-heart-fill v-if="recipe.favorite" />
+                <b-icon-heart v-else />
+                Favorit
               </b-button>
-              <b-button class="mb-1">
-                <b-icon-bookmark /> vormerken
+              <b-button
+                class="mb-1"
+                @click="onRemember"
+              >
+                <b-icon-bookmark-fill v-if="recipe.remember" />
+                <b-icon-bookmark v-else />
+                vormerken
               </b-button>
               <b-button
                 class="mb-1"
@@ -210,7 +228,7 @@
             v-if="showIngredients"
             class="d-inline"
           >
-            Zutaten
+            {{ ingredientsHeadline }}
           </h3>
           <Ingredients
             v-if="showIngredients"
@@ -269,7 +287,6 @@ import Stars from "../recipe/Stars";
 export default {
   name: "Recipe",
   components: {LayoutDefaultDynamic, Ingredients, Steps, Stars},
-
   props: {
   },
   data() {
@@ -288,6 +305,12 @@ export default {
     },
     stepsSize() {
       return (this.showIngredients ? 8 : 12);
+    },
+    ingredientsHeadline() {
+      if (this.recipe.portion === 1){
+        return "Zutaten ( für eine Portion )";
+      }
+      return "Zutaten ( für " + this.recipe.portion + " Portionen )";
     }
   },
   mounted() {
@@ -296,9 +319,22 @@ export default {
     axios.get('/api/recipes/'+ recipeId).then((res) => {
       this.recipe = res.data;
       this.loaded = true;
+      document.title = this.recipe.title;
     });
   },
   methods: {
+    onFavorite() {
+      const newValue = !this.recipe.favorite;
+      axios.put('/api/recipes/flags/' + this.recipe.id, {favorite: newValue}).then(res => {
+        this.recipe.favorite = newValue;
+      });
+    },
+    onRemember() {
+      const newValue = !this.recipe.remember;
+      axios.put('/api/recipes/flags/' + this.recipe.id, {remember: newValue}).then(res => {
+        this.recipe.remember = newValue;
+      });
+    },
     startCooking() {
       this.cooking = true;
     },

@@ -13,7 +13,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @method BelongsToMany tags()
  * @method BelongsToMany ingredients()
  */
-class RecipeResource extends JsonResource
+class RecipeLightResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -32,9 +32,7 @@ class RecipeResource extends JsonResource
             'comments' => $this->comments,
             'favorite' => $this->favorite,
             'remember' => $this->remember,
-            'steps' => new StepResourceCollection($this->steps()->get()),
             'tags' => new TagResourceCollection($this->tags()->get()),
-            'ingredients' => new IngredientsResourceCollection($this->ingredients()->get())
         ];
     }
 }

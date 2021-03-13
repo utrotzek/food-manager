@@ -20,6 +20,8 @@ class CreateRecipesTable extends Migration
             $table->string('image')->nullable();
             $table->integer('portion');
             $table->longText('comments')->nullable();
+            $table->boolean('favorite')->default(false);
+            $table->boolean('remember')->default(false);
             $table->timestamps();
         });
     }

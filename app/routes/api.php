@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/recipes/validate/{recipe?}', [RecipeController::class, 'validateRequest']);
+Route::put('/recipes/flags/{recipe}', [RecipeController::class, 'flags']);
 
 Route::apiResources([
     'goods' => GoodController::class,
@@ -30,8 +31,5 @@ Route::apiResources([
     'units' => UnitController::class,
     'images' => ImageController::class
 ]);
-
-Route::put('/api/images/save', [ImageController::class, 'save']);
-
 
 Route::put('/goodGroups/resort/{goodGroup}', [GoodGroupController::class, 'resort']);
