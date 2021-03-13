@@ -17,6 +17,7 @@ RUN apt-get update && \
         nodejs \
         npm \
         curl \
+        mysql-client \
         vim \
         apache2 \
         openssh-client \
