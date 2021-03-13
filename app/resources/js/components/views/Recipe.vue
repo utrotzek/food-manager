@@ -4,7 +4,7 @@
       v-if="loaded"
       class="recipe-detail"
     >
-      <h2>{{ recipe.title }}</h2>
+      <h2>{{ recipe.title }} </h2>
       <b-row v-if="cooking">
         <b-col class="text-right">
           <div class="cooking-menu">
@@ -136,7 +136,7 @@
             md="6"
             order-md="1"
           >
-            <h3>Zutaten</h3>
+            <h3>{{ ingredientsHeadline }}</h3>
             <Ingredients :ingredients="recipe.ingredients" />
           </b-col>
         </b-row>
@@ -228,7 +228,7 @@
             v-if="showIngredients"
             class="d-inline"
           >
-            Zutaten
+            {{ ingredientsHeadline }}
           </h3>
           <Ingredients
             v-if="showIngredients"
@@ -306,6 +306,12 @@ export default {
     stepsSize() {
       return (this.showIngredients ? 8 : 12);
     },
+    ingredientsHeadline() {
+      if (this.recipe.portion === 1){
+        return "Zutaten ( für eine Portion )";
+      }
+      return "Zutaten ( für " + this.recipe.portion + " Portionen )";
+    }
   },
   mounted() {
     const recipeId = this.$route.params.id;
