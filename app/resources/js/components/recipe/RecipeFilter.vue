@@ -5,6 +5,7 @@
       class="m-1 icon-button-default-color"
       @click="filterVisible=!filterVisible"
     >
+      <b-icon-filter-circle-fill v-if="activeFilter" />
       Erweiterte Suche
       <b-icon-caret-right v-if="!filterVisible" />
       <b-icon-caret-down v-else />
@@ -67,12 +68,12 @@
               >
                 <b-row>
                   <b-col cols="6">
-                    <label>neue Rezepte</label>
+                    <label>unbewerted</label>
                   </b-col>
                   <b-col cols="6">
                     <toggle-button
-                      id="filter-new"
-                      v-model="filter.new"
+                      id="filter-unrated"
+                      v-model="filter.unrated"
                       :width="70"
                       :font-size="15"
                       :labels="{checked: 'an', unchecked: 'aus'}"
@@ -89,7 +90,7 @@
                   <b-col cols="6">
                     <label>Bewertung</label>
                   </b-col>
-                  <b-col cols="6">
+                  <b-col cols="3">
                     <b-input
                       id="filter-rating"
                       v-model="filter.rating"
@@ -155,8 +156,21 @@ export default {
         favorites: this.value.favorites,
         random: this.value.random,
         rating: this.value.rating,
-        new: this.value.new,
+        unrated: this.value.unrated,
       }
+    }
+  },
+  computed: {
+    activeFilter() {
+      if (
+        this.filter.remembered ||
+        this.filter.favorites ||
+        this.rating ||
+        this.unrated
+      ){
+        return true;
+      }
+      return false;
     }
   },
   watch: {
@@ -174,7 +188,7 @@ export default {
         favorites: false,
         random: false,
         rating: null,
-        new: false,
+        unrated: false,
       };
       this.triggerInput();
     },

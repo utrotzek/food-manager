@@ -124,7 +124,7 @@ export default {
           favorites: false,
           random: false,
           rating: null,
-          new: false,
+          unrated: false,
         }
       };
   },
@@ -133,6 +133,12 @@ export default {
       clearTimeout(this.searchHandle);
       if ((term.length >= 3 || term.length === 0)) {
         this.searchHandle = setTimeout(() => this.loadData(), 600);
+      }
+    },
+    filter: {
+      deep: true,
+      handler() {
+        this.loadData();
       }
     }
   },
@@ -155,7 +161,11 @@ export default {
         this.loading = true;
         const queryParams = {
           page: this.page,
-          searchTerm: this.searchTerm
+          searchTerm: this.searchTerm,
+          favorites: this.filter.favorites,
+          remembered: this.filter.remembered,
+          rating: this.filter.rating,
+          unrated: this.filter.unrated
         };
         axios.get('/api/recipes', {params: queryParams}).then((res) => {
           this.noSearchResult = this.searchTerm !== "" && res.data.length === 0;

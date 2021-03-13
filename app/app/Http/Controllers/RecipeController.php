@@ -63,7 +63,13 @@ class RecipeController extends Controller
     {
         return new Response(
             RecipeLightResource::collection(
-                $this->recipeRepository->searchPaginated($request->input('searchTerm'))
+                $this->recipeRepository->searchPaginated(
+                    $request->input('searchTerm'),
+                    filter_var($request->input('favorites'), FILTER_VALIDATE_BOOL),
+                    filter_var($request->input('remembered'), FILTER_VALIDATE_BOOL),
+                    $request->input('rating'),
+                    filter_var($request->input('unrated'), FILTER_VALIDATE_BOOL),
+                )
             )
         );
     }

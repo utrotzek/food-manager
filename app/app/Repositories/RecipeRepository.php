@@ -16,8 +16,13 @@ class RecipeRepository implements RecipeRepositoryInterface
         return Recipe::query()->get();
     }
 
-    public function searchPaginated(?string $query): Paginator
-    {
+    public function searchPaginated(
+        ?string $query,
+        ?bool $favorites,
+        ?bool $remembered,
+        ?string $rating,
+        ?bool $unrated
+    ): Paginator {
         $qb = Recipe::query();
         $qb->leftJoin('ingredients', 'recipes.id', 'ingredients.recipe_id');
         $qb->leftJoin('goods', 'goods.id', 'ingredients.good_id');
@@ -29,6 +34,31 @@ class RecipeRepository implements RecipeRepositoryInterface
             $qb->orWhere('goods.title', 'like', '%'.$query.'%');
             $qb->orWhere('tags.title', 'like', '%'.$query.'%');
         }
+
+        if ($favorites) {
+            $qb->where('recipes.favorite', 1);
+        }
+
+        if ($remembered) {
+            $qb->where('recipes.remember', 1);
+        }
+
+        if ($rating !== null) {
+            if (strstr($rating, '>') !== false) {
+                $rating = (float)str_replace('>', '', $rating);
+                $qb->where('recipes.rating', '>', $rating);
+            } elseif (strstr($rating, '<') !== false) {
+                $rating = (float)str_replace('<', '', $rating);
+                $qb->where('recipes.rating', '<', $rating);
+            } else {
+                $qb->where('recipes.rating', $rating);
+            }
+        }
+
+        if ($unrated) {
+            $qb->where('recipes.rating', null);
+        }
+
         $qb->select('recipes.*');
         $qb->distinct();
         return $qb->orderBy('recipes.title')
