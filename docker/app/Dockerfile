@@ -18,6 +18,7 @@ RUN apt-get update && \
         vim \
         curl \
         npm \
+        mysql-client \
         apache2 \
         openssh-client \
         software-properties-common \
