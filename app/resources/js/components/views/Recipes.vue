@@ -33,7 +33,10 @@
             </b-row>
             <b-row>
               <b-col>
-                <RecipeFilter v-model="filter" />
+                <RecipeFilter
+                  v-model="filter"
+                  @reload="onReload"
+                />
               </b-col>
             </b-row>
 
@@ -165,8 +168,10 @@ export default {
           favorites: this.filter.favorites,
           remembered: this.filter.remembered,
           rating: this.filter.rating,
-          unrated: this.filter.unrated
+          unrated: this.filter.unrated,
+          random: this.filter.random
         };
+
         axios.get('/api/recipes', {params: queryParams}).then((res) => {
           this.noSearchResult = this.searchTerm !== "" && res.data.length === 0;
           this.page++;
@@ -204,6 +209,9 @@ export default {
       }).catch(err => {
         console.log(err);
       });
+    },
+    onReload() {
+      this.loadData();
     }
   }
 };

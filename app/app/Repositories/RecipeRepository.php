@@ -21,7 +21,8 @@ class RecipeRepository implements RecipeRepositoryInterface
         ?bool $favorites,
         ?bool $remembered,
         ?string $rating,
-        ?bool $unrated
+        ?bool $unrated,
+        ?bool $random
     ): Paginator {
         $qb = Recipe::query();
         $qb->leftJoin('ingredients', 'recipes.id', 'ingredients.recipe_id');
@@ -30,9 +31,11 @@ class RecipeRepository implements RecipeRepositoryInterface
         $qb->leftJoin('tags', 'tags.id', 'recipe_tag.tag_id');
 
         if ($query) {
-            $qb->where('recipes.title', 'like', '%'.$query.'%');
-            $qb->orWhere('goods.title', 'like', '%'.$query.'%');
-            $qb->orWhere('tags.title', 'like', '%'.$query.'%');
+            $qb->where(function ($qb) use ($query) {
+                $qb->where('recipes.title', 'like', '%'.$query.'%');
+                $qb->orWhere('goods.title', 'like', '%'.$query.'%');
+                $qb->orWhere('tags.title', 'like', '%'.$query.'%');
+            });
         }
 
         if ($favorites) {
@@ -44,6 +47,7 @@ class RecipeRepository implements RecipeRepositoryInterface
         }
 
         if ($rating !== null) {
+            $rating = str_replace(',', '.', $rating);
             if (strstr($rating, '>') !== false) {
                 $rating = (float)str_replace('>', '', $rating);
                 $qb->where('recipes.rating', '>', $rating);
@@ -59,12 +63,20 @@ class RecipeRepository implements RecipeRepositoryInterface
             $qb->where('recipes.rating', null);
         }
 
+        if ($random) {
+            $qb->inRandomOrder();
+        }
+
         $qb->select('recipes.*');
         $qb->distinct();
         return $qb->orderBy('recipes.title')
             ->simplePaginate(9);
     }
 
+    public function randomPaginated(): Paginator
+    {
+        return Recipe::query()->inRandomOrder()->paginate(9);
+    }
     /**
      * @codeCoverageIgnore
      * Just glue code. No tests necessary

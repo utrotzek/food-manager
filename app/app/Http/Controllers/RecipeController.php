@@ -69,6 +69,7 @@ class RecipeController extends Controller
                     filter_var($request->input('remembered'), FILTER_VALIDATE_BOOL),
                     $request->input('rating'),
                     filter_var($request->input('unrated'), FILTER_VALIDATE_BOOL),
+                    filter_var($request->input('random'), FILTER_VALIDATE_BOOL),
                 )
             )
         );

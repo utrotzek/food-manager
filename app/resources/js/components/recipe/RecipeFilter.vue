@@ -100,6 +100,26 @@
                   </b-col>
                 </b-row>
               </b-col>
+              <b-col
+                cols="12"
+                sm="6"
+              >
+                <b-row>
+                  <b-col cols="6">
+                    <label>zufällig</label>
+                  </b-col>
+                  <b-col cols="6">
+                    <toggle-button
+                      id="filter-random"
+                      v-model="filter.random"
+                      :width="70"
+                      :font-size="15"
+                      :labels="{checked: 'an', unchecked: 'aus'}"
+                      sync
+                    />
+                  </b-col>
+                </b-row>
+              </b-col>
             </b-row>
             <b-row class="mt-4">
               <b-col
@@ -122,13 +142,14 @@
                 sm="6"
                 lg="3"
                 offset-lg="2"
+                class="mb-1"
               >
                 <b-button
                   block
                   variant="secondary"
-                  @click="$emit('random')"
+                  @click="$emit('reload')"
                 >
-                  <b-icon-shuffle /> Zufällige Rezepte
+                  <b-icon-arrow-repeat /> Neu laden
                 </b-button>
               </b-col>
             </b-row>
