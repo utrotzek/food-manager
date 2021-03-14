@@ -1,19 +1,31 @@
 <template>
   <div class="rating clearfix">
-    <b-icon-star-fill
-      v-for="(value, key) in fullStars"
-      :key="`full-star-${ key }`"
-      class="star-icon"
-    />
-    <b-icon-star-half
-      v-if="hasHalfStars"
-      class="star-icon"
-    />
-    <b-icon-star
-      v-for="(value, key) in emptyStars"
-      :key="`empty-star-${ key }`"
-      class="star-icon"
-    />
+    <div
+      v-if="rating"
+      class="rating-child-wrapper"
+    >
+      <b-icon-star-fill
+        v-for="(value, key) in fullStars"
+        :key="`full-star-${ key }`"
+        class="star-icon"
+      />
+      <b-icon-star-half
+        v-if="hasHalfStars"
+        class="star-icon"
+      />
+      <b-icon-star
+        v-for="(value, key) in emptyStars"
+        :key="`empty-star-${ key }`"
+        class="star-icon"
+      />
+    </div>
+    <div v-else>
+      <b-badge
+        variant="warning"
+      >
+        Nicht bewertet
+      </b-badge>
+    </div>
   </div>
 </template>
 
@@ -23,7 +35,8 @@ export default {
   props: {
     rating: {
       type: Number,
-      required: true
+      required: false,
+      default:  null
     }
   },
   computed: {

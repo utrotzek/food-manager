@@ -15,16 +15,7 @@
         cols="4"
         class="text-right stars-column"
       >
-        <Stars
-          v-if="recipe.rating !== null"
-          :rating="recipe.rating"
-        />
-        <b-badge
-          v-else
-          variant="warning"
-        >
-          Nicht bewertet
-        </b-badge>
+        <Stars :rating="recipe.rating" />
       </b-col>
     </b-row>
 
