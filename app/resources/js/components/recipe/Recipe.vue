@@ -28,7 +28,7 @@
       </b-col>
     </b-row>
 
-    <b-row class="tags mb-1">
+    <b-row class="tags mb-2">
       <b-col>
         <div
           v-if="recipe.tags"
@@ -42,32 +42,36 @@
             {{ tag.title }}
           </b-badge>
 
-          <b-popover
-            :target="`popover-target-${recipe.id}`"
-            triggers="hover"
-            placement="top"
-          >
-            <template #title>
-              Weitere tags
-            </template>
-            <b-badge
-              v-for="tag in hiddenTagList"
-              :key="tag.id"
-              class="mr-1"
-              variant="secondary"
-            >
-              {{ tag.title }}
-            </b-badge>
-          </b-popover>
-
-          <b-badge
+          <span
             v-if="recipe.tags.length > maxTags"
-            :id="`popover-target-${recipe.id}`"
-            class="mr-1"
-            variant="light"
+            class="additional-tags"
           >
-            ...
-          </b-badge>
+            <b-button
+              :id="`popover-target-${recipe.id}`"
+              class="mr-1 icon-button"
+              size="sm"
+              variant="light"
+            >
+              ...
+            </b-button>
+            <b-popover
+              :target="`popover-target-${recipe.id}`"
+              triggers="hover"
+              placement="top"
+            >
+              <template #title>
+                Weitere tags
+              </template>
+              <b-badge
+                v-for="tag in hiddenTagList"
+                :key="tag.id"
+                class="mr-1"
+                variant="secondary"
+              >
+                {{ tag.title }}
+              </b-badge>
+            </b-popover>
+          </span>
         </div>
       </b-col>
     </b-row>
@@ -229,6 +233,10 @@ export default {
     .tags {
       height: 1.5em;
       line-height: 1.5em;
+    }
+
+    .additional-tags .btn {
+      line-height: 1;
     }
 </style>
 
