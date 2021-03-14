@@ -7,6 +7,12 @@ echo "Role: ${role}"
 if [ "$role" = "app" ]; then
     [[ "${DB_CONNECTION}" == "sqlite" ]] && touch ${DB_DATABASE}
 
+    if [[ ! -f .initialized ]]; then
+        ./artisan storage:link
+        ./artisan migrate --force
+        touch .initialized
+    fi
+
     /usr/sbin/apachectl -D FOREGROUND
 elif [ "$role" = "queue" ]; then
     echo "Queue role"
