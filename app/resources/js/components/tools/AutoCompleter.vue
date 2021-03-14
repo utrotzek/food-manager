@@ -42,7 +42,7 @@
             v-text="item[searchKey]"
           />
           <li
-            v-if="emptySearchResult"
+            v-if="noExactItems"
             class="notSelectable"
           >
             {{ noObjectsFound }}
@@ -50,7 +50,7 @@
         </ul>
       </div>
       <div
-        v-if="emptySearchResult && enableInlineCreation"
+        v-if="noExactItems && enableInlineCreation"
         class="newItem"
       >
         <button
@@ -121,9 +121,13 @@ export default {
     };
   },
   computed: {
-    emptySearchResult() {
-      return (this.matchedItems.length === 0 && this.query.trim() !== "");
-
+    noExactItems() {
+      return (this.exactMatches.length === 0 && this.query.trim() !== "")
+    },
+    exactMatches() {
+      return this.items.filter((item) => {
+        return item[this.searchKey].toLowerCase().trim() === this.query.toLowerCase().trim()
+      });
     },
     matchedItems() {
       let filteredItems = [];
