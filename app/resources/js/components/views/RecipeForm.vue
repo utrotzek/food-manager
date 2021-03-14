@@ -35,7 +35,7 @@
                           name="title"
                           placeholder="Titel des Rezeptes"
                           :state="getValidationState(validationContext)"
-                          autofocus
+                          :autofocus="!editMode"
                           @focusout="validateTitle"
                         />
                         <b-form-invalid-feedback id="title-feedback">

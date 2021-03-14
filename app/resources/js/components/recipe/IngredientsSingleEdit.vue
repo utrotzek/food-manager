@@ -23,7 +23,7 @@
               name="amount"
               placeholder="Anzahl"
               :state="getValidationState(validationContext)"
-              autofocus
+              :autofocus="!goodId"
               @change="amountUpdated"
             />
             <b-form-invalid-feedback id="amount-feedback">
