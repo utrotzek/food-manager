@@ -411,6 +411,7 @@ export default {
 
       recipeData.ingredients.forEach(item => {
         ingredients.push({
+          id: item.id,
           amount: item.unit_amount,
           unitId: item.unit.id,
           goodId: item.good.id
