@@ -1,7 +1,10 @@
 <template>
   <div class="recipe">
-    <b-row>
-      <b-col>
+    <b-row class="title-row">
+      <b-col
+        cols="8"
+        class="title-column"
+      >
         <div
           class="title"
           @click="$emit('clicked', recipe)"
@@ -11,31 +14,9 @@
           </router-link>
         </div>
       </b-col>
-    </b-row>
-
-    <b-row class="tags-and-rating">
-      <b-col
-        cols="8"
-        md="7"
-      >
-        <div
-          v-if="recipe.tags"
-          class="tags mb-1"
-        >
-          <b-badge
-            v-for="tag in recipe.tags"
-            :key="tag.id"
-            class="mr-1"
-            variant="secondary"
-          >
-            {{ tag.title }}
-          </b-badge>
-        </div>
-      </b-col>
       <b-col
         cols="4"
-        md="5"
-        class="text-right"
+        class="text-right stars-column"
       >
         <Stars
           v-if="recipe.rating !== null"
@@ -47,6 +28,50 @@
         >
           Nicht bewertet
         </b-badge>
+      </b-col>
+    </b-row>
+
+    <b-row class="tags mb-1">
+      <b-col>
+        <div
+          v-if="recipe.tags"
+        >
+          <b-badge
+            v-for="tag in visibleTagList"
+            :key="tag.id"
+            class="mr-1"
+            variant="secondary"
+          >
+            {{ tag.title }}
+          </b-badge>
+
+          <b-popover
+            :target="`popover-target-${recipe.id}`"
+            triggers="hover"
+            placement="top"
+          >
+            <template #title>
+              Weitere tags
+            </template>
+            <b-badge
+              v-for="tag in hiddenTagList"
+              :key="tag.id"
+              class="mr-1"
+              variant="secondary"
+            >
+              {{ tag.title }}
+            </b-badge>
+          </b-popover>
+
+          <b-badge
+            v-if="recipe.tags.length > maxTags"
+            :id="`popover-target-${recipe.id}`"
+            class="mr-1"
+            variant="light"
+          >
+            ...
+          </b-badge>
+        </div>
       </b-col>
     </b-row>
 
@@ -85,15 +110,18 @@
         </router-link>
       </b-col>
     </b-row>
+
+    <Breakpoints v-model="breakpoints" />
   </div>
 </template>
 
 <script>
 import Stars from "./Stars";
 import ImagePlaceholder from "./ImagePlaceholder";
+import Breakpoints from "../tools/Breakpoints";
 export default {
     name: "Recipe",
-    components: {Stars, ImagePlaceholder},
+    components: {Stars, ImagePlaceholder, Breakpoints},
     props: {
         recipe: {
             type: Object,
@@ -110,10 +138,34 @@ export default {
         }
     },
     data() {
-        return {
+      return {
+        breakpoints: {
+          isXs: false,
+          isSm: false,
         }
+      }
     },
     computed: {
+        maxTags() {
+          if (this.breakpoints.isXs || this.breakpoints.isSm || this.breakpoints.isMd) {
+            return 3
+          }else if (this.breakpoints.isLg) {
+            return 4;
+          }
+          return 5;
+        },
+        visibleTagList() {
+          if (this.recipe.tags){
+            return this.recipe.tags.slice(0, this.maxTags);
+          }
+          return [];
+        },
+        hiddenTagList() {
+          if (this.recipe.tags) {
+            return this.recipe.tags.slice(this.maxTags);
+          }
+          return [];
+        },
         imagePath() {
           return '/storage/recipe-images/' + this.recipe.image;
         },
@@ -129,12 +181,18 @@ export default {
           }
           return this.recipe.title;
         }
+    },
+    methods: {
+
     }
 }
 </script>
 
 <style scoped lang="scss">
 @import '../../../sass/_variables.scss';
+    .title-row {
+      line-height: 2em;
+    }
 
     .title {
       font-size: 1.5em;
@@ -159,6 +217,7 @@ export default {
 
     .rating {
       float:right;
+      margin-top: 0.5em;
     }
 
     .tags {
@@ -170,7 +229,7 @@ export default {
       display: block;
     }
 
-    .tags-and-rating {
+    .tags {
       height: 1.5em;
       line-height: 1.5em;
     }
