@@ -280,6 +280,9 @@ export default {
     }
   },
   mounted() {
+    if (this.editMode){
+      setTimeout(() => this.$refs.observer.validate(), 1000);
+    }
   },
   methods: {
     getValidationState({ dirty, validated, valid = null }) {
@@ -421,13 +424,19 @@ export default {
       if (recipeData.image !== null){
         imagePath = '/storage/recipe-images/' + recipeData.image;
       }
+
+      let rating = null;
+      if (recipeData.rating) {
+        rating = String(recipeData.rating).replace('.', ',');
+      }
+
       const formData = {
         id: recipeData.id,
         title: recipeData.title,
         imageName: recipeData.image,
         image: imagePath,
         existingTags: tags,
-        rating: String(recipeData.rating).replace('.', ','),
+        rating: rating,
         portion: recipeData.portion,
         comment: recipeData.comments,
         steps: steps,
