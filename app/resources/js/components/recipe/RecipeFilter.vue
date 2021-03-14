@@ -90,7 +90,10 @@
                   <b-col cols="6">
                     <label>Bewertung</label>
                   </b-col>
-                  <b-col cols="3">
+                  <b-col
+                    cols="4"
+                    lg="3"
+                  >
                     <b-input
                       id="filter-rating"
                       v-model="filter.rating"
@@ -183,15 +186,13 @@ export default {
   },
   computed: {
     activeFilter() {
-      if (
+      return !!(
         this.filter.remembered ||
         this.filter.favorites ||
-        this.rating ||
-        this.unrated
-      ){
-        return true;
-      }
-      return false;
+        this.filter.rating ||
+        this.filter.unrated ||
+        this.filter.random
+      );
     }
   },
   watch: {

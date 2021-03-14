@@ -35,7 +35,7 @@
                           name="title"
                           placeholder="Titel des Rezeptes"
                           :state="getValidationState(validationContext)"
-                          autofocus
+                          :autofocus="!editMode"
                           @focusout="validateTitle"
                         />
                         <b-form-invalid-feedback id="title-feedback">
@@ -280,6 +280,9 @@ export default {
     }
   },
   mounted() {
+    if (this.editMode){
+      setTimeout(() => this.$refs.observer.validate(), 1000);
+    }
   },
   methods: {
     getValidationState({ dirty, validated, valid = null }) {
@@ -411,6 +414,7 @@ export default {
 
       recipeData.ingredients.forEach(item => {
         ingredients.push({
+          id: item.id,
           amount: item.unit_amount,
           unitId: item.unit.id,
           goodId: item.good.id
@@ -420,13 +424,19 @@ export default {
       if (recipeData.image !== null){
         imagePath = '/storage/recipe-images/' + recipeData.image;
       }
+
+      let rating = null;
+      if (recipeData.rating) {
+        rating = String(recipeData.rating).replace('.', ',');
+      }
+
       const formData = {
         id: recipeData.id,
         title: recipeData.title,
         imageName: recipeData.image,
         image: imagePath,
         existingTags: tags,
-        rating: String(recipeData.rating).replace('.', ','),
+        rating: rating,
         portion: recipeData.portion,
         comment: recipeData.comments,
         steps: steps,

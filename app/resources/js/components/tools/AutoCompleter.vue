@@ -20,10 +20,12 @@
         class="form-control"
         type="text"
         autofocus
+        @keydown.esc="disableEditMode"
         @keydown.up="keyUp"
         @keydown.down="keyDown"
         @keydown.enter="selectItem"
-        @keydown.tab="disableEditMode"
+        @keydown.tab.exact="disableEditMode"
+        @keydown.tab.shift="backwards = true"
         @blur="disableEditMode"
       />
       <div class="result">
@@ -40,7 +42,7 @@
             v-text="item[searchKey]"
           />
           <li
-            v-if="emptySearchResult"
+            v-if="noExactItems"
             class="notSelectable"
           >
             {{ noObjectsFound }}
@@ -48,7 +50,7 @@
         </ul>
       </div>
       <div
-        v-if="emptySearchResult && enableInlineCreation"
+        v-if="noExactItems && enableInlineCreation"
         class="newItem"
       >
         <button
@@ -110,15 +112,22 @@ export default {
     return {
       selected: 0,
       selectedItem: null,
+      previousSelected: null,
+      previousItem: null,
+      selectionChangeMode: false,
       editMode: false,
       query: "",
-
+      backwards: false
     };
   },
   computed: {
-    emptySearchResult() {
-      return (this.matchedItems.length === 0 && this.query.trim() !== "");
-
+    noExactItems() {
+      return (this.exactMatches.length === 0 && this.query.trim() !== "")
+    },
+    exactMatches() {
+      return this.items.filter((item) => {
+        return item[this.searchKey].toLowerCase().trim() === this.query.toLowerCase().trim()
+      });
     },
     matchedItems() {
       let filteredItems = [];
@@ -143,6 +152,15 @@ export default {
   watch: {
     preselectedValue: function() {
       this.preselectConfiguredItem();
+    },
+    query() {
+      if (!this.selectionChangeMode){
+        this.previousItem = this.selectedItem;
+        this.previousSelected = this.selected;
+        this.selectionChangeMode = true;
+      }
+      this.selected = 0;
+      this.selectedItem = null;
     }
   },
   mounted() {
@@ -164,10 +182,18 @@ export default {
 
     },
     enableEditMode() {
-      this.editMode = true;
+      if (!this.backwards){
+        this.editMode = true;
+      }
+      this.backwards = false;
     },
     disableEditMode() {
       this.editMode = false;
+
+      if (this.selectionChangeMode){
+        this.selectedItem = this.previousItem;
+        this.selected = this.previousSelected;
+      }
     },
     toggleEditMode() {
       this.resetQuery();
@@ -180,6 +206,11 @@ export default {
     selectItem() {
       this.selectedItem = this.matchedItems[this.selected];
       this.editMode = false;
+
+      this.selectionChangeMode = false;
+      this.previousItem = null;
+      this.previousSelected = null;
+
       this.resetQuery();
 
       this.$emit("selected", JSON.parse(JSON.stringify(this.selectedItem)));

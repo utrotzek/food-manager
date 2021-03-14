@@ -84,6 +84,8 @@ export default {
     },
     onChange(values) {
       const index = this.form.ingredients.findIndex((item) => item.id === values.id);
+      console.log(this.form.ingredients[index]);
+      console.log(values.data);
       this.form.ingredients[index] = values.data;
       this.$emit('changed', this.form.ingredients);
     },
