@@ -5,10 +5,7 @@
         cols="8"
         class="title-column"
       >
-        <div
-          class="title"
-          @click="$emit('clicked', recipe)"
-        >
+        <div class="title">
           <router-link :to="{name: 'recipe', params: {id: recipe.id}}">
             {{ truncatedTitle }}
           </router-link>
