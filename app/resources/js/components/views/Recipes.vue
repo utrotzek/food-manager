@@ -136,26 +136,42 @@ export default {
   },
   watch: {
     searchTerm(term){
-      clearTimeout(this.searchHandle);
-      if ((term.length >= 3 || term.length === 0)) {
-        this.searchHandle = setTimeout(() => this.loadData(true), 600);
+      if (this.initialized) {
+        clearTimeout(this.searchHandle);
+        if ((term.length >= 3 || term.length === 0)) {
+          this.searchHandle = setTimeout(() => this.loadData(true), 600);
+        }
+        this.$store.commit('recipe/saveSearchTerm', this.searchTerm);
       }
     },
     filter: {
       deep: true,
       handler() {
-        this.loadData();
+        if (this.initialized){
+          this.$store.commit('recipe/saveFilter', this.filter);
+          this.loadData();
+        }
       }
     }
   },
-  mounted() {
+  created() {
     this.initialized = false;
+    if (this.$store.state.recipe.searchFilter !== undefined){
+      this.filter = this.$store.state.recipe.searchFilter;
+    }
+
+    if (this.$store.state.recipe.searchTerm !== undefined){
+      this.searchTerm = this.$store.state.recipe.searchTerm;
+    }
+
     if (this.recipes.length === 0){
-      this.loadData().finally(() => {
+      this.loadData().then(() => {
         this.initialized = true;
       });
     }else{
-      this.initialized = true;
+      Vue.nextTick(()=>{
+        this.initialized = true;
+      })
     }
   },
   methods: {

@@ -12,7 +12,6 @@
         type="text"
         placeholder="Suche"
         aria-label="Search"
-        @keyup="triggerSearch"
       />
       <span
         v-if="displayDelete"
@@ -39,6 +38,10 @@ export default {
             query: this.value,
             displayDelete: false
         };
+    },
+    mounted() {
+        //this makes sure the "delete button" is present when value contains a value
+        this.triggerSearch();
     },
     methods: {
         onSubmit(e) {

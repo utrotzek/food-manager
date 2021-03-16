@@ -4,5 +4,7 @@ export default {
     goodGroups: [],
     recipeSearchResult: [],
     recipePageCounter: 1,
-    recipeLoading: false
+    recipeLoading: false,
+    searchFilter: undefined,
+    searchTerm: undefined
 }

@@ -32,5 +32,11 @@ export default {
     },
     setLoadingState(state, payload){
         state.recipeLoading = payload;
+    },
+    saveFilter(state, payload){
+        state.searchFilter = payload;
+    },
+    saveSearchTerm(state, payload){
+        state.searchTerm = payload;
     }
 }
