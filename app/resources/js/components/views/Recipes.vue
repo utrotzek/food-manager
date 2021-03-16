@@ -181,7 +181,6 @@ export default {
     },
     fetchData(){
       return new Promise((resolve, reject) => {
-        this.loading = true;
         const queryParams = {
           searchTerm: this.searchTerm,
           favorites: this.filter.favorites,
@@ -195,8 +194,6 @@ export default {
             this.noSearchResult = this.searchTerm !== "" && res.data.length === 0;
           }
           resolve(res);
-        }).finally(() => {
-          this.loading = false;
         })
       });
     },
@@ -209,17 +206,15 @@ export default {
       });
     },
     infiniteHandler($state) {
-      if (!this.loading){
-        this.fetchData().then(res => {
-          if (res.data && res.data.length > 0){
-            $state.loaded();
-          } else {
-            $state.complete();
-          }
-        }).catch(err => {
-          console.log(err);
-        });
-      }
+      this.fetchData().then(res => {
+        if (res.data && res.data.length > 0){
+          $state.loaded();
+        } else {
+          $state.complete();
+        }
+      }).catch(err => {
+        console.log(err);
+      });
     },
     onReload() {
       this.loadData(true);
