@@ -12,8 +12,12 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
-    <div id="app" class="pb-5 mb-5">
+    <div id="app">
         <app></app>
+        <div class="mb-1">
+            <!-- bottom spacer -->
+            &nbsp;
+        </div>
     </div>
 
     <!-- Bootstrap core JavaScript-->
