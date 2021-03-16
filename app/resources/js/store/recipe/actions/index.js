@@ -68,5 +68,35 @@ export default {
                 reject(err);
             })
         });
+    },
+    search({commit, state}, payload) {
+        let searchParams = {
+            page: state.recipePageCounter,
+            searchTerm: payload.searchTerm,
+            favorites: payload.favorites,
+            remembered: payload.remembered,
+            rating: payload.rating,
+            unrated: payload.unrated,
+            random: payload.random
+        };
+
+        if (!state.recipeLoading){
+            commit('setLoadingState', true);
+            return new Promise((resolve, reject) => {
+                axios.get('/api/recipes', {params: searchParams}).then(res => {
+                    if (res){
+                        this.noSearchResult = this.searchTerm !== "" && res.data.length === 0;
+                        commit('incrementPageCounter');
+                        commit('addRecipes', res.data);
+                        resolve(res.data);
+                    }
+                    resolve();
+                }).catch(err => {
+                    reject(err);
+                }).finally(() => {
+                    commit('setLoadingState', false);
+                });
+            });
+        }
     }
 }

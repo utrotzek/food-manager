@@ -4,7 +4,7 @@ import Recipes from "./components/views/Recipes";
 import Recipe from "./components/views/Recipe";
 import RecipeForm from "./components/views/RecipeForm";
 
-export default new VueRouter({
+const router = new VueRouter({
     mode: "history",
     linkActiveClass: "active",
     linkExactActiveClass: "exact-active",
@@ -30,7 +30,19 @@ export default new VueRouter({
             component: RecipeForm
         },
     ],
-    scrollBehavior() {
-        document.getElementById('app').scrollIntoView();
-    }
+    scrollBehavior (to, from, savedPosition) {
+        let position = null;
+        if (savedPosition) {
+            position = savedPosition;
+        } else {
+            position = { x: 0, y: 0 }
+        }
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                resolve(position)
+            }, 400)
+        })
+    },
 });
+
+export default router;

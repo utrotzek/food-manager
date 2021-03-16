@@ -19,5 +19,18 @@ export default {
     },
     addGoodGroup(state, payload){
         state.goodGroups.push(payload);
+    },
+    addRecipes(state, payload){
+        state.recipeSearchResult = state.recipeSearchResult.concat(payload);
+    },
+    incrementPageCounter(state){
+        state.recipePageCounter++;
+    },
+    clearSearchResult(state){
+        state.recipeSearchResult = [];
+        state.recipePageCounter = 1;
+    },
+    setLoadingState(state, payload){
+        state.recipeLoading = payload;
     }
 }

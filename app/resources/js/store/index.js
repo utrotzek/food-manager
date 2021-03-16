@@ -9,7 +9,7 @@ Vue.use(Vuex);
 
 const vuexStorage = new VuexPersist({
     key: process.env.VUE_APP_STORAGE_KEY,
-    storage: sessionStorage,
+    storage: localStorage,
 });
 
 export default new Vuex.Store({
