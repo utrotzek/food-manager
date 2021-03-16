@@ -211,7 +211,8 @@ export default {
     font-weight: bold;
     margin-bottom: 1.5em;
     margin-top: 1em;
-    margin-left: 1em;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   .headline {
