@@ -114,11 +114,9 @@ export default {
   components: {LayoutDefaultDynamic, Recipe, Search, RecipeFilter},
   data () {
       return {
-        recipes: [],
         initialized: false,
         loading: false,
         noSearchResult: false,
-        page: 1,
         searchHandle: null,
         searchTerm: null,
         filterVisible: false,
@@ -131,39 +129,59 @@ export default {
         }
       };
   },
+  computed: {
+    recipes() {
+      return this.$store.state.recipe.recipeSearchResult;
+    }
+  },
   watch: {
     searchTerm(term){
-      clearTimeout(this.searchHandle);
-      if ((term.length >= 3 || term.length === 0)) {
-        this.searchHandle = setTimeout(() => this.loadData(), 600);
+      if (this.initialized) {
+        clearTimeout(this.searchHandle);
+        if ((term.length >= 3 || term.length === 0)) {
+          this.searchHandle = setTimeout(() => this.loadData(true), 600);
+        }
+        this.$store.commit('recipe/saveSearchTerm', this.searchTerm);
       }
     },
     filter: {
       deep: true,
       handler() {
-        this.loadData();
+        if (this.initialized){
+          this.$store.commit('recipe/saveFilter', this.filter);
+          this.loadData();
+        }
       }
     }
   },
-  mounted() {
+  created() {
     this.initialized = false;
-    this.loadData().finally(() => {
-      this.initialized = true;
-    });
+    if (this.$store.state.recipe.searchFilter !== undefined){
+      this.filter = this.$store.state.recipe.searchFilter;
+    }
+
+    if (this.$store.state.recipe.searchTerm !== undefined){
+      this.searchTerm = this.$store.state.recipe.searchTerm;
+    }
+
+    if (!this.recipes === undefined || this.recipes.length === 0){
+      this.loadData().then(() => {
+        this.initialized = true;
+      });
+    }else{
+      Vue.nextTick(()=>{
+        this.initialized = true;
+      })
+    }
   },
   methods: {
-    login() {
-      this.$store.dispatch('auth/LOGIN', {userName: "Testuser"})
-    },
     recipeClicked(recipe) {
       const recipeId = recipe.id;
       this.$router.push({'name': 'recipe', params: {'id': recipeId}})
     },
     fetchData(){
       return new Promise((resolve, reject) => {
-        this.loading = true;
         const queryParams = {
-          page: this.page,
           searchTerm: this.searchTerm,
           favorites: this.filter.favorites,
           remembered: this.filter.remembered,
@@ -171,37 +189,28 @@ export default {
           unrated: this.filter.unrated,
           random: this.filter.random
         };
-
-        axios.get('/api/recipes', {params: queryParams}).then((res) => {
-          this.noSearchResult = this.searchTerm !== "" && res.data.length === 0;
-          this.page++;
+        this.loading = true;
+        this.$store.dispatch('recipe/search', queryParams).then(res => {
+          if (res && res.data){
+            this.noSearchResult = this.searchTerm !== "" && res.data.length === 0;
+          }
           resolve(res);
-        }).catch(err => {
-          reject(err);
         }).finally(() => {
           this.loading = false;
-        });
+        })
       });
     },
     loadData(){
       return new Promise((resolve, reject) => {
-        this.page = 1;
-        this.recipes = [];
-        this.fetchData().then(res => {
-          this.recipes = res.data;
+        this.$store.commit('recipe/clearSearchResult');
+        this.fetchData().then(() => {
           resolve();
-        }).catch(err => {
-          console.log(err);
-          reject(err);
         });
       });
     },
     infiniteHandler($state) {
       this.fetchData().then(res => {
-        if (res.data.length > 0){
-          $.each(res.data, (key, value)=> {
-            this.recipes.push(value);
-          });
+        if (res.data && res.data.length > 0){
           $state.loaded();
         } else {
           $state.complete();
@@ -211,7 +220,7 @@ export default {
       });
     },
     onReload() {
-      this.loadData();
+      this.loadData(true);
     }
   }
 };

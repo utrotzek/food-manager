@@ -68,5 +68,75 @@ export default {
                 reject(err);
             })
         });
+    },
+    search({commit, state}, payload) {
+        let searchParams = {
+            page: state.recipePageCounter,
+            searchTerm: payload.searchTerm,
+            favorites: payload.favorites,
+            remembered: payload.remembered,
+            rating: payload.rating,
+            unrated: payload.unrated,
+            random: payload.random
+        };
+
+        if (!state.recipeLoading){
+            commit('setLoadingState', true);
+            return new Promise((resolve, reject) => {
+                axios.get('/api/recipes', {params: searchParams}).then(res => {
+                    if (res){
+                        this.noSearchResult = this.searchTerm !== "" && res.data.length === 0;
+                        commit('incrementPageCounter');
+                        commit('addRecipes', res.data);
+                        resolve(res.data);
+                    }
+                    resolve();
+                }).catch(err => {
+                    reject(err);
+                }).finally(() => {
+                    commit('setLoadingState', false);
+                });
+            });
+        }
+    },
+    saveRecipe({commit, state}, payload) {
+        const recipeData = payload.recipe;
+        const id = payload.id;
+
+        const recipe = {
+            title: recipeData.title,
+            image: recipeData.image,
+            rating: recipeData.rating,
+            portion: recipeData.portion,
+            comments: recipeData.comments,
+            steps: recipeData.steps,
+            tags: recipeData.tags,
+            ingredients: recipeData.ingredients
+        }
+
+        return new Promise((resolve, reject) => {
+            if (id){
+                console.log('updated');
+                axios.put('/api/recipes/' + id, recipe).then(res => {
+                    commit('updateRecipe', {recipe: res.data.item, id: id});
+                    resolve();
+                });
+            }else{
+                axios.post('/api/recipes', recipe).then(res => {
+                    commit('addRecipes', [res.data.item] )
+                    resolve();
+                });
+            }
+        })
+    },
+    deleteRecipe({commit, state}, payload){
+        return new Promise((resolve, reject) => {
+            axios.delete('/api/recipes/'+ payload.id).then((res) => {
+                commit('removeRecipe', {id: payload.id});
+                resolve();
+            }).catch(err => {
+                reject(err);
+            })
+        });
     }
 }

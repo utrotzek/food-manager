@@ -1,7 +1,10 @@
 export default {
-    state: {
-        tags: [],
-        units: [],
-        goodGroups: []
-    }
+    tags: [],
+    units: [],
+    goodGroups: [],
+    recipeSearchResult: [],
+    recipePageCounter: 1,
+    recipeLoading: false,
+    searchFilter: undefined,
+    searchTerm: undefined
 }
