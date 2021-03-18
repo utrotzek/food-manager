@@ -327,12 +327,14 @@ export default {
       const newValue = !this.recipe.favorite;
       axios.put('/api/recipes/flags/' + this.recipe.id, {favorite: newValue}).then(res => {
         this.recipe.favorite = newValue;
+        this.$store.commit('recipe/updateRecipe', {recipe: this.recipe, id: this.recipe.id});
       });
     },
     onRemember() {
       const newValue = !this.recipe.remember;
       axios.put('/api/recipes/flags/' + this.recipe.id, {remember: newValue}).then(res => {
         this.recipe.remember = newValue;
+        this.$store.commit('recipe/updateRecipe', {recipe: this.recipe, id: this.recipe.id});
       });
     },
     startCooking() {
@@ -350,10 +352,17 @@ export default {
       this.enableSpeech = false;
       this.cookMode = false;
     },
-    deleteRecipe() {
-      axios.delete('/api/recipes/'+ this.recipe.id).then((res) => {
+    historyBack() {
+      if (window.history.length > 2){
+        this.$router.go(-1);
+      }else{
         this.$router.push({name: 'recipes'});
-      });
+      }
+    },
+    deleteRecipe() {
+      this.$store.dispatch('recipe/deleteRecipe', {id: this.recipe.id}).then(() => {
+        this.historyBack();
+      })
     }
   }
 }

@@ -322,33 +322,38 @@ export default {
     async onSubmit() {
       const tags = await this.saveTags();
       await this.saveImage();
-
       const rating = this.form.rating ? String(this.form.rating).replace(',', '.') : null;
-      console.log('rating: ' + rating);
 
-      const recipe = {
-        title: this.form.title,
-        image: this.form.imageName,
-        rating: rating,
-        portion: this.form.portion,
-        comments: this.form.comment,
-        steps: this.form.steps,
-        tags: tags,
-        ingredients: this.form.ingredients
+      const payload = {
+        recipe: {
+          title: this.form.title,
+          image: this.form.imageName,
+          rating: rating,
+          portion: this.form.portion,
+          comments: this.form.comment,
+          steps: this.form.steps,
+          tags: tags,
+          ingredients: this.form.ingredients
+        },
+        id: null
       }
 
       if (this.editMode){
-        axios.put('/api/recipes/' + this.form.id, recipe).then(res => {
+        payload.id = this.form.id;
+        this.$store.dispatch('recipe/saveRecipe', payload).then(() => {
           this.$refs['saved_modal'].show();
-
-          if (window.history.length > 2){
-            this.$router.go(-1);
-          }
-        });
+          this.historyBack();
+        })
       }else {
-        axios.post('/api/recipes', recipe).then(res => {
+        this.$store.dispatch('recipe/saveRecipe', payload).then(() => {
           this.$refs['saved_modal'].show();
-        });
+          this.historyBack();
+        })
+      }
+    },
+    historyBack() {
+      if (window.history.length > 2){
+        this.$router.go(-1);
       }
     },
     async saveTags() {

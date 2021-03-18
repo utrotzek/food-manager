@@ -84,7 +84,8 @@ class RecipeController extends Controller
     public function store(RecipeStoreRequest $request)
     {
         try {
-            DB::transaction(function () use ($request) {
+            $newItem = null;
+            DB::transaction(function () use ($request, &$newItem) {
                 $newItem = $this->recipeRepository->create($request->input());
 
                 if ($request->has('ingredients')) {
@@ -99,11 +100,10 @@ class RecipeController extends Controller
                     $newItem->steps()->saveMany($steps);
                 }
                 $newItem->tags()->sync($request->input('tags'));
-
-                $response['item'] = new RecipeResource($newItem);
-                $response['message'] = sprintf('Recipe %1$s successfully created', $newItem['title']);
-                return new Response($response);
             });
+            $response['item'] = new RecipeResource($newItem);
+            $response['message'] = sprintf('Recipe %1$s successfully created', $newItem['title']);
+            return new Response($response);
         } catch (\Throwable $e) {
             return new Response('Recipe could not be created', 500);
         }
@@ -117,16 +117,9 @@ class RecipeController extends Controller
      */
     public function show(Recipe $recipe)
     {
-        if ($recipe) {
-            return new Response(
-                new RecipeResource($recipe)
-            );
-        } else {
-            return new Response(
-                sprintf('recipe "%1$s" could not be found.', $slugOrId),
-                404
-            );
-        }
+        return new Response(
+            new RecipeResource($recipe)
+        );
     }
 
     /**
