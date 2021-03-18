@@ -164,7 +164,7 @@ export default {
       this.searchTerm = this.$store.state.recipe.searchTerm;
     }
 
-    if (this.recipes.length === 0){
+    if (!this.recipes === undefined || this.recipes.length === 0){
       this.loadData().then(() => {
         this.initialized = true;
       });
@@ -189,11 +189,14 @@ export default {
           unrated: this.filter.unrated,
           random: this.filter.random
         };
+        this.loading = true;
         this.$store.dispatch('recipe/search', queryParams).then(res => {
           if (res && res.data){
             this.noSearchResult = this.searchTerm !== "" && res.data.length === 0;
           }
           resolve(res);
+        }).finally(() => {
+          this.loading = false;
         })
       });
     },

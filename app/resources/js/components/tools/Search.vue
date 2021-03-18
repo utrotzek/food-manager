@@ -14,7 +14,7 @@
         aria-label="Search"
       />
       <span
-        v-if="displayDelete"
+        v-if="displayDeleted"
         class="search-clear"
         @click="clearQuery"
       >
@@ -35,26 +35,31 @@ export default {
     },
     data() {
         return {
-            query: this.value,
-            displayDelete: false
+            query: this.value
         };
     },
-    mounted() {
-        //this makes sure the "delete button" is present when value contains a value
-        this.triggerSearch();
+    computed: {
+      displayDeleted() {
+        if (this.value){
+          return this.value.length > 0;
+        }else{
+          return false;
+        }
+      }
+    },
+    watch: {
+      query(newVal) {
+        this.displayDelete = newVal.length > 0;
+        this.$emit("input", newVal);
+      }
     },
     methods: {
         onSubmit(e) {
             /* istanbul ignore next */
             e.preventDefault();
         },
-        triggerSearch() {
-            this.displayDelete = this.query.length > 0;
-            this.$emit("input", this.query);
-        },
         clearQuery() {
             this.query = "";
-            this.triggerSearch();
         }
     }
 };
