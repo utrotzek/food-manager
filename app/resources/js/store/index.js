@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import localForage from 'localforage';
 import VuexPersist from 'vuex-persist';
 
 import auth from './auth';
@@ -9,7 +10,7 @@ Vue.use(Vuex);
 
 const vuexStorage = new VuexPersist({
     key: process.env.VUE_APP_STORAGE_KEY,
-    storage: localStorage,
+    storage: localForage,
 });
 
 export default new Vuex.Store({
