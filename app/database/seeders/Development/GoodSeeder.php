@@ -22,6 +22,14 @@ class GoodSeeder extends Seeder
             'piece_in_gramm' => 1000
         ]);
         $grainGoods[] = new Good([
+            'title' => 'Dinkelmehl',
+            'carbs' => 60,
+            'fat' => 45,
+            'protein' => 5,
+            'kcal' => 200,
+            'piece_in_gramm' => 1000
+        ]);
+        $grainGoods[] = new Good([
             'title' => 'Nudeln',
             'carbs' => 60,
             'fat' => 10,
@@ -45,6 +53,15 @@ class GoodSeeder extends Seeder
             'protein' => 10,
             'kcal' => 210,
             'piece_in_gramm' => 500
+        ]);
+
+        $grainGoods[] = new Good([
+            'title' => 'Trockenhefe',
+            'carbs' => 60,
+            'fat' => 45,
+            'protein' => 5,
+            'kcal' => 200,
+            'piece_in_gramm' => 1000
         ]);
         $this->saveGoodsToGroup($goodGroupRepository->findByTitle('Getreideprodukte'), $grainGoods);
 
@@ -104,6 +121,15 @@ class GoodSeeder extends Seeder
             'piece_in_gramm' => 500
         ]);
 
+        $meatGoods[] = new Good([
+            'title' => 'Schinken',
+            'carbs' => 5,
+            'fat' => 20,
+            'protein' => 35,
+            'kcal' => 210,
+            'piece_in_gramm' => 500
+        ]);
+
         $this->saveGoodsToGroup($goodGroupRepository->findByTitle('Fleisch'), $meatGoods);
 
         $fishGoods = [];
@@ -136,6 +162,15 @@ class GoodSeeder extends Seeder
             'kcal' => 150,
             'piece_in_gramm' => 20
         ]);
+
+        $cheeseGoods[] = new Good([
+            'title' => 'Raspelkäse',
+            'carbs' => 10,
+            'fat' => 45,
+            'protein' => 10,
+            'kcal' => 150,
+            'piece_in_gramm' => 20
+        ]);
         $this->saveGoodsToGroup($goodGroupRepository->findByTitle('Käse'), $cheeseGoods);
 
         $tomatoGoods = [];
@@ -150,6 +185,15 @@ class GoodSeeder extends Seeder
 
         $tomatoGoods[] = new Good([
             'title' => 'passierte Tomaten',
+            'carbs' => 10,
+            'fat' => 45,
+            'protein' => 10,
+            'kcal' => 150,
+            'piece_in_gramm' => 20
+        ]);
+
+        $tomatoGoods[] = new Good([
+            'title' => 'Pizzasauce',
             'carbs' => 10,
             'fat' => 45,
             'protein' => 10,
@@ -188,6 +232,15 @@ class GoodSeeder extends Seeder
 
         $spicesGoods[] = new Good([
             'title' => 'Kreuzkümmel',
+            'carbs' => 10,
+            'fat' => 45,
+            'protein' => 10,
+            'kcal' => 150,
+            'piece_in_gramm' => 20
+        ]);
+
+        $spicesGoods[] = new Good([
+            'title' => 'Oregano',
             'carbs' => 10,
             'fat' => 45,
             'protein' => 10,

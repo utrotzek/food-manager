@@ -21,4 +21,9 @@ class Ingredient extends Model
     {
         return $this->belongsTo(Unit::class, 'unit_id');
     }
+
+    public function category(): BelongsTo
+    {
+        return $this->belongsTo(IngredientCategory::class);
+    }
 }
