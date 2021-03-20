@@ -17,7 +17,7 @@
     <b-row>
       <b-col>
         <div
-          v-for="ingredient in ingredients"
+          v-for="ingredient in uncategorized"
           :key="ingredient.id"
           class="ingredient"
         >
@@ -26,6 +26,25 @@
             :ingredient="ingredient"
             :all-checked="allChecked"
           />
+        </div>
+
+
+        <div
+          v-for="category in categories"
+          :key="category.id"
+        >
+          <h4>{{ category.title }}</h4>
+          <div
+            v-for="ingredient in byCategoriy(category.id)"
+            :key="ingredient.id"
+            class="ingredient"
+          >
+            <Ingredient
+              :enable-checklist="enableChecklist"
+              :ingredient="ingredient"
+              :all-checked="allChecked"
+            />
+          </div>
         </div>
       </b-col>
     </b-row>
@@ -39,6 +58,10 @@ export default {
   name: "Ingredients",
   components: {Ingredient},
   props: {
+    categories: {
+      type: Array,
+      default: null
+    },
     ingredients: {
       type: Array,
       required: true
@@ -56,11 +79,17 @@ export default {
   computed: {
     checkVariant() {
       return (this.checked ? 'success' : 'info');
+    },
+    uncategorized(){
+      return this.ingredients.filter(el => { return el.category === null; });
     }
   },
   methods: {
     toggleChecked() {
       this.checked = !this.checked;
+    },
+    byCategoriy(categoryId){
+      return this.ingredients.filter(el => { return el.category.id === categoryId; });
     }
   }
 }

@@ -136,8 +136,13 @@
             md="6"
             order-md="1"
           >
-            <h3>{{ ingredientsHeadline }}</h3>
-            <Ingredients :ingredients="recipe.ingredients" />
+            <h3 class="ingredientsHeadline">
+              {{ ingredientsHeadline }}
+            </h3>
+            <Ingredients
+              :ingredients="recipe.ingredients"
+              :categories="recipe.ingredientCategories"
+            />
           </b-col>
         </b-row>
         <b-row>
@@ -233,6 +238,7 @@
           <Ingredients
             v-if="showIngredients"
             :ingredients="recipe.ingredients"
+            :categories="recipe.ingredientCategories"
             :enable-checklist="true"
           />
         </b-col>
@@ -382,6 +388,11 @@ export default {
 .title {
   font-size: 1.5em;
   white-space: nowrap;
+}
+
+.ingredientsHeadline {
+  display: block;
+  margin-bottom: 1em;
 }
 
 .buttons button {
