@@ -37,7 +37,7 @@ class RecipeResource extends JsonResource
             'steps' => new StepResourceCollection($this->steps()->get()),
             'tags' => new TagResourceCollection($this->tags()->get()),
             'ingredients' => new IngredientsResourceCollection($this->ingredients()->get()),
-            'ingredientCategories' => IngredientCategoryResource::collection($this->ingredientCategories)
+            'ingredientCategories' => IngredientCategoryResource::collection($this->ingredientCategories()->orderBy('title')->get())
         ];
     }
 }

@@ -21,7 +21,7 @@
       </b-button>
     </div>
 
-    <div0
+    <div
       v-for="category in form.categories"
       :key="category.id"
     >
@@ -94,7 +94,7 @@
           </div>
         </b-col>
       </b-row>
-    </div0>
+    </div>
     <b-row>
       <b-col>
         <div class="new-cat">
