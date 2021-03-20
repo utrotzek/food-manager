@@ -33,6 +33,7 @@ export default {
                 commit('updateGoods', goods.data);
                 commit('updateUnits', units.data);
                 commit('updateGoodGroups', goodGroups.data);
+                resolve();
             }));
         });
     },
@@ -53,6 +54,21 @@ export default {
            }).catch(err => {
                reject(err);
            })
+        });
+    },
+    saveUnit({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            const data = {
+                title: payload.title,
+                is_piece: false,
+                average_gram: 100
+            };
+            axios.post('/api/units', data).then((res) => {
+                commit('addUnit', res.data.item);
+                resolve(res.data.item);
+            }).catch(err => {
+                reject(err);
+            })
         });
     },
     saveNewGoodGroup({commit}, payload) {

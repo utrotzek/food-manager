@@ -51,6 +51,7 @@
             :preselected-value="form.unitId"
             :enable-inline-creation="true"
             @selected="unitUpdated"
+            @create="$emit('createUnit', $event)"
           />
         </b-form-group>
       </b-col>
@@ -143,6 +144,9 @@ export default {
   watch: {
     goodId: function (newVal) {
       this.form.goodId = newVal;
+    },
+    unitId: function(newVal) {
+      this.form.unitId = newVal;
     }
   },
   methods: {

@@ -11,6 +11,7 @@
       @changed="onChange"
       @deleted="onDeleted"
       @createGood="onCreateGood(item, $event)"
+      @createUnit="onCreateUnit(item, $event)"
     />
     <div class="text-center mt-4 mb-4">
       <b-button
@@ -222,6 +223,21 @@ export default {
       this.form.newGood.title = newTitle;
       this.form.newGood.item = item;
       this.$refs['add-good-modal'].show();
+    },
+    onCreateUnit(updatedIngredient, newTitle){
+      this.$store.dispatch('recipe/saveUnit', {title: newTitle}).then(res => {
+        console.log(updatedIngredient);
+        console.log(newTitle);
+        console.log(res);
+        const itemIndex = this.form.ingredients.findIndex((item) => { return item.id === updatedIngredient.id });
+        if (itemIndex > -1) {
+          let updatedItem = this.form.ingredients[itemIndex];
+          updatedItem.unitId = res.id;
+          this.$set(this.form.ingredients, itemIndex, updatedItem);
+        }
+      }).catch(err => {
+        console.log(err);
+      })
     },
     onAbortGood(){
       this.$refs['add-good-modal'].hide();

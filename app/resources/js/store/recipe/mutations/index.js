@@ -8,6 +8,9 @@ export default {
     updateUnits(state, payload) {
         state.units = payload;
     },
+    addUnit(state, payload){
+        state.units.push(payload);
+    },
     updateGoods(state, payload) {
         state.goods = payload;
     },
