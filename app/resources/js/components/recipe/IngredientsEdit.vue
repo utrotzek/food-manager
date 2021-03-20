@@ -46,11 +46,13 @@
         class="mb-3"
       >
         <b-col cols="10">
-          <b-input
-            v-model="category.title"
-            autofocus
-            @click="onSelectCategoryTitle($event, category.title)"
-          />
+          <b-form @submit.prevent="toggleCategoryEditMode(category.id)">
+            <b-input
+              v-model="category.title"
+              autofocus
+              @click="onSelectCategoryTitle($event, category.title)"
+            />
+          </b-form>
         </b-col>
         <b-col
           cols="2"
@@ -234,9 +236,9 @@ export default {
       });
     },
     toggleCategoryEditMode(id){
-      console.log(id);
       const changedIndex = this.form.categories.findIndex(el => { return el.id === id;});
       this.form.categories[changedIndex]["editMode"] = !this.form.categories[changedIndex].editMode ?? true;
+      this.$emit('categories-updated', this.form.categories);
     },
     onSelectCategoryTitle(event, text){
       event.target.setSelectionRange(0, text.length);

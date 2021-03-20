@@ -144,6 +144,7 @@
                     <IngredientsEdit
                       v-model="form.ingredients"
                       :categories="form.ingredientCategories"
+                      @categories-updated="onCategoriesUpdate"
                     />
                   </b-form-group>
                 </validation-provider>
@@ -322,6 +323,9 @@ export default {
       newTags.forEach(item => {
         this.form.newTags.push(item.text)
       });
+    },
+    onCategoriesUpdate(updatedCategories){
+      this.form.ingredientCategories = updatedCategories;
     },
     async onSubmit() {
       const tags = await this.saveTags();
