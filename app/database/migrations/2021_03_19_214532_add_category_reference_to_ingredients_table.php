@@ -14,7 +14,12 @@ class AddCategoryReferenceToIngredientsTable extends Migration
     public function up()
     {
         Schema::table('ingredients', function (Blueprint $table) {
-            $table->foreignId('category_id')->after('unit_amount')->nullable()->references('id')->on('ingredient_categories');
+            $table->foreignId('category_id')
+                ->after('unit_amount')
+                ->nullable()
+                ->references('id')
+                ->on('ingredient_categories')
+                ->cascadeOnDelete();
         });
     }
 
