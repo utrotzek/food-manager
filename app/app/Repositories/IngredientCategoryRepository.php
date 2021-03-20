@@ -30,7 +30,7 @@ class IngredientCategoryRepository implements IngredientCategoryRepositoryInterf
      *
      * @throws \Exception
      */
-    public function deleteRemovedItems(Collection $existingItems, Collection $actualItems): void
+    public function deleteRemovedItems(Collection $existingItems, array $actualItems): void
     {
         /** @var IngredientCategory $existingItem */
         foreach ($existingItems as $existingItem) {

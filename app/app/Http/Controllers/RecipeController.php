@@ -175,6 +175,8 @@ class RecipeController extends Controller
                     $ingredientCategories[$ingredientCategory['id']] = $category;
                 }
             }
+            $this->ingredientCategoryRepository->deleteRemovedItems($recipe->ingredientCategories, $ingredientCategories);
+
 
             $actualIngredients = $this->ingredientFactory->createIngredientList(
                 $request->input('ingredients'),
