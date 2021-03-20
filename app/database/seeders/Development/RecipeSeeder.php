@@ -123,7 +123,7 @@ class RecipeSeeder extends Seeder
             ],
             [
                 $this->createIngredient('Dinkelmehl', 'Gramm', 200, $pizza, 'für den Teig'),
-                $this->createIngredient('Trockenhefe', 'Stück', 0.5, $pizza, 'für den Teig'),
+                $this->createIngredient('Trockenhefe', 'Päckchen', 1, $pizza, 'für den Teig'),
                 $this->createIngredient('Pizzasauce', 'Gramm', 200, $pizza, 'für den Belag'),
                 $this->createIngredient('Schinken', 'Gramm', 100, $pizza, 'für den Belag'),
                 $this->createIngredient('Raspelkäse', 'Gramm', 100, $pizza, 'für den Belag'),

@@ -74,5 +74,10 @@ class CreateUnitsTable extends Migration
             'title' => 'ml',
             'average_gram' => '1'
         ]);
+
+        Unit::create([
+            'title' => 'Päckchen',
+            'average_gram' => '1'
+        ]);
     }
 }
