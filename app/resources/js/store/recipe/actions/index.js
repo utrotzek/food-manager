@@ -111,7 +111,8 @@ export default {
             comments: recipeData.comments,
             steps: recipeData.steps,
             tags: recipeData.tags,
-            ingredients: recipeData.ingredients
+            ingredients: recipeData.ingredients,
+            ingredientCategories: recipeData.ingredientCategories
         }
 
         return new Promise((resolve, reject) => {

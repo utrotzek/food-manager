@@ -116,6 +116,10 @@ export default {
     id: {
       type: Number,
       default: null
+    },
+    category: {
+      type: Number,
+      default: null
     }
   },
   data() {
@@ -170,6 +174,7 @@ export default {
           unitId: parseInt(this.form.unitId),
           amount: parseInt(this.form.amount),
           goodId: parseInt(this.form.goodId),
+          category: this.category
         }
       });
     }

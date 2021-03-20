@@ -89,7 +89,7 @@ export default {
       this.checked = !this.checked;
     },
     byCategoriy(categoryId){
-      return this.ingredients.filter(el => { return el.category.id === categoryId; });
+      return this.ingredients.filter(el => { return el.category === categoryId; });
     }
   }
 }

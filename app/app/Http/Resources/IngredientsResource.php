@@ -16,7 +16,7 @@ class IngredientsResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'category' => new IngredientCategoryResource($this->category),
+            'category' => $this->category->id ?? null,
             'unit_amount' => $this->unit_amount,
             'unit' => new UnitResource($this->unit),
             'good' => new GoodResource($this->good),

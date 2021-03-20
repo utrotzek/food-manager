@@ -141,7 +141,10 @@
                     >
                       {{ validationContext.errors[0] }}
                     </b-form-invalid-feedback>
-                    <IngredientsEdit v-model="form.ingredients" />
+                    <IngredientsEdit
+                      v-model="form.ingredients"
+                      :categories="form.ingredientCategories"
+                    />
                   </b-form-group>
                 </validation-provider>
               </b-col>
@@ -258,7 +261,8 @@ export default {
         portion: null,
         comment: null,
         steps: [],
-        ingredients: []
+        ingredients: [],
+        ingredientCategories: []
       },
     };
   },
@@ -333,7 +337,8 @@ export default {
           comments: this.form.comment,
           steps: this.form.steps,
           tags: tags,
-          ingredients: this.form.ingredients
+          ingredients: this.form.ingredients,
+          ingredientCategories: this.form.ingredientCategories
         },
         id: null
       }
@@ -422,7 +427,8 @@ export default {
           id: item.id,
           amount: item.unit_amount,
           unitId: item.unit.id,
-          goodId: item.good.id
+          goodId: item.good.id,
+          category: item.category
         });
       });
       let imagePath = null;
@@ -445,7 +451,8 @@ export default {
         portion: recipeData.portion,
         comment: recipeData.comments,
         steps: steps,
-        ingredients: ingredients
+        ingredients: ingredients,
+        ingredientCategories: recipeData.ingredientCategories
       };
 
       this.$set(this, 'form', formData);
