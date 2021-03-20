@@ -21,13 +21,24 @@
       </b-button>
     </div>
 
-    <div
+    <div0
       v-for="category in form.categories"
       :key="category.id"
     >
-      <b-row v-if="!category.editMode">
+      <b-row
+        v-if="!category.editMode"
+        class="category-title"
+      >
         <b-col>
-          <h4>{{ category.title }}</h4>
+          <h4>
+            {{ category.title }}
+            <b-button
+              variant="link"
+              class="icon-button"
+            >
+              <b-icon-pen @click="toggleCategoryEditMode(category.id)" />
+            </b-button>
+          </h4>
         </b-col>
       </b-row>
       <b-row
@@ -49,7 +60,7 @@
             variant="link"
             class="icon-button"
           >
-            <b-icon-check-circle @click="onFinishTitle(category.id)" />
+            <b-icon-check-circle @click="toggleCategoryEditMode(category.id)" />
           </b-button>
         </b-col>
       </b-row>
@@ -81,7 +92,7 @@
           </div>
         </b-col>
       </b-row>
-    </div>
+    </div0>
     <b-row>
       <b-col>
         <div class="new-cat">
@@ -156,11 +167,18 @@ export default {
   computed: {
     uncategorized() {
       return this.ingredientList.filter(el => { return el.category === null });
-    }
+    },
   },
   mounted() {
     this.form.ingredients = this.ingredientList;
-    this.form.categories = this.categories;
+
+    this.categories.forEach(el => {
+      this.form.categories.push ({
+        id: el.id,
+        title: el.title,
+        editMode: false
+      });
+    })
   },
   methods: {
     recipesForCategory(categoryId){
@@ -215,9 +233,10 @@ export default {
         editMode: true
       });
     },
-    onFinishTitle(id){
+    toggleCategoryEditMode(id){
+      console.log(id);
       const changedIndex = this.form.categories.findIndex(el => { return el.id === id;});
-      this.form.categories[changedIndex].editMode = false;
+      this.form.categories[changedIndex]["editMode"] = !this.form.categories[changedIndex].editMode ?? true;
     },
     onSelectCategoryTitle(event, text){
       event.target.setSelectionRange(0, text.length);
@@ -236,4 +255,7 @@ export default {
     border-bottom: 1px $gray-300 solid;
   }
 
+  .category-title button {
+    color: $gray-500 !important;
+  }
 </style>
