@@ -30,13 +30,25 @@
         class="category-title"
       >
         <b-col>
-          <h4>
+          <h4 class="label">
             {{ category.title }}
             <b-button
               variant="link"
               class="icon-button"
+              size="sm"
             >
               <b-icon-pen @click="toggleCategoryEditMode(category.id)" />
+            </b-button>
+
+            <b-button
+              variant="link"
+              class="icon-button"
+            >
+              <b-icon-trash
+                v-if="recipesForCategory(category.id).length === 0"
+                size="sm"
+                @click="deleteCategory(category.id)"
+              />
             </b-button>
           </h4>
         </b-col>
@@ -234,6 +246,12 @@ export default {
         title: "Neue Kategorie",
         editMode: true
       });
+      this.$emit('categories-updated', this.form.categories);
+    },
+    deleteCategory(id){
+      const foundIndex = this.form.categories.findIndex(el => {return el.id === id;});
+      this.form.categories.splice(foundIndex, 1);
+      this.$emit('categories-updated', this.form.categories);
     },
     toggleCategoryEditMode(id){
       const changedIndex = this.form.categories.findIndex(el => { return el.id === id;});
@@ -259,5 +277,9 @@ export default {
 
   .category-title button {
     color: $gray-500 !important;
+  }
+
+  .category-title .label button {
+    padding: 0!important;
   }
 </style>
