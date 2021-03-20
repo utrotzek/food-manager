@@ -96,4 +96,7 @@ export default {
 </script>
 
 <style scoped>
+  .ingredient {
+    padding-left: 0.5em;
+  }
 </style>

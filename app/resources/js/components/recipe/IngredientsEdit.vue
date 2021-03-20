@@ -30,16 +30,27 @@
           <h4>{{ category.title }}</h4>
         </b-col>
       </b-row>
-      <b-row v-else>
-        <b-col cols="9">
+      <b-row
+        v-else
+        class="mb-3"
+      >
+        <b-col cols="10">
           <b-input
             v-model="category.title"
             autofocus
             @click="onSelectCategoryTitle($event, category.title)"
           />
         </b-col>
-        <b-col cols="3">
-          <b-button><b-icon-check-circle @click="onFinishTitle(category.id)" /></b-button>
+        <b-col
+          cols="2"
+          class="text-right"
+        >
+          <b-button
+            variant="link"
+            class="icon-button"
+          >
+            <b-icon-check-circle @click="onFinishTitle(category.id)" />
+          </b-button>
         </b-col>
       </b-row>
       <b-row>
@@ -71,9 +82,19 @@
         </b-col>
       </b-row>
     </div>
-    <b-button @click="onAddCategory">
-      Kategorie einfügen
-    </b-button>
+    <b-row>
+      <b-col>
+        <div class="new-cat">
+          <b-button
+            variant="link"
+            class="icon-button"
+            @click="onAddCategory"
+          >
+            <b-icon-plus-circle-fill /> Neue Kategorie
+          </b-button>
+        </div>
+      </b-col>
+    </b-row>
     <b-alert
       variant="info"
       :show="form.ingredients.length === 0"
@@ -205,6 +226,14 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import '../../../sass/_variables.scss';
+  .new-cat button {
+    color: $gray-500 !important;
+  }
+  .new-cat {
+    border-top: 1px $gray-300 solid;
+    border-bottom: 1px $gray-300 solid;
+  }
 
 </style>
