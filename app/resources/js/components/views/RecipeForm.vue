@@ -267,27 +267,28 @@ export default {
       },
     };
   },
-  created() {
-    this.$store.dispatch('recipe/updateTags');
-    this.$store.dispatch('recipe/fetchIngredientItems');
-
+  mounted() {
     if (this.$route.params.id !== undefined) {
       this.editMode = true;
       this.loading = true;
-      axios.get('/api/recipes/' + this.$route.params.id).then(res => {
-        const recipeData = res.data;
-        this.loadRecipeData(recipeData);
-        document.title = this.form.title + ' bearbeiten';
-        this.loading = false;
-      });
     }else {
       document.title = 'Neues Rezept anlegen';
     }
-  },
-  mounted() {
-    if (this.editMode){
-      setTimeout(() => this.$refs.observer.validate(), 1000);
-    }
+
+    this.$store.dispatch('recipe/updateTags')
+      .then(res => this.$store.dispatch('recipe/fetchIngredientItems'))
+      .then(res => {
+        axios.get('/api/recipes/' + this.$route.params.id).then(res => {
+          const recipeData = res.data;
+          this.loadRecipeData(recipeData);
+          document.title = this.form.title + ' bearbeiten';
+          this.loading = false;
+        });
+
+        if (this.editMode){
+          setTimeout(() => this.$refs.observer.validate(), 1000);
+        }
+      })
   },
   methods: {
     getValidationState({ dirty, validated, valid = null }) {
