@@ -146,12 +146,21 @@ class RecipeController extends Controller
         $newItem = null;
         DB::transaction(function () use ($request, $recipe, &$newItem) {
             $newItem = $this->recipeRepository->update($request->input(), $recipe);
-            $actualSteps = $this->stepRepository->syncStepsWithDescriptionList(
-                $newItem->steps()->get(),
-                $request->input('steps')
-            );
-            $newItem->steps()->saveMany($actualSteps);
-            $newItem->tags()->sync($request->input('tags'));
+
+            if ($request->has('steps')) {
+                $actualSteps = $this->stepRepository->syncStepsWithDescriptionList(
+                    $newItem->steps()->get(),
+                    $request->input('steps')
+                );
+                $newItem->steps()->saveMany($actualSteps);
+            } else {
+                $newItem->steps()->delete();
+            }
+            if ($request->has('tags')) {
+                $newItem->tags()->sync($request->input('tags'));
+            } else {
+                $newItem->tags()->delete();
+            }
 
             $ingredientCategories = [];
             if ($request->has('ingredientCategories')) {
