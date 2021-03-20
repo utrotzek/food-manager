@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\IngredientCategory;
 use App\Models\Recipe;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,6 +13,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
  * @method HasMany steps()
  * @method BelongsToMany tags()
  * @method BelongsToMany ingredients()
+ * @method BelongsToMany ingredientCategories()
  */
 class RecipeResource extends JsonResource
 {
@@ -34,7 +36,8 @@ class RecipeResource extends JsonResource
             'remember' => $this->remember,
             'steps' => new StepResourceCollection($this->steps()->get()),
             'tags' => new TagResourceCollection($this->tags()->get()),
-            'ingredients' => new IngredientsResourceCollection($this->ingredients()->get())
+            'ingredients' => new IngredientsResourceCollection($this->ingredients()->get()),
+            'ingredientCategories' => IngredientCategoryResource::collection($this->ingredientCategories()->orderBy('title')->get())
         ];
     }
 }

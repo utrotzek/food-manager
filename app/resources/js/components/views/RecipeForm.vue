@@ -141,7 +141,11 @@
                     >
                       {{ validationContext.errors[0] }}
                     </b-form-invalid-feedback>
-                    <IngredientsEdit v-model="form.ingredients" />
+                    <IngredientsEdit
+                      v-model="form.ingredients"
+                      :categories="form.ingredientCategories"
+                      @categories-updated="onCategoriesUpdate"
+                    />
                   </b-form-group>
                 </validation-provider>
               </b-col>
@@ -258,31 +262,33 @@ export default {
         portion: null,
         comment: null,
         steps: [],
-        ingredients: []
+        ingredients: [],
+        ingredientCategories: []
       },
     };
   },
-  created() {
-    this.$store.dispatch('recipe/updateTags');
-    this.$store.dispatch('recipe/fetchIngredientItems');
-
+  mounted() {
     if (this.$route.params.id !== undefined) {
       this.editMode = true;
       this.loading = true;
-      axios.get('/api/recipes/' + this.$route.params.id).then(res => {
-        const recipeData = res.data;
-        this.loadRecipeData(recipeData);
-        document.title = this.form.title + ' bearbeiten';
-        this.loading = false;
-      });
     }else {
       document.title = 'Neues Rezept anlegen';
     }
-  },
-  mounted() {
-    if (this.editMode){
-      setTimeout(() => this.$refs.observer.validate(), 1000);
-    }
+
+    this.$store.dispatch('recipe/updateTags')
+      .then(res => this.$store.dispatch('recipe/fetchIngredientItems'))
+      .then(res => {
+        axios.get('/api/recipes/' + this.$route.params.id).then(res => {
+          const recipeData = res.data;
+          this.loadRecipeData(recipeData);
+          document.title = this.form.title + ' bearbeiten';
+          this.loading = false;
+        });
+
+        if (this.editMode){
+          setTimeout(() => this.$refs.observer.validate(), 1000);
+        }
+      })
   },
   methods: {
     getValidationState({ dirty, validated, valid = null }) {
@@ -319,6 +325,9 @@ export default {
         this.form.newTags.push(item.text)
       });
     },
+    onCategoriesUpdate(updatedCategories){
+      this.form.ingredientCategories = updatedCategories;
+    },
     async onSubmit() {
       const tags = await this.saveTags();
       await this.saveImage();
@@ -333,7 +342,8 @@ export default {
           comments: this.form.comment,
           steps: this.form.steps,
           tags: tags,
-          ingredients: this.form.ingredients
+          ingredients: this.form.ingredients,
+          ingredientCategories: this.form.ingredientCategories
         },
         id: null
       }
@@ -422,7 +432,8 @@ export default {
           id: item.id,
           amount: item.unit_amount,
           unitId: item.unit.id,
-          goodId: item.good.id
+          goodId: item.good.id,
+          category: item.category
         });
       });
       let imagePath = null;
@@ -445,7 +456,8 @@ export default {
         portion: recipeData.portion,
         comment: recipeData.comments,
         steps: steps,
-        ingredients: ingredients
+        ingredients: ingredients,
+        ingredientCategories: recipeData.ingredientCategories
       };
 
       this.$set(this, 'form', formData);

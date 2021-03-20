@@ -51,6 +51,7 @@
             :preselected-value="form.unitId"
             :enable-inline-creation="true"
             @selected="unitUpdated"
+            @create="$emit('createUnit', $event)"
           />
         </b-form-group>
       </b-col>
@@ -116,6 +117,10 @@ export default {
     id: {
       type: Number,
       default: null
+    },
+    category: {
+      type: Number,
+      default: null
     }
   },
   data() {
@@ -139,6 +144,9 @@ export default {
   watch: {
     goodId: function (newVal) {
       this.form.goodId = newVal;
+    },
+    unitId: function(newVal) {
+      this.form.unitId = newVal;
     }
   },
   methods: {
@@ -170,6 +178,7 @@ export default {
           unitId: parseInt(this.form.unitId),
           amount: parseInt(this.form.amount),
           goodId: parseInt(this.form.goodId),
+          category: this.category
         }
       });
     }

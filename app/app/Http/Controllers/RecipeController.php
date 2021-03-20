@@ -7,6 +7,7 @@ use App\Http\Requests\RecipeStoreRequest;
 use App\Http\Resources\RecipeLightResource;
 use App\Http\Resources\RecipeResource;
 use App\Models\Recipe;
+use App\Repositories\IngredientCategoryRepository;
 use App\Repositories\IngredientRepository;
 use App\Repositories\RecipeRepository;
 use App\Repositories\StepRepository;
@@ -36,16 +37,20 @@ class RecipeController extends Controller
      */
     protected StepRepository $stepRepository;
 
+    protected IngredientCategoryRepository $ingredientCategoryRepository;
+
     public function __construct(
         RecipeRepository $recipeRepository,
         StepRepository $stepRepository,
         IngredientFactory $ingredientFactory,
-        IngredientRepository $ingredientRepository
+        IngredientRepository $ingredientRepository,
+        IngredientCategoryRepository $ingredientCategoryRepository
     ) {
         $this->recipeRepository = $recipeRepository;
         $this->stepRepository = $stepRepository;
         $this->ingredientFactory = $ingredientFactory;
         $this->ingredientRepository = $ingredientRepository;
+        $this->ingredientCategoryRepository = $ingredientCategoryRepository;
     }
 
     /**
@@ -83,30 +88,37 @@ class RecipeController extends Controller
      */
     public function store(RecipeStoreRequest $request)
     {
-        try {
-            $newItem = null;
-            DB::transaction(function () use ($request, &$newItem) {
-                $newItem = $this->recipeRepository->create($request->input());
+        $newRecipe = null;
+        DB::transaction(function () use ($request, &$newRecipe) {
+            $newRecipe = $this->recipeRepository->create($request->input());
 
-                if ($request->has('ingredients')) {
-                    $ingredients = $this->ingredientFactory->createIngredientList(
-                        $request->input('ingredients')
+            $ingredientCategories = [];
+            if ($request->has('ingredientCategories')) {
+                foreach ($request->input('ingredientCategories') as $ingredientCategory) {
+                    $ingredientCategories[$ingredientCategory['id']] = $this->ingredientCategoryRepository->create(
+                        $ingredientCategory['title'],
+                        $newRecipe
                     );
-                    $newItem->ingredients()->saveMany($ingredients);
                 }
+            }
 
-                if ($request->has('steps')) {
-                    $steps = $this->stepRepository->prepareByDescriptionArray($request->input('steps'));
-                    $newItem->steps()->saveMany($steps);
-                }
-                $newItem->tags()->sync($request->input('tags'));
-            });
-            $response['item'] = new RecipeResource($newItem);
-            $response['message'] = sprintf('Recipe %1$s successfully created', $newItem['title']);
-            return new Response($response);
-        } catch (\Throwable $e) {
-            return new Response('Recipe could not be created', 500);
-        }
+            if ($request->has('ingredients')) {
+                $ingredients = $this->ingredientFactory->createIngredientList(
+                    $request->input('ingredients'),
+                    $ingredientCategories
+                );
+                $newRecipe->ingredients()->saveMany($ingredients);
+            }
+
+            if ($request->has('steps')) {
+                $steps = $this->stepRepository->prepareByDescriptionArray($request->input('steps'));
+                $newRecipe->steps()->saveMany($steps);
+            }
+            $newRecipe->tags()->sync($request->input('tags'));
+        });
+        $response['item'] = new RecipeResource($newRecipe);
+        $response['message'] = sprintf('Recipe %1$s successfully created', $newRecipe['title']);
+        return new Response($response);
     }
 
     /**
@@ -131,17 +143,49 @@ class RecipeController extends Controller
      */
     public function update(RecipeStoreRequest $request, Recipe $recipe)
     {
-        $newItem = $this->recipeRepository->update($request->input(), $recipe);
-        $actualSteps = $this->stepRepository->syncStepsWithDescriptionList(
-            $newItem->steps()->get(),
-            $request->input('steps')
-        );
-        $newItem->steps()->saveMany($actualSteps);
-        $newItem->tags()->sync($request->input('tags'));
-        $actualIngredients = $this->ingredientFactory->createIngredientList($request->input('ingredients'));
-        $this->ingredientRepository->deleteRemovedItems($newItem->ingredients()->get(), $actualIngredients);
-        $newItem->ingredients()->saveMany($actualIngredients);
+        $newItem = null;
+        DB::transaction(function () use ($request, $recipe, &$newItem) {
+            $newItem = $this->recipeRepository->update($request->input(), $recipe);
 
+            if ($request->has('steps')) {
+                $actualSteps = $this->stepRepository->syncStepsWithDescriptionList(
+                    $newItem->steps()->get(),
+                    $request->input('steps')
+                );
+                $newItem->steps()->saveMany($actualSteps);
+            } else {
+                $newItem->steps()->delete();
+            }
+            if ($request->has('tags')) {
+                $newItem->tags()->sync($request->input('tags'));
+            } else {
+                $newItem->tags()->delete();
+            }
+
+            $ingredientCategories = [];
+            if ($request->has('ingredientCategories')) {
+                foreach ($request->input('ingredientCategories') as $ingredientCategory) {
+                    $category = $this->ingredientCategoryRepository->findByRecipeAndTitle($recipe, $ingredientCategory['title']);
+                    if (!$category) {
+                        $category = $this->ingredientCategoryRepository->create(
+                            $ingredientCategory['title'],
+                            $recipe
+                        );
+                    }
+                    $ingredientCategories[$ingredientCategory['id']] = $category;
+                }
+            }
+            $this->ingredientCategoryRepository->deleteRemovedItems($recipe->ingredientCategories, $ingredientCategories);
+
+
+            $actualIngredients = $this->ingredientFactory->createIngredientList(
+                $request->input('ingredients'),
+                $ingredientCategories
+            );
+
+            $this->ingredientRepository->deleteRemovedItems($newItem->ingredients()->get(), $actualIngredients);
+            $newItem->ingredients()->saveMany($actualIngredients);
+        });
         $response['item'] = new RecipeResource($newItem->fresh());
         $response['message'] = sprintf('Recipe %1$s successfully updated', $newItem['title']);
         return new Response($response);
