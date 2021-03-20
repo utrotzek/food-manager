@@ -9,7 +9,7 @@ uses(
 );
 
 beforeEach(function () {
-    $this->seed('DevelopmentSeeder');
+    $this->seed('DatabaseSeeder');
 });
 
 it('Can find items by id or slug', function () {

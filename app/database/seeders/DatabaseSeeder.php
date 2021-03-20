@@ -8,7 +8,7 @@ use Database\Seeders\Development\TagSeeder;
 use Database\Seeders\Development\UnitSeeder;
 use Illuminate\Database\Seeder;
 
-class DevelopmentSeeder extends Seeder
+class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.

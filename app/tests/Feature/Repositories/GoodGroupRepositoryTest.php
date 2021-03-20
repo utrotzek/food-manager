@@ -10,7 +10,7 @@ uses(
 
 
 beforeEach(function () {
-    $this->seed('DevelopmentSeeder');
+    $this->seed('DatabaseSeeder');
 });
 
 

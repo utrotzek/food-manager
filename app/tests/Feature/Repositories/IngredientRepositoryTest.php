@@ -10,7 +10,7 @@ uses(
 );
 
 beforeEach(function () {
-    $this->seed('DevelopmentSeeder');
+    $this->seed('DatabaseSeeder');
 });
 
 it('Will delete items when not present in actual array', function () {
