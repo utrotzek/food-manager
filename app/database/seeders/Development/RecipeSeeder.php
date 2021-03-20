@@ -99,7 +99,7 @@ class RecipeSeeder extends Seeder
         $pizza = new Recipe([
             'title' => 'Pizza mit Schinken',
             'rating' => 5,
-            'image' => '3.png',
+            'image' => '3.jpg',
             'portion' => 4,
             'comments' => 'Die Pizza ist mega lecker und einfach herzustellen zugleich'
         ]);
@@ -130,6 +130,7 @@ class RecipeSeeder extends Seeder
                 $this->createIngredient('Oregano', 'Tl', 1, $pizza, 'für den Belag'),
             ]
         );
+        Storage::disk('public')->put('recipe-images/3.jpg', file_get_contents(__DIR__.'/../../../resources/images/fixture-images/pizza.jpg'));
     }
 
     protected function addRelations(Recipe $recipe, array $stepDescriptions, array $tagNames, array $ingredients): void

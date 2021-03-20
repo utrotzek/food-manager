@@ -20,7 +20,6 @@ class DatabaseSeeder extends Seeder
         $this->call([
             GoodGroupSeeder::class,
             GoodSeeder::class,
-            UnitSeeder::class,
             TagSeeder::class,
             RecipeSeeder::class,
         ]);
