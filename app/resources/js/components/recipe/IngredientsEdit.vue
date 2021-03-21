@@ -63,6 +63,7 @@
             <b-input
               v-model="category.title"
               autofocus
+              placeholder="Neue Kategorie"
               @click="onSelectCategoryTitle($event, category.title)"
             />
           </b-form>
@@ -259,7 +260,7 @@ export default {
       const newId = new Date().getTime();
       this.form.categories.push({
         id: newId,
-        title: "Neue Kategorie",
+        title: "",
         editMode: true
       });
       this.$emit('categories-updated', this.form.categories);
