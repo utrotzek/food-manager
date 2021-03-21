@@ -63,6 +63,7 @@
             <b-input
               v-model="category.title"
               autofocus
+              placeholder="Neue Kategorie"
               @click="onSelectCategoryTitle($event, category.title)"
             />
           </b-form>
@@ -74,6 +75,7 @@
           <b-button
             variant="link"
             class="icon-button"
+            :disabled="category.title.length < 3"
           >
             <b-icon-check-circle @click="toggleCategoryEditMode(category.id)" />
           </b-button>
@@ -124,6 +126,7 @@
     <b-alert
       variant="info"
       :show="form.ingredients.length === 0"
+      class="mt-3"
     >
       Das Rezept enthält noch keine Zutaten. So wird das nichts.
     </b-alert>
@@ -259,7 +262,7 @@ export default {
       const newId = new Date().getTime();
       this.form.categories.push({
         id: newId,
-        title: "Neue Kategorie",
+        title: "",
         editMode: true
       });
       this.$emit('categories-updated', this.form.categories);
