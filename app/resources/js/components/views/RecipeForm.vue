@@ -430,7 +430,7 @@ export default {
       recipeData.ingredients.forEach(item => {
         ingredients.push({
           id: item.id,
-          amount: item.unit_amount,
+          amount: item.unit_amount.toString().replace('.', ','),
           unitId: item.unit.id,
           goodId: item.good.id,
           category: item.category

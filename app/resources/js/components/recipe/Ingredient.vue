@@ -11,7 +11,7 @@
     >
       <b-icon-check />
     </b-button>
-    <b>{{ ingredient.unit_amount }} {{ ingredient.unit.title }}</b> {{ ingredient.good.title }}
+    <b>{{ amount }} {{ ingredient.unit.title }}</b> {{ ingredient.good.title }}
   </div>
 </template>
 
@@ -40,6 +40,9 @@ export default {
   computed: {
     checkVariant() {
       return (this.checked ? 'success' : 'secondary');
+    },
+    amount() {
+      return this.ingredient.unit_amount.toString().replace('.', ',');
     }
   },
   watch: {
