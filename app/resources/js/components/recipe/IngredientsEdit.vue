@@ -125,6 +125,7 @@
     <b-alert
       variant="info"
       :show="form.ingredients.length === 0"
+      class="mt-3"
     >
       Das Rezept enthält noch keine Zutaten. So wird das nichts.
     </b-alert>
