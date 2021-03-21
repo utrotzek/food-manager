@@ -1,15 +1,31 @@
 <template>
   <div class="recipe-filter">
-    <b-button
-      variant="link"
-      class="m-1 icon-button-default-color"
-      @click="filterVisible=!filterVisible"
-    >
-      <b-icon-filter-circle-fill v-if="activeFilter" />
-      Erweiterte Suche
-      <b-icon-caret-right v-if="!filterVisible" />
-      <b-icon-caret-down v-else />
-    </b-button>
+    <b-row>
+      <b-col cols="7">
+        <b-button
+          variant="link"
+          class="m-1 icon-button-default-color"
+          @click="filterVisible=!filterVisible"
+        >
+          <b-icon-filter-circle-fill v-if="activeFilter" />
+          Erweiterte Suche
+          <b-icon-caret-right v-if="!filterVisible" />
+          <b-icon-caret-down v-else />
+        </b-button>
+      </b-col>
+      <b-col
+        cols="5"
+        class="text-right"
+      >
+        <b-button
+          variant="link"
+          class="icon-button"
+          @click="$emit('reload')"
+        >
+          <b-icon-arrow-repeat />
+        </b-button>
+      </b-col>
+    </b-row>
     <b-collapse
       id="collapse-filter"
       v-model="filterVisible"
@@ -127,9 +143,8 @@
             <b-row class="mt-4">
               <b-col
                 cols="12"
-                sm="6"
-                lg="3"
-                offset-lg="2"
+                sm="4"
+                offset-sm="7"
                 class="mb-1"
               >
                 <b-button
@@ -138,21 +153,6 @@
                   @click="resetFilter"
                 >
                   <b-icon-x-circle /> Filter löschen
-                </b-button>
-              </b-col>
-              <b-col
-                cols="12"
-                sm="6"
-                lg="3"
-                offset-lg="2"
-                class="mb-1"
-              >
-                <b-button
-                  block
-                  variant="secondary"
-                  @click="$emit('reload')"
-                >
-                  <b-icon-arrow-repeat /> Neu laden
                 </b-button>
               </b-col>
             </b-row>
