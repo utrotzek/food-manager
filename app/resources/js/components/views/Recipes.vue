@@ -191,7 +191,7 @@ export default {
         };
         this.loading = true;
         this.$store.dispatch('recipe/search', queryParams).then(res => {
-          if (res && res.data){
+          if (res){
             this.noSearchResult = this.searchTerm !== "" && res.data.length === 0;
           }
           resolve(res);
@@ -210,7 +210,7 @@ export default {
     },
     infiniteHandler($state) {
       this.fetchData().then(res => {
-        if (res.data && res.data.length > 0){
+        if (res && res.data.length > 0){
           $state.loaded();
         } else {
           $state.complete();

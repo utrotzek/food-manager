@@ -100,13 +100,12 @@ export default {
             commit('setLoadingState', true);
             return new Promise((resolve, reject) => {
                 axios.get('/api/recipes', {params: searchParams}).then(res => {
-                    if (res){
-                        this.noSearchResult = this.searchTerm !== "" && res.data.length === 0;
+                    if (res.data){
                         commit('incrementPageCounter');
                         commit('addRecipes', res.data);
-                        resolve(res.data);
+                        resolve(res);
                     }
-                    resolve();
+                    resolve(null);
                 }).catch(err => {
                     reject(err);
                 }).finally(() => {
