@@ -75,6 +75,7 @@
           <b-button
             variant="link"
             class="icon-button"
+            :disabled="category.title.length < 3"
           >
             <b-icon-check-circle @click="toggleCategoryEditMode(category.id)" />
           </b-button>
