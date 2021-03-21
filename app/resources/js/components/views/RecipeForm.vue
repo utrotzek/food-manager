@@ -8,7 +8,7 @@
         <h1>Ein neues Rezept erstellen</h1>
         <validation-observer
           ref="observer"
-          v-slot="{ handleSubmit, invalid }"
+          v-slot="{ handleSubmit }"
         >
           <b-form @submit.stop.prevent="handleSubmit(onSubmit)">
             <b-row>
@@ -214,7 +214,6 @@
                   type="submit"
                   variant="primary"
                   class="save-button"
-                  :disabled="invalid"
                   block
                 >
                   <b-icon-check /> Speichern
@@ -329,36 +328,39 @@ export default {
       this.form.ingredientCategories = updatedCategories;
     },
     async onSubmit() {
-      const tags = await this.saveTags();
-      await this.saveImage();
-      const rating = this.form.rating ? String(this.form.rating).replace(',', '.') : null;
+      const valid = await this.$refs.observer.validate();
+      if (valid){
+        const tags = await this.saveTags();
+        await this.saveImage();
+        const rating = this.form.rating ? String(this.form.rating).replace(',', '.') : null;
 
-      const payload = {
-        recipe: {
-          title: this.form.title,
-          image: this.form.imageName,
-          rating: rating,
-          portion: this.form.portion,
-          comments: this.form.comment,
-          steps: this.form.steps,
-          tags: tags,
-          ingredients: this.form.ingredients,
-          ingredientCategories: this.form.ingredientCategories
-        },
-        id: null
-      }
+        const payload = {
+          recipe: {
+            title: this.form.title,
+            image: this.form.imageName,
+            rating: rating,
+            portion: this.form.portion,
+            comments: this.form.comment,
+            steps: this.form.steps,
+            tags: tags,
+            ingredients: this.form.ingredients,
+            ingredientCategories: this.form.ingredientCategories
+          },
+          id: null
+        }
 
-      if (this.editMode){
-        payload.id = this.form.id;
-        this.$store.dispatch('recipe/saveRecipe', payload).then(() => {
-          this.$refs['saved_modal'].show();
-          this.historyBack();
-        })
-      }else {
-        this.$store.dispatch('recipe/saveRecipe', payload).then(() => {
-          this.$refs['saved_modal'].show();
-          this.historyBack();
-        })
+        if (this.editMode){
+          payload.id = this.form.id;
+          this.$store.dispatch('recipe/saveRecipe', payload).then(() => {
+            this.$refs['saved_modal'].show();
+            this.historyBack();
+          })
+        }else {
+          this.$store.dispatch('recipe/saveRecipe', payload).then(() => {
+            this.$refs['saved_modal'].show();
+            this.historyBack();
+          })
+        }
       }
     },
     historyBack() {
