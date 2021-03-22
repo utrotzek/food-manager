@@ -3,6 +3,7 @@ import Home from "./components/views/Home";
 import Recipes from "./components/views/Recipes";
 import Recipe from "./components/views/Recipe";
 import RecipeForm from "./components/views/RecipeForm";
+import MealPlan from "./components/views/MealPlan";
 
 const router = new VueRouter({
     mode: "history",
@@ -29,6 +30,11 @@ const router = new VueRouter({
             name: "recipe-form",
             component: RecipeForm
         },
+        {
+            path: "/meal-plan",
+            name: "meal-plan",
+            component: MealPlan
+        }
     ],
     scrollBehavior (to, from, savedPosition) {
         let position = null;
