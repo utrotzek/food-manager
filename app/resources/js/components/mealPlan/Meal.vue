@@ -1,25 +1,26 @@
 <template>
   <div class="meal">
     <b-row>
-      <b-col cols="12">
-        {{ title }}
+      <b-col>
+        <h4 class="card-title">
+          {{ title }}
+        </h4>
       </b-col>
-      <b-col cols="12">
-        <b-row class="planned-meal">
-          <b-col cols="12">
-            <PlanItem />
-          </b-col>
-          <b-col cols="12">
-            <PlanItem />
-          </b-col>
-        </b-row>
+    </b-row>
+    <b-row>
+      <b-col>
+        <div>
+          <PlanItem :recipe="recipe" />
+        </div>
+        <div>
+          <PlanItem :recipe="recipe" />
+        </div>
       </b-col>
-      <b-col cols="12">
-        <b-button
-          variant="link"
-          class="icon-button"
-        >
-          <b-icon-plus-circle-fill />
+    </b-row>
+    <b-row class="mt-3">
+      <b-col>
+        <b-button class="plan-recipe">
+          Gericht einplanen
         </b-button>
       </b-col>
     </b-row>
@@ -37,12 +38,29 @@ export default {
       type: String,
       required: true
     }
+  },
+  data(){
+    return {
+      recipe: null
+    }
+  },
+  mounted() {
+    axios.get('/api/recipes/1').then(res => {
+      this.recipe = res.data;
+    });
   }
 }
 </script>
 
 <style scoped>
   .planned-meal {
+  }
 
+  .odd {
+    background-color: green;
+  }
+
+  .plan-recipe {
+    border-radius: 20px;
   }
 </style>

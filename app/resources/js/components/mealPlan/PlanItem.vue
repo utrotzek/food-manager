@@ -1,12 +1,23 @@
 <template>
   <div class="plan-item">
-    Test
+    <h5>{{ recipe.title }}</h5>
   </div>
 </template>
 
 <script>
 export default {
-name: "PlanItem"
+  name: "PlanItem",
+  props: {
+    recipe: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+  },
+  mounted() {
+
+  }
 }
 </script>
 

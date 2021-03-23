@@ -29,6 +29,18 @@
               Essensplan
             </b-nav-item>
           </b-navbar-nav>
+          <b-navbar-nav class="ml-auto">
+            <b-nav-item right>
+              <b-button
+                variant="link"
+                class="icon-button"
+                size="lg"
+              >
+                <b-icon-cart />
+                <b-badge>9</b-badge>
+              </b-button>
+            </b-nav-item>
+          </b-navbar-nav>
         </b-collapse>
       </b-navbar>
       <main class="LayoutDefault__main h-100">

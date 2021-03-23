@@ -1,11 +1,48 @@
 <template>
   <layout-default-dynamic>
     <div class="meal-plan">
-      <h1>Essenplan</h1>
+      <h1>
+        Essenplan <b-button
+          variant="link"
+          class="icon-button"
+          size="lg"
+        >
+          <b-icon-unlock-fill />
+        </b-button>
+      </h1>
+      <b-row class="mb-3">
+        <b-col
+          class="text-center"
+          cols="12"
+          md="9"
+        >
+          <b-row>
+            <b-col
+              cols="12"
+              md="9"
+              offset-md="3"
+            >
+              <b-button
+                variant="link"
+                class="icon-button"
+              >
+                <b-icon-dash-circle />
+              </b-button>
+              <span>22.03. - 27.03</span>
+              <b-button
+                variant="link"
+                class="icon-button"
+              >
+                <b-icon-plus-circle />
+              </b-button>
+            </b-col>
+          </b-row>
+        </b-col>
+      </b-row>
       <b-row>
         <b-col
           cols="12"
-          md="8"
+          md="9"
         >
           <b-row>
             <b-col cols="12">
@@ -32,7 +69,7 @@
           </b-row>
         </b-col>
         <b-col
-          md="4"
+          md="3"
           class="d-none d-md-block"
         >
           <h3>Merkliste</h3>
