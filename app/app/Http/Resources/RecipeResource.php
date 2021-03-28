@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Models\IngredientCategory;
 use App\Models\Recipe;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;

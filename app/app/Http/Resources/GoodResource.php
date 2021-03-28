@@ -2,7 +2,6 @@
 
 namespace App\Http\Resources;
 
-use App\Repositories\GoodGroupRepository;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class GoodResource extends JsonResource

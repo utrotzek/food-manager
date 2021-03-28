@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\UnitResource;
 use App\Http\Resources\UnitResourceCollection;
-use App\Models\Unit;
 use App\Repositories\UnitRepository;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

@@ -4,7 +4,6 @@ namespace App\Repositories;
 use App\Interfaces\RepositoryInterfaces\IngredientCategoryRepositoryInterface;
 use App\Models\IngredientCategory;
 use App\Models\Recipe;
-use App\Models\Step;
 use Illuminate\Database\Eloquent\Collection;
 
 class IngredientCategoryRepository implements IngredientCategoryRepositoryInterface

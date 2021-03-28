@@ -3,7 +3,6 @@ namespace App\Repositories;
 
 use App\Interfaces\RepositoryInterfaces\RecipeRepositoryInterface;
 use App\Models\Recipe;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Pagination\Paginator;
 
 class RecipeRepository implements RecipeRepositoryInterface

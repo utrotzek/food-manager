@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\GoodGroupResource;
 use App\Http\Resources\GoodGroupResourceCollection;
-use App\Http\Resources\TagResource;
 use App\Models\GoodGroup;
 use App\Repositories\GoodGroupRepository;
 use Illuminate\Http\Request;
