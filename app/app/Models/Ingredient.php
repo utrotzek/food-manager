@@ -11,6 +11,9 @@ class Ingredient extends Model
     use HasFactory;
 
     protected $fillable = ['unit_amount'];
+    protected $casts = [
+        'unit_amount' => 'float'
+    ];
 
     public function setUnitAmountAttribute($amount)
     {

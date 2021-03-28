@@ -72,6 +72,10 @@ class RecipeRepository implements RecipeRepositoryInterface
             ->simplePaginate(9);
     }
 
+    /**
+     * @codeCoverageIgnore
+     * Just glue code. No tests necessary
+     */
     public function randomPaginated(): Paginator
     {
         return Recipe::query()->inRandomOrder()->paginate(9);

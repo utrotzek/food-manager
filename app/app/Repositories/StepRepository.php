@@ -52,7 +52,7 @@ class StepRepository implements StepRepositoryInterface
 
     /**
      * TODO: needs to be moved to an "factory"
-     * Updates (or inserts new entries) the given steps by comparing the scription with the given description list
+     * Updates (or inserts new entries) the given steps by comparing the description with the given description list
      * @param array $steps The existing steps to compare the description list with
      * @param array $descriptions The list of description with the an eventually updated order
      */
