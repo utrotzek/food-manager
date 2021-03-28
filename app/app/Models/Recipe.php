@@ -15,7 +15,11 @@ class Recipe extends Model
 
     public function setRatingAttribute($rating)
     {
-        $this->attributes['rating'] = str_replace(',', '.', $rating);
+        if ($rating) {
+            $this->attributes['rating'] = str_replace(',', '.', $rating);
+        } else {
+            $this->attributes['rating'] = null;
+        }
     }
 
     public function steps(): HasMany
