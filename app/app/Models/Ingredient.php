@@ -12,6 +12,11 @@ class Ingredient extends Model
 
     protected $fillable = ['unit_amount'];
 
+    public function setUnitAmountAttribute($amount)
+    {
+        $this->attributes['unit_amount'] = str_replace(',', '.', $amount);
+    }
+
     public function good(): BelongsTo
     {
         return $this->belongsTo(Good::class, 'good_id');

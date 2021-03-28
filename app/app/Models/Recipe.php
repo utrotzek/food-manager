@@ -13,6 +13,11 @@ class Recipe extends Model
 
     protected $fillable = ['title', 'rating', 'portion', 'comments', 'image'];
 
+    public function setRatingAttribute($rating)
+    {
+        $this->attributes['rating'] = str_replace(',', '.', $rating);
+    }
+
     public function steps(): HasMany
     {
         return $this->hasMany(Step::class)->orderBy('sort');
