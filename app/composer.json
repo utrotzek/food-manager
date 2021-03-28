@@ -27,7 +27,6 @@
         "pestphp/pest": "^1.0",
         "pestphp/pest-plugin-laravel": "^1.0",
         "php-vfs/php-vfs": "^1.4",
-        "phpunit/phpunit": "^9.5.0",
         "profclems/postman-collection-generator": "^1.1"
     },
     "config": {
