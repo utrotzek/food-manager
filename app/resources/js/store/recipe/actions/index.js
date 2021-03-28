@@ -163,5 +163,32 @@ export default {
                 reject(err);
             })
         });
+    },
+    setFlag({commit, dispatch}, payload) {
+        const data = {
+            id: payload.id
+        }
+
+        if (payload.hasOwnProperty('favorite')){
+            data['favorite'] = payload.favorite;
+        }
+
+        if (payload.hasOwnProperty('remember')){
+            data['remember'] = payload.remember;
+        }
+
+        return new Promise((resolve, reject) => {
+            axios.put('/api/recipes/flags/' + data.id, data)
+                .then(res => {
+                    return new Promise((resolve, reject) => {
+                        commit('updateRecipe', {recipe: res.data.item, id: data.id})
+                        resolve();
+                    })
+                })
+                .then(res => dispatch('fetchRemembered'))
+                .then(res => {
+                    resolve();
+                });
+        })
     }
 }

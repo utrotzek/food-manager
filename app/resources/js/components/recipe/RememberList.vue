@@ -31,12 +31,18 @@
             <b-button class="mr-1">
               <b-icon-arrow-bar-left />
             </b-button>
-            <b-button><b-icon-x-circle-fill /></b-button>
+            <b-button @click="onRemove(recipe)">
+              <b-icon-x-circle-fill />
+            </b-button>
           </b-button-group>
           <hr>
         </div>
       </div>
-      <b-alert variant="info">
+      <b-alert
+        v-else
+        variant="info"
+        :show="true"
+      >
         Es befinden sich aktuell keine gemerkten Rezepte in der Liste.
       </b-alert>
     </div>
@@ -67,6 +73,9 @@ export default {
       this.$store.dispatch('recipe/fetchRemembered').finally(() => {
         this.loading = false;
       })
+    },
+    onRemove(recipe){
+      this.$store.dispatch('recipe/setFlag', {id: recipe.id, remember: false});
     }
   }
 }
