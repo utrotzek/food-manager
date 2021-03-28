@@ -183,7 +183,7 @@ class RecipeController extends Controller
                 $ingredientCategories
             );
 
-            $this->ingredientRepository->deleteRemovedItems($newItem->ingredients()->get(), $actualIngredients);
+            $this->ingredientRepository->deleteDiffObjects($newItem->ingredients()->get(), $actualIngredients);
             $newItem->ingredients()->saveMany($actualIngredients);
         });
         $response['item'] = new RecipeResource($newItem->fresh());

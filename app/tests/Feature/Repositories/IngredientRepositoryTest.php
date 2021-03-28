@@ -24,6 +24,6 @@ it('Will delete items when not present in actual array', function () {
     $actualItems->add($ingredientRepository->findById(2));
     $actualItems->add($ingredientRepository->findById(3));
 
-    $ingredientRepository->deleteRemovedItems($existingItems, $actualItems);
+    $ingredientRepository->deleteDiffObjects($existingItems, $actualItems);
     expect($ingredientRepository->findById(1))->toBeNull();
 });

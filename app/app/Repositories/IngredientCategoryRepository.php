@@ -4,10 +4,12 @@ namespace App\Repositories;
 use App\Interfaces\RepositoryInterfaces\IngredientCategoryRepositoryInterface;
 use App\Models\IngredientCategory;
 use App\Models\Recipe;
-use Illuminate\Database\Eloquent\Collection;
+use App\Traits\DiffDeletableTrait;
 
 class IngredientCategoryRepository implements IngredientCategoryRepositoryInterface
 {
+    use DiffDeletableTrait;
+
     /**
      * @codeCoverageIgnore
      */
@@ -22,28 +24,6 @@ class IngredientCategoryRepository implements IngredientCategoryRepositoryInterf
     public function findById(int $id): ?IngredientCategory
     {
         return IngredientCategory::find($id);
-    }
-
-    /**
-     * Deletes all items of $existingItems which are not present in $actualItems
-     *
-     * @throws \Exception
-     */
-    public function deleteRemovedItems(Collection $existingItems, array $actualItems): void
-    {
-        /** @var IngredientCategory $existingItem */
-        foreach ($existingItems as $existingItem) {
-            $found = false;
-            foreach ($actualItems as $actualItem) {
-                if ($existingItem == $actualItem) {
-                    $found = true;
-                }
-            }
-
-            if (!$found) {
-                $existingItem->delete();
-            }
-        }
     }
 
     /**

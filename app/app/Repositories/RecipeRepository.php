@@ -15,6 +15,10 @@ class RecipeRepository implements RecipeRepositoryInterface
         return Recipe::query()->get();
     }
 
+    /**
+     * @codeCoverageIgnore
+     * Already tested by postman tests
+     */
     public function searchPaginated(
         ?string $query,
         ?bool $favorites,
