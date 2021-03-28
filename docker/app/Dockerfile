@@ -62,6 +62,8 @@ RUN chown -R $USER_NAME:$USER_NAME /var/log/apache2*
 RUN chown -R $USER_NAME:$USER_NAME /var/lock/apache2*
 RUN chown -R $USER_NAME:$USER_NAME /var/run/apache2*
 
+RUN mkdir /opt/phpstorm-coverage && chown $USER_NAME:$USER_NAME /opt/phpstorm-coverage
+
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/apache2/access.log && \
     ln -sf /dev/stderr /var/log/apache2/error.log
