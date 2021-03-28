@@ -56,7 +56,7 @@ class IngredientFactory
      * @codeCoverageIgnore
      * Just glue code. No tests necessary
      */
-    public function createIngredient(int $unitId, int $goodId, float $amount, int $categoryId = null): Ingredient
+    public function createIngredient(int $unitId, int $goodId, string $amount, int $categoryId = null): Ingredient
     {
         $ingredient = new Ingredient(['unit_amount' => $amount]);
         $good = $this->goodRepository->findByIdOrSlug($goodId);

@@ -103,7 +103,7 @@ export default {
   components: {AutoCompleter},
   props: {
     amount: {
-      type: Number,
+      type: String,
       default: null
     },
     unitId: {
