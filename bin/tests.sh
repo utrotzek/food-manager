@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-docker-compose exec app php bin/phpunit
+docker-compose exec app php bin/pest

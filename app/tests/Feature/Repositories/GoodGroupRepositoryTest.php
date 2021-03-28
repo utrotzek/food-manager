@@ -13,6 +13,13 @@ beforeEach(function () {
     $this->seed('DatabaseSeeder');
 });
 
+function fetchHighestSort(): int
+{
+    return \App\Models\GoodGroup::query()
+        ->orderBy('sort', 'desc')
+        ->value('sort');
+}
+
 
 it('Can insert entries sorted first', function () {
     $subject = new GoodGroupRepository();
@@ -31,11 +38,12 @@ it('Can find items by id or slug', function () {
 
 
 it('Can insert entries sorted last', function () {
+    $highestSort = fetchHighestSort();
     $subject = new GoodGroupRepository();
     $subject->createLast('TestTitle');
 
     $goodGorup = $subject->findByTitle('TestTitle');
-    expect($goodGorup['sort'])->toBe(100);
+    expect($goodGorup['sort'])->toBe($highestSort + 10);
 });
 
 it('Can insert after sort entry', function () {
@@ -70,13 +78,11 @@ it('Can resort item as first element', function () {
 });
 
 it('Can resort item as last element', function () {
+    $highestSort = fetchHighestSort();
     $subject = new GoodGroupRepository();
     $goodGroupToResort = $subject->findById(2);
-    expect($goodGroupToResort['sort'])->toBe(20);
-
-    $subject->resortLast($goodGroupToResort);
-    $goodGroupResorted = $subject->findById(2);
-    expect($goodGroupResorted['sort'])->toBe(100);
+    $goodGroupResorted = $subject->resortLast($goodGroupToResort);
+    expect($goodGroupResorted['sort'])->toBe($highestSort + 10);
 });
 
 it('Can resort item after certain item', function () {

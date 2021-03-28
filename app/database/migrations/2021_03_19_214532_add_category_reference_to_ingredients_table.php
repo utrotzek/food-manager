@@ -31,7 +31,7 @@ class AddCategoryReferenceToIngredientsTable extends Migration
     public function down()
     {
         Schema::table('ingredients', function (Blueprint $table) {
-            $table->dropColumn('category_id');
+            $table->dropConstrainedForeignId('category_id');
         });
     }
 }
