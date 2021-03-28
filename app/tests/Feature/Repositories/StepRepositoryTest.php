@@ -34,12 +34,12 @@ it('Can sync steps with an updated list of step-descriptions', function () {
         $stepsBeforeSync,
         [
         'step 1',
-        'Gewürze hinzufügen',
+        'Zwiebeln hinzugeben und glasig andünsten.',
         'step 3'
     ]
     );
     expect($stepsAfterSync[0]['description'])->toBe('step 1');
-    expect($stepsAfterSync[1]['description'])->toBe('Gewürze hinzufügen');
+    expect($stepsAfterSync[1]['description'])->toBe('Zwiebeln hinzugeben und glasig andünsten.');
     expect($stepsAfterSync[2]['description'])->toBe('step 3');
     expect($stepsAfterSync)->not->toHaveKey(3);
 });
