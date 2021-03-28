@@ -229,9 +229,6 @@ export default {
     },
     onCreateUnit(updatedIngredient, newTitle){
       this.$store.dispatch('recipe/saveUnit', {title: newTitle}).then(res => {
-        console.log(updatedIngredient);
-        console.log(newTitle);
-        console.log(res);
         const itemIndex = this.form.ingredients.findIndex((item) => { return item.id === updatedIngredient.id });
         if (itemIndex > -1) {
           let updatedItem = this.form.ingredients[itemIndex];

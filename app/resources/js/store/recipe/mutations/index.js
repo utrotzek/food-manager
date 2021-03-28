@@ -34,7 +34,6 @@ export default {
     },
     removeRecipe(state, payload){
         const foundIndex = state.recipeSearchResult.findIndex(el => el.id === payload.id);
-        console.log('found index:' + foundIndex);
         state.recipeSearchResult.splice(foundIndex, 1);
     },
     incrementPageCounter(state){

@@ -36,47 +36,73 @@
         cols="8"
         md="3"
       >
-        <b-form-group
-          id="amount-group"
-          label="Einheit"
-          label-for="unit"
-          label-sr-only
+        <validation-provider
+          v-slot="{errors, valid}"
+          ref="unit"
+          name="Einheit"
+          rules="required"
         >
-          <AutoCompleter
-            placeholder="Einheit auswählen"
-            search-key="title"
-            value-key="id"
-            :items="units"
-            :show-all-items-on-empty-query="true"
-            :preselected-value="form.unitId"
-            :enable-inline-creation="true"
-            @selected="unitUpdated"
-            @create="$emit('createUnit', $event)"
-          />
-        </b-form-group>
+          <b-form-group
+            id="amount-group"
+            label="Einheit"
+            label-for="unit"
+            label-sr-only
+          >
+            <AutoCompleter
+              placeholder="Einheit auswählen"
+              search-key="title"
+              value-key="id"
+              :items="units"
+              :show-all-items-on-empty-query="true"
+              :preselected-value="form.unitId"
+              :enable-inline-creation="true"
+              @selected="unitUpdated"
+              @create="$emit('createUnit', $event)"
+            />
+            <b-form-invalid-feedback
+              id="unit-feedback"
+              :force-show="!valid"
+            >
+              {{ errors[0] }}
+            </b-form-invalid-feedback>
+          </b-form-group>
+        </validation-provider>
       </b-col>
       <b-col
         cols="10"
         md="6"
       >
-        <b-form-group
-          id="amount-group"
-          label="Zutat"
-          label-for="good"
-          label-sr-only
+        <validation-provider
+          v-slot="{errors, valid}"
+          ref="good"
+          name="Zutat"
+          rules="required"
         >
-          <AutoCompleter
-            placeholder="Zutat auswählen"
-            search-key="title"
-            value-key="id"
-            :items="goods"
-            :show-all-items-on-empty-query="false"
-            :enable-inline-creation="true"
-            :preselected-value="form.goodId"
-            @selected="goodUpdated"
-            @create="$emit('createGood', $event)"
-          />
-        </b-form-group>
+          <b-form-group
+            id="amount-group"
+            label="Zutat"
+            label-for="good"
+            label-sr-only
+          >
+            <AutoCompleter
+              placeholder="Zutat auswählen"
+              search-key="title"
+              value-key="id"
+              :items="goods"
+              :show-all-items-on-empty-query="false"
+              :enable-inline-creation="true"
+              :preselected-value="form.goodId"
+              @selected="goodUpdated"
+              @create="$emit('createGood', $event)"
+            />
+          </b-form-group>
+          <b-form-invalid-feedback
+            id="good-feedback"
+            :force-show="!valid"
+          >
+            {{ errors[0] }}
+          </b-form-invalid-feedback>
+        </validation-provider>
       </b-col>
       <b-col
         cols="1"
@@ -149,6 +175,11 @@ export default {
       this.form.unitId = newVal;
     }
   },
+  mounted() {
+    this.$refs.amount.validate(this.form.amount);
+    this.$refs.unit.validate(this.form.unitId);
+    this.$refs.good.validate(this.form.goodId);
+  },
   methods: {
     getValidationState({ dirty, validated, valid = null }) {
       let state = null;
@@ -162,10 +193,12 @@ export default {
     goodUpdated(good){
       this.form.goodId=good.id;
       this.emitChanged();
+      this.$refs.good.validate(this.form.goodId);
     },
     unitUpdated(unit){
       this.form.unitId=unit.id;
       this.emitChanged();
+      this.$refs.unit.validate(this.form.unitId);
     },
     amountUpdated(){
       this.emitChanged();
