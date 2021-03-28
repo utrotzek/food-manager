@@ -9,11 +9,12 @@
     </b-row>
     <b-row>
       <b-col>
-        <div>
+        <div
+          v-for="recipe in recipes"
+          :key="recipe.id"
+        >
           <PlanItem :recipe="recipe" />
-        </div>
-        <div>
-          <PlanItem :recipe="recipe" />
+          <hr>
         </div>
       </b-col>
     </b-row>
@@ -37,17 +38,18 @@ export default {
     title: {
       type: String,
       required: true
+    },
+    recipes: {
+      type: Array,
+      required: true
     }
   },
   data(){
     return {
-      recipe: null
+
     }
   },
   mounted() {
-    axios.get('/api/recipes/1').then(res => {
-      this.recipe = res.data;
-    });
   }
 }
 </script>

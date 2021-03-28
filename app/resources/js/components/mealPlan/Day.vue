@@ -38,19 +38,28 @@
                 cols="12"
                 lg="4"
               >
-                <Meal title="Frühstück" />
+                <Meal
+                  title="Frühstück"
+                  :recipes="recipes"
+                />
               </b-col>
               <b-col
                 cols="12"
                 lg="4"
               >
-                <Meal title="Kaffee" />
+                <Meal
+                  title="Kaffee"
+                  :recipes="recipes"
+                />
               </b-col>
               <b-col
                 cols="12"
                 lg="4"
               >
-                <Meal title="Abendessen" />
+                <Meal
+                  title="Abendessen"
+                  :recipes="recipes"
+                />
               </b-col>
             </b-row>
           </div>
@@ -70,6 +79,10 @@ export default {
   props: {
     title: {
       type: String,
+      required: true
+    },
+    recipes: {
+      type: Array,
       required: true
     }
   }

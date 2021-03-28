@@ -1,6 +1,13 @@
 <template>
   <div class="plan-item">
-    <h5>{{ recipe.title }}</h5>
+    <span>
+      {{ recipe.title }} <b-button
+        variant="link"
+        class="icon-button"
+      >
+        <b-icon-trash />
+      </b-button>
+    </span>
   </div>
 </template>
 
@@ -14,6 +21,9 @@ export default {
     }
   },
   data() {
+    return {
+
+    }
   },
   mounted() {
 
