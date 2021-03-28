@@ -3,8 +3,8 @@ namespace App\Repositories;
 
 use App\Interfaces\RepositoryInterfaces\RecipeRepositoryInterface;
 use App\Models\Recipe;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Contracts\Pagination\Paginator;
+use Illuminate\Support\Collection;
 
 class RecipeRepository implements RecipeRepositoryInterface
 {
@@ -73,10 +73,15 @@ class RecipeRepository implements RecipeRepositoryInterface
             ->simplePaginate(9);
     }
 
-    public function randomPaginated(): Paginator
+    /**
+     * @codeCoverageIgnore
+     * Tested by postman
+     */
+    public function findRemembered(): ?Collection
     {
-        return Recipe::query()->inRandomOrder()->paginate(9);
+        return Recipe::where('remember', true)->orderBy('title')->get();
     }
+
     /**
      * @codeCoverageIgnore
      * Just glue code. No tests necessary

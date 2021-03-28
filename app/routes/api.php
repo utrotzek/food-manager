@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/recipes/validate/{recipe?}', [RecipeController::class, 'validateRequest']);
 Route::put('/recipes/flags/{recipe}', [RecipeController::class, 'flags']);
+Route::get('/recipes/remembered', [RecipeController::class, 'remembered']);
 
 Route::apiResources([
     'goods' => GoodController::class,

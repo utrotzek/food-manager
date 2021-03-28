@@ -114,6 +114,16 @@ export default {
             });
         }
     },
+    fetchRemembered({commit, state}){
+        return new Promise((resolve, reject) => {
+            axios.get('/api/recipes/remembered').then(res => {
+                commit('setRememberedRecipes', res.data);
+                resolve();
+            }).catch(err => {
+                reject(err);
+            })
+        });
+    },
     saveRecipe({commit, state}, payload) {
         const recipeData = payload.recipe;
         const id = payload.id;
