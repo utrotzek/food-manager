@@ -1,10 +1,10 @@
 <template>
   <div class="remember-list">
     <b-row>
-      <b-col cols="10">
+      <b-col cols="9">
         <h2>Merkliste</h2>
       </b-col>
-      <b-col cols="2">
+      <b-col cols="3">
         <b-button
           variant="link"
           class="icon-button"
@@ -22,6 +22,9 @@
         v-if="remembered.length > 0"
         class="remembered-list"
       >
+        <p>
+          Es befinden sich aktuell <b>{{ remembered.length }} Rezepte</b> auf der Merkliste.
+        </p>
         <div
           v-for="recipe in remembered"
           :key="recipe.id"
@@ -65,14 +68,14 @@ export default {
     }
   },
   mounted() {
-    this.loadList();
+    this.loading = false;
   },
   methods: {
-    loadList(){
+    loadList() {
       this.loading = true;
-      this.$store.dispatch('recipe/fetchRemembered').finally(() => {
+      this.$store.dispatch('recipe/fetchRemembered').then(res => {
         this.loading = false;
-      })
+      });
     },
     onRemove(recipe){
       this.$store.dispatch('recipe/setFlag', {id: recipe.id, remember: false});
