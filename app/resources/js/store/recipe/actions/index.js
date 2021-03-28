@@ -132,7 +132,6 @@ export default {
 
         return new Promise((resolve, reject) => {
             if (id){
-                console.log('updated');
                 axios.put('/api/recipes/' + id, recipe).then(res => {
                     commit('updateRecipe', {recipe: res.data.item, id: id});
                     resolve();
