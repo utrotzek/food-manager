@@ -1,8 +1,12 @@
 <template>
   <div class="recipe">
-    <b-row class="title-row">
+    <b-row
+      class="title-row"
+      no-gutters
+    >
       <b-col
-        cols="8"
+        cols="7"
+        lg="8"
         class="title-column"
       >
         <div class="title">
@@ -12,7 +16,8 @@
         </div>
       </b-col>
       <b-col
-        cols="4"
+        cols="5"
+        lg="4"
         class="text-right stars-column"
       >
         <Stars :rating="recipe.rating" />
@@ -189,7 +194,6 @@ export default {
 
     .title {
       font-size: 1.5em;
-      white-space: nowrap;
     }
 
     .title a,
@@ -229,6 +233,13 @@ export default {
 
     .additional-tags .btn {
       line-height: 1;
+    }
+
+    .recipe {
+      height: 100%;
+      display: flex;
+      justify-content: flex-end;
+      flex-direction: column;
     }
 </style>
 
