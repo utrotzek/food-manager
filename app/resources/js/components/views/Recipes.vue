@@ -50,6 +50,7 @@
                 class="mb-4"
                 cols="12"
                 md="4"
+                lg="3"
               >
                 <Recipe
                   :recipe="recipe"

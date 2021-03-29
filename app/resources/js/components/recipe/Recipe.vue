@@ -2,11 +2,8 @@
   <div class="recipe">
     <b-row
       class="title-row"
-      no-gutters
     >
       <b-col
-        cols="7"
-        lg="8"
         class="title-column"
       >
         <div class="title">
@@ -14,13 +11,6 @@
             {{ truncatedTitle }}
           </router-link>
         </div>
-      </b-col>
-      <b-col
-        cols="5"
-        lg="4"
-        class="text-right stars-column"
-      >
-        <Stars :rating="recipe.rating" />
       </b-col>
     </b-row>
 
@@ -81,9 +71,11 @@
             :style="{ backgroundImage: 'url(' + imagePath + ')' }"
           >
             <div
-              v-if="recipe.favorite || recipe.remember"
               class="flag-overlay"
             >
+              <div class="stars">
+                <Stars :rating="recipe.rating" />
+              </div>
               <div class="flags">
                 <b-icon-heart-fill v-if="recipe.favorite" />
                 <b-icon-bookmark-fill v-if="recipe.remember" />
@@ -131,7 +123,7 @@ export default {
         },
         maxTitleLength: {
           type: Number,
-          default: 25
+          default: 30
         }
     },
     data() {
@@ -139,6 +131,8 @@ export default {
         breakpoints: {
           isXs: false,
           isSm: false,
+          isLg: false,
+          isMd: false
         }
       }
     },
@@ -261,21 +255,29 @@ export default {
     font-size: 1.5em;
     text-align: right;
     padding: 5px 8px 0 0;
-    width: 20%;
+    width: 100%;
+    height: 1.5em;
     right: 0;
     top: 0;
-    background-color: gray;
-    height: 100%;
+    background-color: #808080;
     mix-blend-mode: multiply;
     position: absolute;
     z-index: 1;
   }
 
-  .flag-overlay .flags {
-    color: $yellow;
-    top: 5px;
+  .flag-overlay .stars {
+    color: $white;
+    top: 2px;
     right: 8px;
     position: absolute;
     z-index: 2;
+  }
+  .flag-overlay .flags {
+    color: $white;
+    top: 4px;
+    left: 8px;
+    position: absolute;
+    z-index: 2;
+    font-size: 1.1em;
   }
 </style>
