@@ -88,14 +88,14 @@ export default {
     },
     offset(){
       if (!this.bigList){
-        return 2;
+        return 1;
       }else{
         return 0;
       }
     },
     cols(){
       if (!this.bigList){
-        return 8;
+        return 9;
       }else{
         return 6;
       }
