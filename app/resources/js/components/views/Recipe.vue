@@ -307,7 +307,8 @@ export default {
   },
   computed: {
     imagePath() {
-      return '/storage/recipe-images/' + this.recipe.image;
+      const time = Date.now();
+      return '/storage/recipe-images/' + this.recipe.image + "?" + time;
     },
     stepsSize() {
       return (this.showIngredients ? 8 : 12);

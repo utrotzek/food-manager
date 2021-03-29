@@ -159,7 +159,8 @@ export default {
           return [];
         },
         imagePath() {
-          return '/storage/recipe-images/' + this.recipe.image;
+          const time = Date.now();
+          return '/storage/recipe-images/' + this.recipe.image + "?" + time;
         },
         truncatedTitle() {
           if (this.recipe.title.length > this.maxTitleLength){

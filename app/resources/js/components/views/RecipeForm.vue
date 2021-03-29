@@ -385,6 +385,11 @@ export default {
       return allTagIds;
     },
     async saveImage() {
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      };
       let data = new FormData();
 
       if (this.form.image) {
@@ -392,19 +397,11 @@ export default {
           data.append('image', this.form.image);
 
           if (this.editMode && this.form.imageName !== null) {
-            await axios.post('/api/images/' + this.form.imageName + '?_method=put', data, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-            }).then(res => {
+            await axios.post('/api/images/' + this.form.imageName + '?_method=put', data, config).then(res => {
               this.form.imageName = res.data;
             });
           }else {
-            await axios.post('/api/images', data, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-            }).then(res => {
+            await axios.post('/api/images', data, config).then(res => {
               this.form.imageName = res.data;
             });
           }
@@ -440,7 +437,8 @@ export default {
       });
       let imagePath = null;
       if (recipeData.image !== null){
-        imagePath = '/storage/recipe-images/' + recipeData.image;
+        const time = Date.now();
+        imagePath = '/storage/recipe-images/' + recipeData.image + "?" + time;
       }
 
       let rating = null;
