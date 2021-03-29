@@ -1,19 +1,5 @@
 <template>
   <div class="remember-list">
-    <b-row>
-      <b-col cols="9">
-        <h2>Merkliste</h2>
-      </b-col>
-      <b-col cols="3">
-        <b-button
-          variant="link"
-          class="icon-button"
-          @click="loadList"
-        >
-          <b-icon-arrow-repeat />
-        </b-button>
-      </b-col>
-    </b-row>
     <div
       class="recipes"
     >
@@ -23,6 +9,13 @@
       >
         <p>
           Es befinden sich aktuell <b>{{ remembered.length }} Rezepte</b> auf der Merkliste.
+          <b-button
+            variant="link"
+            class="icon-button"
+            @click="loadList"
+          >
+            <b-icon-arrow-repeat />
+          </b-button>
         </p>
         <b-row class="text-center">
           <b-col
@@ -56,7 +49,7 @@
         variant="info"
         :show="true"
       >
-        Es befinden sich aktuell keine gemerkten Rezepte in der Liste.
+        Es sind aktuell keine Rezept auf der Merkliste!
       </b-alert>
     </div>
   </div>
@@ -88,14 +81,14 @@ export default {
     },
     offset(){
       if (!this.bigList){
-        return 1;
+        return 0;
       }else{
         return 0;
       }
     },
     cols(){
       if (!this.bigList){
-        return 9;
+        return 12;
       }else{
         return 6;
       }
