@@ -91,6 +91,7 @@
                   />
                   <div class="d-block d-md-none">
                     <b-button-group
+                      v-if="!editingDisabled"
                       class="text-left buttons small-device d-md-none"
                     >
                       <b-button
@@ -161,6 +162,7 @@
             class="d-none d-md-block text-right"
           >
             <b-button-group
+              v-if="!editingDisabled"
               class="buttons medium-devices"
               vertical
             >
@@ -294,6 +296,14 @@ export default {
   name: "Recipe",
   components: {LayoutDefaultDynamic, Ingredients, Steps, Stars},
   props: {
+    recipeId: {
+      type: Number,
+      default: null
+    },
+    editingDisabled: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -321,7 +331,7 @@ export default {
     }
   },
   mounted() {
-    const recipeId = this.$route.params.id;
+    const recipeId = this.recipeId ?? this.$route.params.id;
 
     axios.get('/api/recipes/'+ recipeId).then((res) => {
       this.recipe = res.data;

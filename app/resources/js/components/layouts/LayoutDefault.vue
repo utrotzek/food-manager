@@ -71,8 +71,12 @@
         id="modal-remember-list"
         ref="modal-remember-list"
         centered
+        hide-footer
       >
-        <RememberList />
+        <RememberList
+          big-list
+          assign-disabled
+        />
       </b-modal>
     </div>
   </div>

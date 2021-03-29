@@ -1,45 +1,47 @@
 <template>
   <div class="recipe">
-    <b-row class="title-row">
-      <b-col
-        cols="12"
-        class="title-column"
-      >
-        <div class="title">
-          <router-link :to="{name: 'recipe', params: {id: recipe.id}}">
-            {{ truncatedTitle }}
-          </router-link>
-        </div>
-      </b-col>
-    </b-row>
+    <b-card
+      img-bottom
+      no-body
+    >
+      <b-card-img
+        bottom
+        :src="imagePath"
+        style="cursor: pointer"
+        @click="onOpenDetails"
+      />
+      <template #header>
+        <h4
+          class="mb-0"
+          style="cursor: pointer"
+          @click="onOpenDetails"
+        >
+          {{ truncatedTitle }}
+        </h4>
+      </template>
+    </b-card>
 
-    <b-row>
-      <b-col>
-        <router-link :to="{name: 'recipe', params: {id: recipe.id}}">
-          <div
-            v-if="recipe.image"
-            class="image"
-            :style="{ backgroundImage: 'url(' + imagePath + ')' }"
-          />
-          <ImagePlaceholder
-            v-else
-            :placeholder-text="truncatedPlaceholderTitle"
-          />
-        </router-link>
-      </b-col>
-    </b-row>
-
+    <b-modal
+      id="recipe-details-modal"
+      :ref="'recipe-details-modal-' + recipe.id"
+      size="lg"
+      hide-footer
+    >
+      <Recipe
+        :recipe-id="recipe.id"
+        editing-disabled
+      />
+    </b-modal>
     <Breakpoints v-model="breakpoints" />
   </div>
 </template>
 
 <script>
-import Stars from "./Stars";
-import ImagePlaceholder from "./ImagePlaceholder";
 import Breakpoints from "../tools/Breakpoints";
+import Recipe from "../views/Recipe";
 export default {
-  name: "Recipe",
-  components: {ImagePlaceholder, Breakpoints},
+  name: "RecipeLight",
+  components: {Recipe, Breakpoints},
   props: {
     recipe: {
       type: Object,
@@ -90,10 +92,12 @@ export default {
         return this.recipe.title.slice(0, this.maxPlaceholderTitleLength) + '...';
       }
       return this.recipe.title;
-    }
+    },
   },
   methods: {
-
+    onOpenDetails(){
+      this.$refs['recipe-details-modal-' + this.recipe.id].show();
+    }
   }
 }
 </script>
