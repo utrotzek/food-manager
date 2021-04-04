@@ -49,46 +49,15 @@
             class="week-plan"
           >
             <b-row>
-              <b-col cols="12">
+              <b-col
+                v-for="day in $store.state.meal.days"
+                :key="day.id"
+                cols="12"
+              >
                 <Day
-                  title="Montag"
-                  :recipes="recipes"
-                />
-              </b-col>
-              <b-col cols="12">
-                <Day
-                  title="Dienstag"
-                  :recipes="recipes"
-                />
-              </b-col>
-              <b-col cols="12">
-                <Day
-                  title="Mittwoch"
-                  :recipes="recipes"
-                />
-              </b-col>
-              <b-col cols="12">
-                <Day
-                  title="Donerstag"
-                  :recipes="recipes"
-                />
-              </b-col>
-              <b-col cols="12">
-                <Day
-                  title="Freitag"
-                  :recipes="recipes"
-                />
-              </b-col>
-              <b-col cols="12">
-                <Day
-                  title="Samstag"
-                  :recipes="recipes"
-                />
-              </b-col>
-              <b-col cols="12">
-                <Day
-                  title="Sonntag"
-                  :recipes="recipes"
+                  :title="day.date.format('dddd - DD.MM.YYYY')"
+                  :date="day.date"
+                  :meals="$store.state.meal.meals"
                 />
               </b-col>
             </b-row>

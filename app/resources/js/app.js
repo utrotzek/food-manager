@@ -43,10 +43,19 @@ Vue.component('ToggleButton', ToggleButton)
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
 
+import dayjs from "dayjs";
+require('dayjs/locale/de')
+dayjs.locale('de')
+Vue.use(dayjs);
+
+Object.defineProperty(Vue.prototype, '$dayjs', { value: dayjs });
+
 /*------------------------------------------------*/
 /*                  Mixins                        */
 /*------------------------------------------------*/
 import titleMixin from './mixins/titleMixin'
+
+
 Vue.mixin(titleMixin)
 
 

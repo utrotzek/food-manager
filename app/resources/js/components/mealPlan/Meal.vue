@@ -10,10 +10,10 @@
     <b-row>
       <b-col>
         <div
-          v-for="recipe in recipes"
-          :key="recipe.id"
+          v-for="plan in dayPlans"
+          :key="plan.id"
         >
-          <PlanItem :recipe="recipe" />
+          <PlanItem :plan="plan" />
           <hr>
         </div>
       </b-col>
@@ -25,7 +25,7 @@
         </b-button>
       </b-col>
     </b-row>
-    <hr>
+    <hr class="d-md-none">
   </div>
 </template>
 
@@ -40,7 +40,7 @@ export default {
       type: String,
       required: true
     },
-    recipes: {
+    dayPlans: {
       type: Array,
       required: true
     }

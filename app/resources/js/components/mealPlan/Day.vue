@@ -28,37 +28,24 @@
         cols="12"
         md="9"
       >
-        <div class="card bg-light">
+        <div
+          class="card bg-light"
+          :class="todayClass"
+        >
           <div class="card-header">
             {{ title }}
           </div>
           <div class="card-body">
             <b-row>
               <b-col
+                v-for="meal in meals"
+                :key="meal.id"
                 cols="12"
                 lg="4"
               >
                 <Meal
-                  title="Frühstück"
-                  :recipes="recipes"
-                />
-              </b-col>
-              <b-col
-                cols="12"
-                lg="4"
-              >
-                <Meal
-                  title="Kaffee"
-                  :recipes="recipes"
-                />
-              </b-col>
-              <b-col
-                cols="12"
-                lg="4"
-              >
-                <Meal
-                  title="Abendessen"
-                  :recipes="recipes"
+                  :title="meal.title"
+                  :day-plans="$store.getters['meal/getDayPlansByDateAndMeal'](date, meal)"
                 />
               </b-col>
             </b-row>
@@ -81,9 +68,22 @@ export default {
       type: String,
       required: true
     },
-    recipes: {
+    date: {
+      type: Object,
+      required: true
+    },
+    meals: {
       type: Array,
       required: true
+    }
+  },
+  computed: {
+    todayClass() {
+      const isToday = this.date.isSame(this.$dayjs(), 'day');
+
+      return {
+        'border-warning': isToday
+      }
     }
   }
 }

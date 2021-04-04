@@ -1,7 +1,17 @@
 <template>
   <div class="plan-item">
-    <span>
-      {{ recipe.title }} <b-button
+    <span v-if="plan.recipe">
+      {{ plan.recipe.title }}
+      <b-button
+        variant="link"
+        class="icon-button"
+      >
+        <b-icon-trash />
+      </b-button>
+    </span>
+    <span v-if="plan.description">
+      {{ plan.description }}
+      <b-button
         variant="link"
         class="icon-button"
       >
@@ -15,7 +25,7 @@
 export default {
   name: "PlanItem",
   props: {
-    recipe: {
+    plan: {
       type: Object,
       required: true
     }
