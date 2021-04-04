@@ -18,13 +18,14 @@
         </div>
       </b-col>
     </b-row>
-    <b-row class="mt-3">
-      <b-col>
+    <b-row class="mt-3 mb-3">
+      <b-col class="text-center">
         <b-button class="plan-recipe">
           Gericht einplanen
         </b-button>
       </b-col>
     </b-row>
+    <hr>
   </div>
 </template>
 
