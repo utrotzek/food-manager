@@ -33,7 +33,35 @@
           :class="todayClass"
         >
           <div class="card-header">
-            {{ title }}
+            <b-row>
+              <b-col
+                cols="8"
+                class="title"
+              >
+                {{ title }}
+              </b-col>
+              <b-col
+                cols="4"
+                class="text-right"
+              >
+                <div v-if="!day.done">
+                  <b-button
+                    variant="light"
+                    @click="toggleDone"
+                  >
+                    <b-icon-check-circle />
+                  </b-button>
+                </div>
+                <div v-else>
+                  <b-button
+                    variant="light"
+                    @click="toggleDone"
+                  >
+                    <b-icon-check-circle-fill />
+                  </b-button>
+                </div>
+              </b-col>
+            </b-row>
           </div>
           <div class="card-body">
             <b-row>
@@ -46,6 +74,7 @@
                 <Meal
                   :title="meal.title"
                   :day-plans="$store.getters['meal/getDayPlansByDateAndMeal'](date, meal)"
+                  :done="day.done"
                 />
               </b-col>
             </b-row>
@@ -84,6 +113,14 @@ export default {
       return {
         'border-warning': isToday
       }
+    },
+    day(){
+      return this.$store.getters["meal/getDayByDate"](this.date);
+    }
+  },
+  methods: {
+    toggleDone(){
+      this.$store.dispatch('meal/dayChangeDone', {day: this.day});
     }
   }
 }
@@ -103,5 +140,9 @@ export default {
 
   .day .meal.odd {
     background-color: green;
+  }
+
+  .title {
+    line-height: 2em;
   }
 </style>

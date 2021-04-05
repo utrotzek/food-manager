@@ -48,31 +48,38 @@ export default {
     days: [
         {
             id: 1,
-            date: dayjs('2021-04-04')
+            date: dayjs('2021-04-04'),
+            done: false
         },
         {
             id: 2,
-            date: dayjs('2021-04-05')
+            date: dayjs('2021-04-05'),
+            done: false
         },
         {
             id: 3,
-            date: dayjs('2021-04-06')
+            date: dayjs('2021-04-06'),
+            done: false
         },
         {
             id: 4,
-            date: dayjs('2021-04-07')
+            date: dayjs('2021-04-07'),
+            done: false
         },
         {
             id: 5,
-            date: dayjs('2021-04-08')
+            date: dayjs('2021-04-08'),
+            done: false
         },
         {
             id: 6,
-            date: dayjs('2021-04-09')
+            date: dayjs('2021-04-09'),
+            done: false
         },
         {
             id: 7,
-            date: dayjs('2021-04-10')
+            date: dayjs('2021-04-10'),
+            done: false
         }
     ]
 }

@@ -4,4 +4,9 @@ export default  {
             return el.date.isSame(date, 'day') && el.meal_id === meal.id
         }) ?? [];
     },
+    getDayByDate: (state) => (date) => {
+        return state.days.find(el => {
+            return el.date.isSame(date, 'day');
+        });
+    }
 }

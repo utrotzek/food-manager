@@ -13,12 +13,18 @@
           v-for="plan in dayPlans"
           :key="plan.id"
         >
-          <PlanItem :plan="plan" />
+          <PlanItem
+            :plan="plan"
+            :done="done"
+          />
           <hr>
         </div>
       </b-col>
     </b-row>
-    <b-row class="mt-3 mb-3">
+    <b-row
+      v-if="!done"
+      class="mt-3 mb-3"
+    >
       <b-col class="text-center">
         <b-button class="plan-recipe">
           Gericht einplanen
@@ -43,6 +49,10 @@ export default {
     dayPlans: {
       type: Array,
       required: true
+    },
+    done: {
+      type: Boolean,
+      default: false
     }
   },
   data(){
