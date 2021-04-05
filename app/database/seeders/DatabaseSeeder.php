@@ -1,6 +1,7 @@
 <?php
 namespace Database\Seeders;
 
+use Database\Seeders\Development\DaySeeder;
 use Database\Seeders\Development\GoodGroupSeeder;
 use Database\Seeders\Development\GoodSeeder;
 use Database\Seeders\Development\RecipeSeeder;
@@ -21,6 +22,7 @@ class DatabaseSeeder extends Seeder
             GoodSeeder::class,
             TagSeeder::class,
             RecipeSeeder::class,
+            DaySeeder::class,
         ]);
     }
 }

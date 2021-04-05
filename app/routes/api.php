@@ -1,4 +1,6 @@
 <?php
+
+use App\Http\Controllers\DayController;
 use App\Http\Controllers\GoodController;
 use App\Http\Controllers\GoodGroupController;
 use App\Http\Controllers\ImageController;
@@ -22,8 +24,10 @@ use Illuminate\Support\Facades\Route;
 Route::post('/recipes/validate/{recipe?}', [RecipeController::class, 'validateRequest']);
 Route::put('/recipes/flags/{recipe}', [RecipeController::class, 'flags']);
 Route::get('/recipes/remembered', [RecipeController::class, 'remembered']);
+Route::get('/days/range', [DayController::class, 'range']);
 
 Route::apiResources([
+    'days' => DayController::class,
     'goods' => GoodController::class,
     'goodGroups' => GoodGroupController::class,
     'ingredients' => IngredientController::class,

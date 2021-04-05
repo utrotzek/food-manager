@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Repositories\DayRepository;
 use App\Repositories\RecipeRepository;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
@@ -30,11 +31,13 @@ class RouteServiceProvider extends ServiceProvider
     // protected $namespace = 'App\\Http\\Controllers';
 
     protected RecipeRepository $recipeReposotiry;
+    protected DayRepository $dayRepository;
 
     public function __construct($app)
     {
         parent::__construct($app);
         $this->recipeReposotiry = $app->make(RecipeRepository::class);
+        $this->dayRepository = $app->make(DayRepository::class);
     }
 
     /**
@@ -76,6 +79,10 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->app['router']->bind('recipe', function ($value, $route) {
             return $this->recipeReposotiry->findByIdOrSlug($value);
+        });
+
+        $this->app['router']->bind('day', function ($value, $route) {
+            return $this->dayRepository->findByIdOrDate($value);
         });
     }
 }
