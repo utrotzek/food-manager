@@ -21,20 +21,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/days/range', [DayController::class, 'range']);
+
+Route::put('/goodGroups/resort/{goodGroup}', [GoodGroupController::class, 'resort']);
+
 Route::post('/recipes/validate/{recipe?}', [RecipeController::class, 'validateRequest']);
 Route::put('/recipes/flags/{recipe}', [RecipeController::class, 'flags']);
 Route::get('/recipes/remembered', [RecipeController::class, 'remembered']);
-Route::get('/days/range', [DayController::class, 'range']);
 
 Route::apiResources([
     'days' => DayController::class,
     'goods' => GoodController::class,
     'goodGroups' => GoodGroupController::class,
     'ingredients' => IngredientController::class,
+    'images' => ImageController::class,
     'recipes' => RecipeController::class,
     'tags' => TagController::class,
     'units' => UnitController::class,
-    'images' => ImageController::class
 ]);
 
-Route::put('/goodGroups/resort/{goodGroup}', [GoodGroupController::class, 'resort']);
