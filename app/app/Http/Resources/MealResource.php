@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class MealConfigResource extends JsonResource
+class MealResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +17,8 @@ class MealConfigResource extends JsonResource
         return [
             'id' => $this->id,
             'title' => $this->title,
-            'meals' => MealResource::collection($this->meals)
+            'sort' => $this->sort,
+            'meal_config_id' => $this->mealConfig->id
         ];
     }
 }

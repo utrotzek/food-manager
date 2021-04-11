@@ -7,6 +7,7 @@ use App\Http\Controllers\GoodGroupController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\MealConfigController;
+use App\Http\Controllers\MealController;
 use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UnitController;
@@ -38,6 +39,7 @@ Route::apiResources([
     'goodGroups' => GoodGroupController::class,
     'ingredients' => IngredientController::class,
     'images' => ImageController::class,
+    'meals' => MealController::class,
     'meal-config' => MealConfigController::class,
     'recipes' => RecipeController::class,
     'tags' => TagController::class,

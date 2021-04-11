@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class MealConfig extends Model
+class Meal extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title'];
+    protected $fillable = ['id', 'title', 'sort'];
 
-    public function meals(): HasMany
+    public function mealConfig(): belongsTo
     {
-        return $this->hasMany(Meal::class);
+        return $this->belongsTo(MealConfig::class);
     }
 
     public function __toString(): string
