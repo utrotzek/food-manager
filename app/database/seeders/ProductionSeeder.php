@@ -14,7 +14,7 @@ class ProductionSeeder extends Seeder
     public function run()
     {
         $this->call([
-            AppStateSeeder::class
+            AppStateSeeder::class,
         ]);
     }
 }

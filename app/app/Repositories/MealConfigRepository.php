@@ -36,6 +36,15 @@ class MealConfigRepository implements MealConfigRepositoryInterface
         return $mealConfig->fresh();
     }
 
+    /**
+     * @codeCoverageIgnore
+     * Just glue code. No tests necessary
+     */
+    public function findFirst(): ?MealConfig
+    {
+        return MealConfig::get()->first();
+    }
+
     public function findByIdOrSlug(string $idOrTitle): ?MealConfig
     {
         /** @var MealConfig $item */
