@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AppStateController;
 use App\Http\Controllers\DayController;
+use App\Http\Controllers\DayPlanController;
 use App\Http\Controllers\GoodController;
 use App\Http\Controllers\GoodGroupController;
 use App\Http\Controllers\ImageController;
@@ -35,6 +36,7 @@ Route::get('/recipes/remembered', [RecipeController::class, 'remembered']);
 Route::apiResources([
     'app-states' => AppStateController::class,
     'days' => DayController::class,
+    'day-plans' => DayPlanController::class,
     'goods' => GoodController::class,
     'goodGroups' => GoodGroupController::class,
     'ingredients' => IngredientController::class,

@@ -11,4 +11,9 @@ class Day extends Model
 
     protected $fillable = ['date', 'done'];
     protected $dates = ['date'];
+
+    public function __toString()
+    {
+        return $this->date->format('Y-m-d');
+    }
 }

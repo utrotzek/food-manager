@@ -40,10 +40,22 @@ class DayRepository implements DayRepositoryInterface
 
     public function findByIdOrDate(string $idOrDate): ?Day
     {
+        $date = null;
+        $id = null;
+        if (!is_numeric($idOrDate)) {
+            $date = new Carbon($idOrDate);
+        } else {
+            $id = (int)$idOrDate;
+        }
+
         /** @var Day $day */
         $day = Day::query()
-            ->where('id', $idOrDate)
-            ->orWhere('date', $idOrDate)
+            ->when($id, function ($query) use ($id) {
+                return $query->where('id', $id);
+            })
+            ->when($date, function ($query) use ($date) {
+                return $query->orWhereDate('date', $date->toDateString());
+            })
             ->first();
         return $day;
     }

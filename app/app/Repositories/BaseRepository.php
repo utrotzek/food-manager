@@ -12,8 +12,9 @@ abstract class BaseRepository
 
     /**
      * @codeCoverageIgnore
+     * @returns Model
      */
-    public function findById(int $id): Model
+    public function findById(int $id)
     {
         return $this->getModel()::find($id);
     }
@@ -29,8 +30,9 @@ abstract class BaseRepository
     /**
      * @codeCoverageIgnore
      * Just glue code. No tests necessary
+     * @returns Model
      */
-    public function create($attributes): Model
+    public function create($attributes)
     {
         $model = $this->getModel()->make($attributes);
         $model->save();
@@ -40,15 +42,19 @@ abstract class BaseRepository
     /**
      * @codeCoverageIgnore
      * Just glue code. No tests necessary
+     * @return Model
      */
-    public function update(array $attributes, Model $model): Model
+    public function update(array $attributes, Model $model)
     {
         $model->fill($attributes);
         $model->save();
         return $model->fresh();
     }
 
-    private function getModel(): Model
+    /**
+     * @return Model
+     */
+    private function getModel()
     {
         $modelName = ClassUtilities::extractModelFromRepositoryName(get_class($this));
         return new $modelName;
