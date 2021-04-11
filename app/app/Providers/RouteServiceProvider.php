@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Models\MealConfig;
+use App\Repositories\AppStateRepository;
 use App\Repositories\DayRepository;
 use App\Repositories\MealConfigRepository;
 use App\Repositories\RecipeRepository;
@@ -35,6 +35,7 @@ class RouteServiceProvider extends ServiceProvider
     protected RecipeRepository $recipeReposotiry;
     protected DayRepository $dayRepository;
     protected MealConfigRepository $mealConfigRepository;
+    protected AppStateRepository $appStateRepository;
 
     public function __construct($app)
     {
@@ -42,6 +43,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->recipeReposotiry = $app->make(RecipeRepository::class);
         $this->dayRepository = $app->make(DayRepository::class);
         $this->mealConfigRepository = $app->make(MealConfigRepository::class);
+        $this->appStateRepository = $app->make(AppStateRepository::class);
     }
 
     /**
@@ -91,6 +93,10 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->app['router']->bind('meal_config', function ($value, $route) {
             return $this->mealConfigRepository->findByIdOrSlug($value);
+        });
+
+        $this->app['router']->bind('app_state', function ($value, $route) {
+            return $this->appStateRepository->findByName($value);
         });
     }
 }

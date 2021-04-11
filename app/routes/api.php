@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AppStateController;
 use App\Http\Controllers\DayController;
 use App\Http\Controllers\GoodController;
 use App\Http\Controllers\GoodGroupController;
@@ -31,6 +32,7 @@ Route::put('/recipes/flags/{recipe}', [RecipeController::class, 'flags']);
 Route::get('/recipes/remembered', [RecipeController::class, 'remembered']);
 
 Route::apiResources([
+    'app-states' => AppStateController::class,
     'days' => DayController::class,
     'goods' => GoodController::class,
     'goodGroups' => GoodGroupController::class,
