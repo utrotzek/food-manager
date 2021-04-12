@@ -25,13 +25,15 @@
               <b-button
                 variant="link"
                 class="icon-button"
+                @click="onPrevInterval"
               >
                 <b-icon-dash-circle />
               </b-button>
-              <span>22.03. - 27.03</span>
+              <span>{{ from.format('DD.MM.') }} - {{ to.format('DD.MM.') }}</span>
               <b-button
                 variant="link"
                 class="icon-button"
+                @click="onNextInterval"
               >
                 <b-icon-plus-circle />
               </b-button>
@@ -104,7 +106,9 @@ export default {
       loaded: false,
       recipes: null,
       mounted: false,
-      rememberTop: 0
+      rememberTop: 0,
+      from: this.$dayjs(),
+      to: this.$dayjs().add(7, 'day')
     }
   },
   computed: {
@@ -115,16 +119,40 @@ export default {
   destroyed () {
     window.removeEventListener('scroll', this.handleScroll);
   },
-  mounted() {
+  async mounted() {
     this.rememberTop = this.$refs.remember.getBoundingClientRect().top;
-    axios.get('/api/recipes/remembered').then(res => {
-      this.recipes = res.data.slice(0, 2);
-      this.loaded = true;
-    });
+    const rememberedHandle = this.fetchRemembered();
+    const daysHandle = this.fetchMealPlan();
+
+    await daysHandle;
+    await rememberedHandle;
+    this.loaded = true;
   },
   methods: {
     handleScroll(){
       this.rememberTop = this.$refs.remember.getBoundingClientRect().top;
+    },
+    fetchMealPlan() {
+      return this.$store.dispatch('meal/loadMealPlanRange', {from: this.from, to: this.to});
+    },
+    fetchRemembered() {
+      return axios.get('/api/recipes/remembered').then(res => {
+        return new Promise((resolve, reject) => {
+          //why slice?
+          this.recipes = res.data.slice(0, 2);
+          resolve();
+        })
+      });
+    },
+    onNextInterval(){
+      this.to = this.to.add(7, 'day');
+      this.from = this.from.add(7, 'day');
+      this.fetchMealPlan();
+    },
+    onPrevInterval(){
+      this.to = this.to.subtract(7, 'day');
+      this.from = this.from.subtract(7, 'day');
+      this.fetchMealPlan();
     }
   }
 }
