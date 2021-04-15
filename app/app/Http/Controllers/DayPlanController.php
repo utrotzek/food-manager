@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RangeRequest;
 use App\Http\Requests\DayPlanStoreRequest;
 use App\Http\Resources\DayPlanResource;
 use App\Models\DayPlan;
@@ -9,6 +10,7 @@ use App\Repositories\DayPlanRepository;
 use App\Repositories\DayRepository;
 use App\Repositories\MealRepository;
 use App\Repositories\RecipeRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Response;
 
 class DayPlanController extends Controller
@@ -37,6 +39,18 @@ class DayPlanController extends Controller
     {
         return new Response(
             DayPlanResource::collection($this->dayPlanRepository->all())
+        );
+    }
+
+    public function range(RangeRequest $request): Response
+    {
+        $from = new Carbon($request->input('from'));
+        $to = new Carbon($request->input('to'));
+
+        return new Response(
+            DayPlanResource::collection(
+                $this->dayPlanRepository->findByRange($from, $to)
+            )
         );
     }
 

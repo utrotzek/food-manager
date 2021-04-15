@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RangeRequest;
 use App\Http\Resources\DayResource;
 use App\Models\Day;
 use App\Repositories\DayRepository;
@@ -30,7 +31,7 @@ class DayController extends Controller
         );
     }
 
-    public function range(Request $request): Response
+    public function range(RangeRequest $request): Response
     {
         $from = new Carbon($request->input('from'));
         $to = new Carbon($request->input('to'));

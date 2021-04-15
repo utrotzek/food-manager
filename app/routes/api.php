@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/days/range', [DayController::class, 'range']);
+Route::get('/day-plans/range', [DayPlanController::class, 'range']);
 
 Route::put('/goodGroups/resort/{goodGroup}', [GoodGroupController::class, 'resort']);
 

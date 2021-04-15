@@ -6,6 +6,9 @@ use App\Models\Day;
 use App\Models\DayPlan;
 use App\Models\Meal;
 use App\Models\Recipe;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Collection;
 
 class DayPlanRepository extends BaseRepository implements DayPlanRepositoryInterface
 {
@@ -30,5 +33,18 @@ class DayPlanRepository extends BaseRepository implements DayPlanRepositoryInter
         $dayPlan->meal()->associate($meal);
         $dayPlan->save();
         return $dayPlan->fresh();
+    }
+
+    public function findByRange(Carbon $from, Carbon $to): Collection
+    {
+        return DayPlan::whereHas('day', function (Builder $query) use ($from, $to) {
+            $query->whereBetween(
+                'date',
+                [
+                    $from->format('Y-m-d'),
+                    $to->format('Y-m-d'),
+                ]
+            );
+        })->get();
     }
 }
