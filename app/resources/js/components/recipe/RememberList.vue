@@ -30,6 +30,7 @@
                 v-if="!assignDisabled"
                 class="mr-1"
                 variant="light"
+                @click="onAssign(recipe)"
               >
                 <b-icon-arrow-bar-left />
               </b-button>
@@ -106,6 +107,9 @@ export default {
     },
     onRemove(recipe){
       this.$store.dispatch('recipe/setFlag', {id: recipe.id, remember: false});
+    },
+    onAssign(recipe){
+      this.$emit('assign', recipe);
     }
   }
 }

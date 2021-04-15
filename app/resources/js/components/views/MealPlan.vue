@@ -58,7 +58,7 @@
               >
                 <Day
                   :title="day.date.format('dddd - DD.MM.YYYY')"
-                  :date="day.date"
+                  :day="day"
                   :meals="$store.state.meal.meals"
                 />
               </b-col>
@@ -81,7 +81,7 @@
                     <b-icon-bookmark-fill /> <b>Merkliste</b>
                   </template>
                   <b-card-body>
-                    <RememberList />
+                    <RememberList @assign="onAssign" />
                   </b-card-body>
                 </b-card>
               </b-col>
@@ -153,6 +153,9 @@ export default {
       this.to = this.to.subtract(7, 'day');
       this.from = this.from.subtract(7, 'day');
       this.fetchMealPlan();
+    },
+    onAssign(recipe){
+      this.$store.commit('meal/enableRecipeAssignMode', {recipe: recipe});
     }
   }
 }

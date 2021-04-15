@@ -20,5 +20,21 @@ export default {
                 resolve();
             })
         })
+    },
+    planRecipeForDay({commit, state}, payload) {
+        return new Promise((resolve, reject) => {
+            const data = {
+                recipe_id: payload.recipe.id,
+                meal_id: payload.meal.id,
+                day_id: payload.day.id
+            };
+            axios.post('/api/day-plans', data).then(res => {
+                //update day plan list
+                commit('disabledRecipeAssignMode');
+                resolve();
+            }).catch(err => {
+                reject(err);
+            });
+        })
     }
 }

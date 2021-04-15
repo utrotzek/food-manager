@@ -72,8 +72,9 @@
                 lg="4"
               >
                 <Meal
-                  :title="meal.title"
-                  :day-plans="$store.getters['meal/getDayPlansByDateAndMeal'](date, meal)"
+                  :meal="meal"
+                  :day="day"
+                  :day-plans="$store.getters['meal/getDayPlansByDateAndMeal'](day.date, meal)"
                   :done="day.done"
                 />
               </b-col>
@@ -97,26 +98,27 @@ export default {
       type: String,
       required: true
     },
-    date: {
+    day: {
       type: Object,
       required: true
     },
     meals: {
       type: Array,
       required: true
+    },
+    assignMode: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
     todayClass() {
-      const isToday = this.date.isSame(this.$dayjs(), 'day');
+      const isToday = this.day.date.isSame(this.$dayjs(), 'day');
 
       return {
         'border-warning': isToday
       }
     },
-    day(){
-      return this.$store.getters["meal/getDayByDate"](this.date);
-    }
   },
   methods: {
     toggleDone(){

@@ -3,7 +3,7 @@
     <b-row>
       <b-col>
         <h4 class="card-title">
-          {{ title }}
+          {{ meal.title }}
         </h4>
       </b-col>
     </b-row>
@@ -26,8 +26,17 @@
       class="mt-3 mb-3"
     >
       <b-col class="text-center">
-        <b-button class="plan-recipe">
+        <b-button
+          v-if="!$store.state.meal.assign.enabled"
+          class="plan-recipe"
+        >
           Gericht einplanen
+        </b-button>
+        <b-button
+          v-else
+          @click="onAssignConfirmed"
+        >
+          Hier zuweisen zuweisen
         </b-button>
       </b-col>
     </b-row>
@@ -42,8 +51,12 @@ export default {
   name: "Meal",
   components: {PlanItem},
   props: {
-    title: {
-      type: String,
+    meal: {
+      type: Object,
+      required: true
+    },
+    day: {
+      type: Object,
       required: true
     },
     dayPlans: {
@@ -61,6 +74,16 @@ export default {
     }
   },
   mounted() {
+  },
+  methods: {
+    onAssignConfirmed(){
+      const data = {
+        meal: this.meal,
+        day: this.day,
+        recipe: this.$store.state.meal.assign.recipe
+      };
+      this.$store.dispatch('meal/planRecipeForDay', data);
+    }
   }
 }
 </script>
