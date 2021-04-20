@@ -22,32 +22,6 @@ export default {
             sort: 1
         },
     ],
-    dayPlans: [
-        {
-            id: 1,
-            date: dayjs('2021-04-05'),
-            meal_id: 1,
-            recipe: {
-                id: 1,
-                title: "Chili con Carne"
-            },
-        },
-        {
-            id: 2,
-            date: dayjs('2021-04-05'),
-            meal_id: 2,
-            recipe: {
-                id: 2,
-                title: "Gnocchi Pfanne mit Spinat"
-            }
-        },
-        {
-            id: 3,
-            date: dayjs('2021-04-07'),
-            meal_id: 2,
-            recipe: null,
-            description: "Essen gehen"
-        }
-    ],
+    dayPlans: [],
     days: []
 }
