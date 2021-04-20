@@ -5,6 +5,10 @@ export default {
         enabled: false,
         recipe: null
     },
+    movePlan: {
+        enabled: false,
+        plan: null
+    },
     meals: [
         {
             id: 1,

@@ -51,5 +51,23 @@ export default {
                 reject(err);
             });
         })
+    },
+    movePlanToDay({commit, state}, payload){
+        return new Promise((resolve, reject) => {
+            const dayPlanId = payload.id;
+            const data = {
+                recipe_id: payload.recipe.id,
+                meal_id: payload.meal.id,
+                day_id: payload.day.id
+            };
+            axios.put('/api/day-plans/' + dayPlanId, data).then(res => {
+                commit('removeDayPlan', {id: dayPlanId});
+                commit('addDayPlans', {dayPlans: [res.data.item], override: false});
+                commit('disableRecipeMoveMode');
+                resolve();
+            }).catch(err => {
+                reject(err);
+            });
+        })
     }
 }

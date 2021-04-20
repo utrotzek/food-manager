@@ -7,7 +7,7 @@
           v-if="!done"
           variant="light"
         >
-          <b-icon-arrows-move />
+          <b-icon-arrows-move @click="onMove" />
         </b-button>
         <b-button
           v-if="!done"
@@ -24,7 +24,7 @@
           v-if="!done"
           variant="light"
         >
-          <b-icon-arrows-move />
+          <b-icon-arrows-move @click="onMove" />
         </b-button>
         <b-button
           v-if="!done"
@@ -61,6 +61,9 @@ export default {
   methods: {
     onDelete(){
       this.$store.dispatch('meal/deletePlanItem', {dayPlanId: this.plan.id});
+    },
+    onMove() {
+      this.$store.commit('meal/enableRecipeMoveMode', {plan: this.plan});
     }
   }
 }

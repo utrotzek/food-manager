@@ -27,7 +27,7 @@
     >
       <b-col class="text-center">
         <b-button
-          v-if="!$store.state.meal.assign.enabled"
+          v-if="!$store.state.meal.assign.enabled && !$store.state.meal.movePlan.enabled"
           class="plan-recipe"
         >
           Gericht einplanen
@@ -77,12 +77,24 @@ export default {
   },
   methods: {
     onAssignConfirmed(){
-      const data = {
-        meal: this.meal,
-        day: this.day,
-        recipe: this.$store.state.meal.assign.recipe
-      };
-      this.$store.dispatch('meal/planRecipeForDay', data);
+      if (this.$store.state.meal.assign.enabled){
+        const data = {
+          meal: this.meal,
+          day: this.day,
+          recipe: this.$store.state.meal.assign.recipe
+        };
+        this.$store.dispatch('meal/planRecipeForDay', data);
+      }
+
+      if (this.$store.state.meal.movePlan.enabled){
+        const data = {
+          id: this.$store.state.meal.movePlan.plan.id,
+          meal: this.meal,
+          day: this.day,
+          recipe: this.$store.state.meal.movePlan.plan.recipe,
+        };
+        this.$store.dispatch('meal/movePlanToDay', data);
+      }
     }
   }
 }

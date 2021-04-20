@@ -39,6 +39,14 @@ export default {
         let day = state.days.find(el => {return el.date.isSame(payload.day.date, 'day')})
         day.done = payload.done;
     },
+    enableRecipeMoveMode(state, payload){
+        state.movePlan.enabled = true;
+        state.movePlan.plan = payload.plan;
+    },
+    disableRecipeMoveMode(state){
+        state.movePlan.enabled = false;
+        state.movePlan.plan = null;
+    },
     enableRecipeAssignMode(state, payload){
         state.assign.enabled = true;
         state.assign.recipe = payload.recipe;
