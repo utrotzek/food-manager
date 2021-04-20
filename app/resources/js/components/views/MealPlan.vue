@@ -107,8 +107,8 @@ export default {
       recipes: null,
       mounted: false,
       rememberTop: 0,
-      from: this.$dayjs(),
-      to: this.$dayjs().add(7, 'day')
+      from: this.$dayjs().startOf('week'),
+      to: this.$dayjs().startOf('week').add(7, 'day')
     }
   },
   computed: {

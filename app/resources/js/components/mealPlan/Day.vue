@@ -114,9 +114,10 @@ export default {
   computed: {
     todayClass() {
       const isToday = this.day.date.isSame(this.$dayjs(), 'day');
-
+      const isPast = this.day.date.isBefore(this.$dayjs(), 'day');
       return {
-        'border-warning': isToday
+        'border-warning': isToday,
+        'disabled': isPast
       }
     },
   },
@@ -146,5 +147,9 @@ export default {
 
   .title {
     line-height: 2em;
+  }
+
+  .day .card.disabled {
+    opacity: 0.4;
   }
 </style>
