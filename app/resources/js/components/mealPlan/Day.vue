@@ -74,7 +74,7 @@
                 <Meal
                   :meal="meal"
                   :day="day"
-                  :day-plans="$store.getters['meal/getDayPlansByDateAndMeal'](day.date, meal)"
+                  :day-plans="$store.getters['meal/getDayPlansByDayAndMeal'](day, meal)"
                   :done="day.done"
                 />
               </b-col>

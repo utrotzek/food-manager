@@ -1,7 +1,7 @@
 export default  {
-    getDayPlansByDateAndMeal: (state) => (date, meal) => {
+    getDayPlansByDayAndMeal: (state) => (day, meal) => {
         return state.dayPlans.filter(el => {
-            return el.date.isSame(date, 'day') && el.meal_id === meal.id
+            return el.day.id === day.id && el.meal.id === meal.id
         }) ?? [];
     },
     getDayByDate: (state) => (date) => {

@@ -4,12 +4,17 @@ export default {
         return new Promise((resolve, reject) => {
             const from = payload.from.format('YYYY-MM-DD');
             const to = payload.to.format('YYYY-MM-DD');
-            axios.get('/api/days/range', {params: {from: from, to: to}}).then(res => {
-               commit('setDays', {days: res.data});
-               resolve();
-            }).catch(err => {
-                reject(err);
-            });
+
+            axios.all([
+                axios.get('/api/days/range', {params: {from: from, to: to}}),
+                axios.get('/api/day-plans/range', {params: {from: from, to: to}})
+            ])
+            .then(axios.spread((daysResponse, dayPlansResponse) => {
+                commit('setDays', {days: daysResponse.data});
+                commit('addDayPlans', {dayPlans: dayPlansResponse.data, override: true});
+                resolve();
+            }))
+            .catch(err => reject(err));
         });
     },
     dayChangeDone({commit, state}, payload) {
@@ -29,7 +34,7 @@ export default {
                 day_id: payload.day.id
             };
             axios.post('/api/day-plans', data).then(res => {
-                //update day plan list
+                commit('addDayPlans', {dayPlans: [res.data.item], override: false});
                 commit('disabledRecipeAssignMode');
                 resolve();
             }).catch(err => {
