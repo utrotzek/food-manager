@@ -19,6 +19,7 @@ export default {
 
         payload.dayPlans.forEach(el => {
             state.dayPlans.push({
+                id: el.id,
                 day: {
                     done: Boolean(el.day.done),
                     date: dayjs(el.day.date),
@@ -29,6 +30,10 @@ export default {
                 recipe: el.recipe
             });
         })
+    },
+    removeDayPlan(state, payload){
+        const deleteIndex = state.dayPlans.findIndex(el => {return el.id === payload.id});
+        state.dayPlans.splice(deleteIndex, 1);
     },
     updateDayDone(state, payload){
         let day = state.days.find(el => {return el.date.isSame(payload.day.date, 'day')})

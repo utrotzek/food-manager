@@ -13,7 +13,7 @@
           v-if="!done"
           variant="light"
         >
-          <b-icon-trash />
+          <b-icon-trash @click="onDelete" />
         </b-button>
       </b-button-group>
     </span>
@@ -30,7 +30,7 @@
           v-if="!done"
           variant="light"
         >
-          <b-icon-trash />
+          <b-icon-trash @click="onDelete" />
         </b-button>
       </b-button-group>
     </span>
@@ -57,6 +57,11 @@ export default {
   },
   mounted() {
 
+  },
+  methods: {
+    onDelete(){
+      this.$store.dispatch('meal/deletePlanItem', {dayPlanId: this.plan.id});
+    }
   }
 }
 </script>

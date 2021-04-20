@@ -17,6 +17,16 @@ export default {
             .catch(err => reject(err));
         });
     },
+    deletePlanItem({commit, state}, payload){
+        return new Promise((resolve, reject) => {
+            const dayPlanId = payload.dayPlanId;
+            axios.delete('/api/day-plans/' + dayPlanId).then(res => {
+                commit('removeDayPlan', {id: dayPlanId});
+                resolve();
+            })
+            .catch(err => reject(err))
+        });
+    },
     dayChangeDone({commit, state}, payload) {
         return new Promise((resolve, reject) => {
             const done = !payload.day.done;
