@@ -31,6 +31,17 @@ export default {
             });
         })
     },
+    addMeals(state, payload){
+        state.meals = [];
+        payload.meals.forEach(el => {
+            state.meals.push({
+                id: Number(el.id),
+                title: el.title,
+                sort: Number(el.sort),
+                meal_config_id: Number(el.meal_config_id)
+            })
+        })
+    },
     removeDayPlan(state, payload){
         const deleteIndex = state.dayPlans.findIndex(el => {return el.id === payload.id});
         state.dayPlans.splice(deleteIndex, 1);

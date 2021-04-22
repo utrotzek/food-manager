@@ -123,9 +123,11 @@ export default {
     this.rememberTop = this.$refs.remember.getBoundingClientRect().top;
     const rememberedHandle = this.fetchRemembered();
     const daysHandle = this.fetchMealPlan();
+    const mealHandle = this.fetchMeals();
 
     await daysHandle;
     await rememberedHandle;
+    await mealHandle;
     this.loaded = true;
   },
   methods: {
@@ -134,6 +136,9 @@ export default {
     },
     fetchMealPlan() {
       return this.$store.dispatch('meal/loadMealPlanRange', {from: this.from, to: this.to});
+    },
+    fetchMeals() {
+      return this.$store.dispatch('meal/loadMeals');
     },
     fetchRemembered() {
       return axios.get('/api/recipes/remembered').then(res => {

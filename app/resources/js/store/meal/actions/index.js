@@ -1,5 +1,14 @@
 import dayjs from "dayjs";
 export default {
+    loadMeals({commit, state}) {
+        return new Promise((resolve, reject) => {
+            axios.get('/api/meals').then(res => {
+                commit('addMeals', {meals: res.data})
+                resolve();
+            })
+            .catch(err => reject(err));
+        })
+    },
     loadMealPlanRange({commit, state}, payload) {
         return new Promise((resolve, reject) => {
             const from = payload.from.format('YYYY-MM-DD');
