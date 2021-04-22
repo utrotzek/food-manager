@@ -13,16 +13,16 @@
           v-for="plan in dayPlans"
           :key="plan.id"
         >
-          <PlanItem
+          <DayPlan
             :plan="plan"
-            :done="done"
+            :day="day"
           />
           <hr>
         </div>
       </b-col>
     </b-row>
     <b-row
-      v-if="!done"
+      v-if="!day.done"
       class="mt-3 mb-3"
     >
       <b-col class="text-center">
@@ -45,11 +45,11 @@
 </template>
 
 <script>
-import PlanItem from "./PlanItem";
+import DayPlan from "./DayPlan";
 
 export default {
   name: "Meal",
-  components: {PlanItem},
+  components: {DayPlan},
   props: {
     meal: {
       type: Object,
@@ -62,10 +62,6 @@ export default {
     dayPlans: {
       type: Array,
       required: true
-    },
-    done: {
-      type: Boolean,
-      default: false
     }
   },
   data(){

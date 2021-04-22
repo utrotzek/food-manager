@@ -71,11 +71,10 @@
                 cols="12"
                 lg="4"
               >
-                <Meal
+                <MealForDay
                   :meal="meal"
                   :day="day"
                   :day-plans="$store.getters['meal/getDayPlansByDayAndMeal'](day, meal)"
-                  :done="day.done"
                 />
               </b-col>
             </b-row>
@@ -88,11 +87,11 @@
 
 <script>
 
-import Meal from "./Meal";
+import MealForDay from "./MealForDay";
 
 export default {
   name: "Day",
-  components: {Meal},
+  components: {MealForDay},
   props: {
     title: {
       type: String,

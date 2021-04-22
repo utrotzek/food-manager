@@ -20,6 +20,7 @@ class CreateDayPlansTable extends Migration
             $table->foreignId('meal_id')->references('id')->on('meals')->cascadeOnDelete();
             $table->foreignId('day_id')->references('id')->on('days')->cascadeOnDelete();
             $table->string('description')->nullable();
+            $table->boolean('done')->default(false);
         });
     }
 

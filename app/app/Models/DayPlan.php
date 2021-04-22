@@ -10,7 +10,7 @@ class DayPlan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['description'];
+    protected $fillable = ['description', 'done'];
 
     public function meal(): belongsTo
     {
@@ -34,5 +34,6 @@ class DayPlan extends Model
         } elseif ($this->description) {
             return "plan ". $this->description;
         }
+        return "";
     }
 }

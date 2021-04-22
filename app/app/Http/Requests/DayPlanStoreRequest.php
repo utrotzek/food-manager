@@ -27,7 +27,8 @@ class DayPlanStoreRequest extends FormRequest
             'recipe_id' => 'required|int|exists:recipes,id',
             'meal_id' => 'required|int|exists:meals,id',
             'day_id'  => 'required|int|exists:days,id',
-            'description' => 'string|max:100'
+            'description' => 'string|max:100',
+            'done' => 'boolean'
         ];
     }
 }

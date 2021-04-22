@@ -12,6 +12,10 @@ export default {
             });
         })
     },
+    updateDayPlan(state, payload) {
+        const updatedIndex = state.dayPlans.findIndex(el => {return el.id === payload.dayPlan.id});
+        state.dayPlans[updatedIndex] = payload.dayPlan;
+    },
     addDayPlans(state, payload) {
         if (payload.override){
             state.dayPlans = [];
@@ -26,6 +30,7 @@ export default {
                     id: el.day.id
                 },
                 description: el.description,
+                done: Boolean(el.done),
                 meal: el.meal,
                 recipe: el.recipe
             });

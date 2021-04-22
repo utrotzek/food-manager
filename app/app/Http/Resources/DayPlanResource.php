@@ -19,7 +19,8 @@ class DayPlanResource extends JsonResource
             'recipe' => new RecipeLightResource($this->recipe),
             'meal' => new MealResource($this->meal),
             'day' => new DayResource($this->day),
-            'description' => $this->description
+            'description' => $this->description,
+            'done' => $this->done
         ];
     }
 }

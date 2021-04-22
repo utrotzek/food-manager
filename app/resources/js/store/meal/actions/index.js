@@ -45,6 +45,20 @@ export default {
             })
         })
     },
+    updateDayPlan({commit, state}, payload) {
+        return new Promise((resolve, reject) => {
+            const data = {
+                recipe_id: payload.recipe.id,
+                meal_id: payload.meal.id,
+                day_id: payload.day.id,
+                done: payload.done
+            };
+            axios.put('/api/day-plans/' + payload.id, data).then(res => {
+                commit('updateDayPlan', {dayPlan: payload.dayPlan});
+                resolve();
+            })
+        })
+    },
     planRecipeForDay({commit, state}, payload) {
         return new Promise((resolve, reject) => {
             const data = {

@@ -37,12 +37,11 @@ class DayPlanSeeder extends Seeder
     {
         $todayDate = Carbon::now();
         $tomorrow = Carbon::now()->addDay();
-        $this->createDayPlan($todayDate, 'Chili con Carne', 3);
-        $this->createDayPlan($tomorrow, 'Gnocchi-Pfanne mit Spinat', 3);
+        $this->createDayPlan($todayDate, 'Chili con Carne', 3, true);
+        $this->createDayPlan($tomorrow, 'Gnocchi-Pfanne mit Spinat', 3, false);
     }
 
-    private function createDayPlan(Carbon $date, string $recipeSlug, int $mealId){
-
+    private function createDayPlan(Carbon $date, string $recipeSlug, int $mealId, bool $done) {
         $today = $this->dayRepository->findByIdOrDate($date);
         $recipe = $this->recipeRepository->findByIdOrSlug($recipeSlug);
         $meal = $this->mealRepository->findById($mealId);
@@ -51,7 +50,7 @@ class DayPlanSeeder extends Seeder
             $today,
             $recipe,
             $meal,
-            []
+            ['done' => $done]
         );
     }
 }
