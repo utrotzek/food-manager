@@ -332,6 +332,9 @@ export default {
   },
   mounted() {
     const recipeId = this.recipeId ?? this.$route.params.id;
+    if (this.$route.params.cooking){
+      this.startCooking();
+    }
 
     axios.get('/api/recipes/'+ recipeId).then((res) => {
       this.recipe = res.data;

@@ -29,7 +29,6 @@
     >
       <Recipe
         :recipe-id="recipe.id"
-        editing-disabled
       />
     </b-modal>
     <Breakpoints v-model="breakpoints" />

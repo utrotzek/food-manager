@@ -1,20 +1,36 @@
 <template>
   <div class="plan-item">
     <div v-if="plan.recipe">
-      <b-button
-        v-if="day.done"
-        variant="light"
-        @click="onDayPlanDone"
+      <div
+        class="recipe-title"
+        @click="onRecipeClick"
       >
-        <b-icon-check-square-fill v-if="plan.done" />
-        <b-icon-check-square v-else />
-      </b-button>
-      <span v-if="plan.done">
-        <strike>{{ plan.recipe.title }}</strike>
-      </span>
-      <span v-else>
-        {{ plan.recipe.title }}
-      </span>
+        <span v-if="plan.done">
+          <strike>{{ plan.recipe.title }}</strike>
+        </span>
+        <span v-else>
+          {{ plan.recipe.title }}
+        </span>
+      </div>
+      <b-button-group
+        v-if="day.done"
+        size="sm"
+      >
+        <b-button
+          variant="light"
+          @click="onDayPlanDone"
+        >
+          <b-icon-check-square-fill v-if="plan.done" />
+          <b-icon-check-square v-else />
+        </b-button>
+        <b-button
+          v-if="!plan.done"
+          variant="light"
+          @click="onCookingClick"
+        >
+          <b-icon-egg-fried />
+        </b-button>
+      </b-button-group>
 
       <b-button-group size="sm">
         <b-button
@@ -48,12 +64,25 @@
         </b-button>
       </b-button-group>
     </span>
+    <b-modal
+      id="recipe-details-modal"
+      :ref="'recipe-details-modal'"
+      size="lg"
+      hide-footer
+    >
+      <Recipe
+        :recipe-id="plan.recipe.id"
+      />
+    </b-modal>
   </div>
 </template>
 
 <script>
+import Recipe from '../views/Recipe';
+
 export default {
   name: "PlanItem",
+  components: {Recipe},
   props: {
     plan: {
       type: Object,
@@ -83,11 +112,22 @@ export default {
       let data = this.plan;
       data.done = !this.plan.done;
       this.$store.dispatch('meal/updateDayPlan', data);
+    },
+    onRecipeClick() {
+      this.$refs['recipe-details-modal'].show();
+    },
+    onCookingClick(){
+      this.$router.push({name: 'recipe', params: {id: this.plan.recipe.id, cooking: true}});
     }
   }
 }
 </script>
 
 <style scoped>
-
+  .recipe-title {
+    cursor: pointer;
+  }
+  .recipe-title:hover {
+    text-decoration: underline;
+  }
 </style>
