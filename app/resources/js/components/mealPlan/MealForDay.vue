@@ -28,15 +28,18 @@
       <b-col class="text-center">
         <b-button
           v-if="!$store.state.meal.assign.enabled && !$store.state.meal.movePlan.enabled"
+          variant="light"
           class="plan-recipe"
         >
-          Gericht einplanen
+          <b-icon-plus-circle />
         </b-button>
         <b-button
           v-else
+          class="assign-recipe"
+          variant="light"
           @click="onAssignConfirmed"
         >
-          Hier zuweisen zuweisen
+          <b-icon-arrow-down-circle />
         </b-button>
       </b-col>
     </b-row>
@@ -96,7 +99,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+@import "resources/sass/variables";
+
   .planned-meal {
   }
 
@@ -106,5 +111,13 @@ export default {
 
   .plan-recipe {
     border-radius: 20px;
+    color: $gray-400;
+    font-size: 1.5em;
+  }
+
+  .assign-recipe {
+    border-radius: 20px;
+    color: $gray-400;
+    font-size: 1.5em;
   }
 </style>

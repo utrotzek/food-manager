@@ -32,13 +32,14 @@
                 variant="light"
                 @click="onAssign(recipe)"
               >
-                <b-icon-arrow-bar-left />
+                <b-icon-arrow-up-left-circle v-if="!recipeIsAssignModeEnabled(recipe)" />
+                <b-icon-arrow-up-left-circle-fill v-else />
               </b-button>
               <b-button
                 variant="light"
                 @click="onRemove(recipe)"
               >
-                <b-icon-x-circle-fill />
+                <b-icon-trash />
               </b-button>
             </b-button-group>
             <hr>
@@ -50,7 +51,7 @@
         variant="info"
         :show="true"
       >
-        Es sind aktuell keine Rezept auf der Merkliste!
+        Es sind aktuell keine Rezepte auf der Merkliste!
       </b-alert>
     </div>
   </div>
@@ -79,6 +80,9 @@ export default {
   computed: {
     remembered() {
       return this.$store.state.recipe.recipeRemembered;
+    },
+    assignMode() {
+      return this.$store.state.meal.assign.enabled;
     },
     offset(){
       if (!this.bigList){
@@ -109,7 +113,17 @@ export default {
       this.$store.dispatch('recipe/setFlag', {id: recipe.id, remember: false});
     },
     onAssign(recipe){
-      this.$emit('assign', recipe);
+      if (this.recipeIsAssignModeEnabled(recipe)){
+        this.$store.commit('meal/disabledRecipeAssignMode');
+      }else{
+        this.$emit('assign', recipe);
+      }
+    },
+    recipeIsAssignModeEnabled(recipe) {
+      if (this.assignMode){
+        return this.$store.state.meal.assign.recipe.id === recipe.id;
+      }
+      return false;
     }
   }
 }
