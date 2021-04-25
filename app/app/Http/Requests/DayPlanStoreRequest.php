@@ -24,7 +24,7 @@ class DayPlanStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'recipe_id' => 'required|int|exists:recipes,id',
+            'recipe_id' => 'int|exists:recipes,id',
             'meal_id' => 'required|int|exists:meals,id',
             'day_id'  => 'required|int|exists:days,id',
             'description' => 'string|max:100',

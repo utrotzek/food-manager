@@ -31,7 +31,7 @@
           variant="light"
           class="plan-recipe"
         >
-          <b-icon-plus-circle />
+          <b-icon-plus-circle @click="onAddPlan" />
         </b-button>
         <b-button
           v-else
@@ -44,6 +44,23 @@
       </b-col>
     </b-row>
     <hr class="d-md-none">
+
+    <b-modal
+      id="assign-plan-modal"
+      ref="assign-plan-modal"
+      title="Planung hinzufügen"
+      ok-title="Planung einfügen"
+      centered
+      @ok="onAddPlanSubmit"
+    >
+      <b-form-group label="Freitext">
+        <b-input
+          id="plan-to-add-description"
+          v-model="planToAdd.description"
+          placeholder="Freitext"
+        />
+      </b-form-group>
+    </b-modal>
   </div>
 </template>
 
@@ -65,11 +82,14 @@ export default {
     dayPlans: {
       type: Array,
       required: true
-    }
+    },
   },
   data(){
     return {
-
+      planToAdd: {
+        description: null,
+        recipe: null
+      }
     }
   },
   mounted() {
@@ -94,6 +114,27 @@ export default {
         };
         this.$store.dispatch('meal/movePlanToDay', data);
       }
+    },
+    onAddPlan() {
+      this.$refs['assign-plan-modal'].show();
+    },
+    onAddPlanSubmit(){
+      if (this.planToAdd.description) {
+        const data = {
+          meal: this.meal,
+          day: this.day,
+          description: this.planToAdd.description
+        }
+        this.$store.dispatch('meal/planRecipeForDay', data);
+      }
+      this.clearPlanToAdd();
+      this.$refs['assign-plan-modal'].hide();
+    },
+    clearPlanToAdd() {
+      this.planToAdd = {
+        description: null,
+        recipe: null
+      };
     }
   }
 }

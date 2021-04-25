@@ -47,25 +47,42 @@ export default {
     },
     updateDayPlan({commit, state}, payload) {
         return new Promise((resolve, reject) => {
-            const data = {
-                recipe_id: payload.recipe.id,
+            let data = {
+                id: payload.id,
                 meal_id: payload.meal.id,
                 day_id: payload.day.id,
                 done: payload.done
             };
+
+            if (payload.recipe){
+                data['recipe_id'] = payload.recipe.id;
+            }
+
+            if (payload.description) {
+                data['description'] = payload.description;
+            }
+
             axios.put('/api/day-plans/' + payload.id, data).then(res => {
-                commit('updateDayPlan', {dayPlan: payload.dayPlan});
+                commit('updateDayPlan', {dayPlan: data});
                 resolve();
             })
         })
     },
     planRecipeForDay({commit, state}, payload) {
         return new Promise((resolve, reject) => {
-            const data = {
-                recipe_id: payload.recipe.id,
+            let data = {
                 meal_id: payload.meal.id,
                 day_id: payload.day.id
             };
+
+            if (payload.recipe){
+                data['recipe_id'] = payload.recipe.id;
+            }
+
+            if (payload.description) {
+                data['description'] = payload.description;
+            }
+
             axios.post('/api/day-plans', data).then(res => {
                 commit('addDayPlans', {dayPlans: [res.data.item], override: false});
                 commit('disabledRecipeAssignMode');
@@ -78,11 +95,18 @@ export default {
     movePlanToDay({commit, state}, payload){
         return new Promise((resolve, reject) => {
             const dayPlanId = payload.id;
-            const data = {
-                recipe_id: payload.recipe.id,
+            let data = {
                 meal_id: payload.meal.id,
                 day_id: payload.day.id
             };
+
+            if (payload.recipe){
+                data['recipe_id'] = payload.recipe.id;
+            }
+            if (payload.description) {
+                data['description'] = payload.recipe.id;
+            }
+
             axios.put('/api/day-plans/' + dayPlanId, data).then(res => {
                 commit('removeDayPlan', {id: dayPlanId});
                 commit('addDayPlans', {dayPlans: [res.data.item], override: false});

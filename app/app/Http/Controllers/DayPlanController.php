@@ -62,7 +62,10 @@ class DayPlanController extends Controller
      */
     public function store(DayPlanStoreRequest $request)
     {
-        $recipe = $this->recipeRepository->findByIdOrSlug($request['recipe_id']);
+        $recipe = null;
+        if ($request->has('recipe_id')) {
+            $recipe = $this->recipeRepository->findByIdOrSlug($request['recipe_id']);
+        }
         $meal = $this->mealRepository->findById($request['meal_id']);
         $day = $this->dayRepository->findByIdOrDate($request['day_id']);
 
@@ -97,7 +100,10 @@ class DayPlanController extends Controller
      */
     public function update(DayPlanStoreRequest $request, DayPlan $dayPlan): Response
     {
-        $recipe = $this->recipeRepository->findByIdOrSlug($request['recipe_id']);
+        $recipe = null;
+        if ($request->has('recipe_id')) {
+            $recipe = $this->recipeRepository->findByIdOrSlug($request['recipe_id']);
+        }
         $meal = $this->mealRepository->findById($request['meal_id']);
         $day = $this->dayRepository->findByIdOrDate($request['day_id']);
 

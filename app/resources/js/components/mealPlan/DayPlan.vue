@@ -1,15 +1,15 @@
 <template>
   <div class="plan-item">
-    <div v-if="plan.recipe">
+    <div>
       <div
         class="recipe-title"
         @click="onRecipeClick"
       >
         <span v-if="plan.done">
-          <strike>{{ plan.recipe.title }}</strike>
+          <strike>{{ planTitle }}</strike>
         </span>
         <span v-else>
-          {{ plan.recipe.title }}
+          {{ planTitle }}
         </span>
       </div>
       <b-button-group
@@ -24,7 +24,7 @@
           <b-icon-check-square v-else />
         </b-button>
         <b-button
-          v-if="!plan.done"
+          v-if="!plan.done && plan.recipe"
           variant="light"
           @click="onCookingClick"
         >
@@ -47,24 +47,8 @@
         </b-button>
       </b-button-group>
     </div>
-    <span v-if="plan.description">
-      {{ plan.description }}
-      <b-button-group size="sm">
-        <b-button
-          v-if="!day.done"
-          variant="light"
-        >
-          <b-icon-arrows-move @click="onMove" />
-        </b-button>
-        <b-button
-          v-if="!day.done"
-          variant="light"
-        >
-          <b-icon-trash @click="onDelete" />
-        </b-button>
-      </b-button-group>
-    </span>
     <b-modal
+      v-if="plan.recipe"
       id="recipe-details-modal"
       :ref="'recipe-details-modal'"
       size="lg"
@@ -96,6 +80,19 @@ export default {
   data() {
     return {
 
+    }
+  },
+  computed: {
+    planTitle () {
+      if (this.plan.recipe){
+        return this.plan.recipe.title;
+      }
+
+      if (this.plan.description){
+        return this.plan.description;
+      }
+
+      return "no plan title given"
     }
   },
   mounted() {
