@@ -108,7 +108,7 @@ export default {
       mounted: false,
       rememberTop: 0,
       from: this.$dayjs().startOf('week'),
-      to: this.$dayjs().startOf('week').add(7, 'day')
+      to: this.$dayjs().startOf('week').add(6, 'day')
     }
   },
   computed: {
