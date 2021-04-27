@@ -22,7 +22,7 @@ class DayFactory extends Factory
     public function definition()
     {
         return [
-            'done' => $this->faker->boolean()
+            'done' => false
         ];
     }
 }
