@@ -27,16 +27,16 @@
     >
       <b-col class="text-center">
         <b-button
-          v-if="!$store.state.meal.assign.enabled && !$store.state.meal.movePlan.enabled"
+          v-if="!$store.state.meal.assign.enabled && !$store.state.meal.movePlan.enabled && !isPast"
           variant="light"
           class="plan-recipe"
         >
           <b-icon-plus-circle @click="onAddPlan" />
         </b-button>
         <b-button
-          v-else
+          v-else-if="!isPast"
           class="assign-recipe"
-          variant="light"
+          variant="primary"
           @click="onAssignConfirmed"
         >
           <b-icon-arrow-down-circle />
@@ -154,6 +154,10 @@ export default {
       type: Array,
       required: true
     },
+    isPast: {
+      type: Boolean,
+      default: false
+    }
   },
   data(){
     return {

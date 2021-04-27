@@ -74,6 +74,7 @@
                 <MealForDay
                   :meal="meal"
                   :day="day"
+                  :is-past="isPast"
                   :day-plans="$store.getters['meal/getDayPlansByDayAndMeal'](day, meal)"
                 />
               </b-col>
@@ -111,12 +112,16 @@ export default {
     }
   },
   computed: {
+    isPast() {
+      return this.day.date.isBefore(this.$dayjs(), 'day');
+    },
+    isToday() {
+      return this.day.date.isSame(this.$dayjs(), 'day');
+    },
     todayClass() {
-      const isToday = this.day.date.isSame(this.$dayjs(), 'day');
-      const isPast = this.day.date.isBefore(this.$dayjs(), 'day');
       return {
-        'border-warning': isToday,
-        'disabled': isPast
+        'border-warning': this.isToday,
+        'disabled': this.isPast
       }
     },
   },
