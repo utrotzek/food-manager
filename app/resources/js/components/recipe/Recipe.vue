@@ -6,8 +6,15 @@
       <b-col
         class="title-column"
       >
-        <div class="title">
-          <router-link :to="{name: 'recipe', params: {id: recipe.id}}">
+        <div
+          class="title"
+          :class="{clickable: !unclickable}"
+        >
+          <router-link
+            :to="{name: 'recipe', params: {id: recipe.id}}"
+            :disabled="unclickable"
+            :event="!unclickable ? 'click' : ''"
+          >
             {{ truncatedTitle }}
           </router-link>
         </div>
@@ -63,8 +70,15 @@
     </b-row>
 
     <b-row>
-      <b-col>
-        <router-link :to="{name: 'recipe', params: {id: recipe.id}}">
+      <b-col
+        class="image-wrapper"
+        :class="{clickable: !unclickable}"
+      >
+        <router-link
+          :to="{name: 'recipe', params: {id: recipe.id}}"
+          :disabled="unclickable"
+          :event="!unclickable ? 'click' : ''"
+        >
           <div
             v-if="recipe.image"
             class="image"
@@ -124,6 +138,10 @@ export default {
         maxTitleLength: {
           type: Number,
           default: 30
+        },
+        unclickable: {
+          type: Boolean,
+          default: false
         }
     },
     data() {
@@ -195,7 +213,14 @@ export default {
       color: $black;
     }
 
-    .title:hover {
+    .title a:hover,
+    .image-wrapper a:hover {
+      cursor: default;
+      text-decoration: initial;
+    }
+
+    .title.clickable a:hover,
+    .image-wrapper.clickable a:hover{
       text-decoration: underline;
       cursor: pointer;
     }

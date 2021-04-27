@@ -51,25 +51,96 @@
       title="Planung hinzufügen"
       ok-title="Planung einfügen"
       centered
-      @ok="onAddPlanSubmit"
+      hide-footer
     >
-      <b-form-group label="Freitext">
-        <b-input
-          id="plan-to-add-description"
-          v-model="planToAdd.description"
-          placeholder="Freitext"
-        />
-      </b-form-group>
+      <b-card
+        no-body
+        class="mb-1"
+      >
+        <b-card-header
+          header-tag="header"
+          class="p-1"
+          role="tab"
+        >
+          <b-button
+            v-b-toggle.accordion-1
+            block
+            variant="primary"
+            @click="focusDescriptionInput"
+          >
+            Freitext
+          </b-button>
+        </b-card-header>
+        <b-collapse
+          id="accordion-1"
+          accordion="my-accordion"
+          role="tabpanel"
+        >
+          <b-card-body>
+            <b-card-text>
+              <b-form @submit.prevent="onAddPlanSubmit">
+                <b-form-group label="Freitext">
+                  <b-input
+                    id="plan-to-add-description"
+                    ref="description-input"
+                    v-model="planToAdd.description"
+                    placeholder="Freitext"
+                  />
+                </b-form-group>
+                <div class="text-center">
+                  <b-button class="select-button">
+                    Zur Planung hinzufügen
+                  </b-button>
+                </div>
+              </b-form>
+            </b-card-text>
+          </b-card-body>
+        </b-collapse>
+      </b-card>
+
+      <b-card
+        no-body
+        class="mb-1"
+      >
+        <b-card-header
+          header-tag="header"
+          class="p-1"
+          role="tab"
+        >
+          <b-button
+            v-b-toggle.accordion-2
+            block
+            variant="primary"
+          >
+            Rezept auswählen
+          </b-button>
+        </b-card-header>
+        <b-collapse
+          id="accordion-2"
+          accordion="my-accordion"
+          role="tabpanel"
+        >
+          <b-card-body>
+            <b-card-text>
+              <RecipeSearch
+                select-mode
+                @selected="onAddRecipeSubmit"
+              />
+            </b-card-text>
+          </b-card-body>
+        </b-collapse>
+      </b-card>
     </b-modal>
   </div>
 </template>
 
 <script>
 import DayPlan from "./DayPlan";
+import RecipeSearch from "../recipe/RecipeSearch";
 
 export default {
   name: "Meal",
-  components: {DayPlan},
+  components: {DayPlan, RecipeSearch},
   props: {
     meal: {
       type: Object,
@@ -95,6 +166,11 @@ export default {
   mounted() {
   },
   methods: {
+    focusDescriptionInput() {
+      setTimeout(() => {
+        this.$refs['description-input'].$el.focus();
+      });
+    },
     onAssignConfirmed(){
       if (this.$store.state.meal.assign.enabled){
         const data = {
@@ -130,6 +206,16 @@ export default {
       this.clearPlanToAdd();
       this.$refs['assign-plan-modal'].hide();
     },
+    onAddRecipeSubmit(recipe){
+      const data = {
+        meal: this.meal,
+        day: this.day,
+        recipe: recipe
+      }
+      this.$store.dispatch('meal/planRecipeForDay', data);
+      this.clearPlanToAdd();
+      this.$refs['assign-plan-modal'].hide();
+    },
     clearPlanToAdd() {
       this.planToAdd = {
         description: null,
@@ -160,5 +246,11 @@ export default {
     border-radius: 20px;
     color: $gray-400;
     font-size: 1.5em;
+  }
+
+  .select-button {
+    border-radius: 25px;
+    width: 15em;
+    height: 3em;
   }
 </style>

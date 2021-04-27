@@ -2,12 +2,13 @@
   <div>
     <b-row class="mb-2">
       <b-col
-        cols="9"
-        sm="10"
+        :cols="searchBarSize.cols"
+        :sm="searchBarSize.sm"
       >
         <Search v-model="searchTerm" />
       </b-col>
       <b-col
+        v-if="!selectMode"
         cols="3"
         sm="2"
         class="text-left"
@@ -39,14 +40,30 @@
         v-for="recipe in recipes"
         :key="recipe.id"
         class="mb-4"
-        cols="12"
-        md="4"
-        lg="3"
+        :cols="recipeSize.cols"
+        :md="recipeSize.md"
+        :lg="recipeSize.lg"
       >
-        <Recipe
-          :recipe="recipe"
-          @clicked="recipeClicked"
-        />
+        <b-row>
+          <b-col>
+            <Recipe
+              :recipe="recipe"
+              :unclickable="selectMode"
+              @clicked="recipeClicked"
+            />
+          </b-col>
+        </b-row>
+        <b-row v-if="selectMode">
+          <b-col class="text-center mt-2">
+            <b-button
+              class="select-button"
+              @click="$emit('selected', recipe)"
+            >
+              <b-icon-arrow-up-left-circle />
+              Rezept auswählen
+            </b-button>
+          </b-col>
+        </b-row>
       </b-col>
       <infinite-loading
         @distance="1"
@@ -99,6 +116,12 @@ import RecipeFilter from "../recipe/RecipeFilter";
 export default {
   name: "RecipeSearch",
   components: {Search, Recipe, RecipeFilter},
+  props: {
+    selectMode: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
       initialized: false,
@@ -119,6 +142,19 @@ export default {
   computed: {
     recipes() {
       return this.$store.state.recipe.recipeSearchResult;
+    },
+    searchBarSize() {
+      return {
+        cols: (!this.selectMode) ? 9: 12,
+        sm: (!this.selectMode) ? 10: 12
+      }
+    },
+    recipeSize() {
+      return {
+        cols: 12,
+        md: (!this.selectMode) ? 4: 12,
+        lg: (!this.selectMode) ? 3: 12,
+      }
     }
   },
   watch: {
@@ -227,6 +263,12 @@ export default {
 
 .full-width .btn {
   flex: 1;
+}
+
+.select-button {
+  border-radius: 25px;
+  width: 15em;
+  height: 3em;
 }
 </style>
 
