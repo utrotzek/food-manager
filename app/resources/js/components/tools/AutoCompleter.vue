@@ -1,6 +1,7 @@
 <template>
   <div class="autoCompleter">
     <div
+      ref="autocompleter"
       data-vue-test="autocompleter"
       class="form-control preview"
       tabindex="0"
@@ -24,9 +25,8 @@
         @keydown.up="keyUp"
         @keydown.down="keyDown"
         @keydown.enter="selectItem"
-        @keydown.tab.exact="disableEditMode"
-        @keydown.tab.shift="backwards = true"
-        @blur="disableEditMode"
+        @keydown.tab.exact="moveForward"
+        @keydown.tab.shift="moveBackwards"
       />
       <div class="result">
         <ul
@@ -183,18 +183,26 @@ export default {
 
     },
     enableEditMode() {
-      if (!this.backwards){
+      if (!this.backwards && !this.forward){
         this.editMode = true;
       }
       this.backwards = false;
+      this.forward = false;
     },
     disableEditMode() {
-      this.editMode = false;
-
       if (this.selectionChangeMode){
         this.selectedItem = this.previousItem;
         this.selected = this.previousSelected;
       }
+      this.editMode = false;
+    },
+    moveForward() {
+      this.forward = true;
+      this.disableEditMode();
+    },
+    moveBackwards() {
+      this.backwards = true;
+      this.disableEditMode();
     },
     toggleEditMode() {
       this.resetQuery();
@@ -206,15 +214,14 @@ export default {
     },
     selectItem() {
       this.selectedItem = this.matchedItems[this.selected];
-      this.editMode = false;
-
       this.selectionChangeMode = false;
       this.previousItem = null;
       this.previousSelected = null;
 
+      this.disableEditMode();
       this.resetQuery();
-
       this.$emit("selected", JSON.parse(JSON.stringify(this.selectedItem)));
+      this.$refs.autocompleter.focus();
     },
     resetQuery() {
       if (this.queryShouldBeReset){
