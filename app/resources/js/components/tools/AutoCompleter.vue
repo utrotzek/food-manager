@@ -158,9 +158,10 @@ export default {
         this.previousItem = this.selectedItem;
         this.previousSelected = this.selected;
         this.selectionChangeMode = true;
+      }else{
+        this.selected = 0;
+        this.selectedItem = null;
       }
-      this.selected = 0;
-      this.selectedItem = null;
     }
   },
   mounted() {
