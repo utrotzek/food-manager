@@ -106,12 +106,17 @@ export default {
       loaded: false,
       recipes: null,
       mounted: false,
-      rememberTop: 0,
       from: this.$dayjs().startOf('week'),
       to: this.$dayjs().startOf('week').add(6, 'day')
     }
   },
   computed: {
+    rememberTop() {
+      if (this.$refs.remember){
+        return this.$refs.remember.getBoundingClientRect().top;
+      }
+      return 0;
+    }
   },
   created () {
     window.addEventListener('scroll', this.handleScroll);
@@ -120,7 +125,6 @@ export default {
     window.removeEventListener('scroll', this.handleScroll);
   },
   async mounted() {
-    this.rememberTop = this.$refs.remember.getBoundingClientRect().top;
     const rememberedHandle = this.fetchRemembered();
     const daysHandle = this.fetchMealPlan();
     const mealHandle = this.fetchMeals();
@@ -131,9 +135,6 @@ export default {
     this.loaded = true;
   },
   methods: {
-    handleScroll(){
-      this.rememberTop = this.$refs.remember.getBoundingClientRect().top;
-    },
     fetchMealPlan() {
       return this.$store.dispatch('meal/loadMealPlanRange', {from: this.from, to: this.to});
     },
