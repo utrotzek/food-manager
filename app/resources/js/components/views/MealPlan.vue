@@ -1,15 +1,7 @@
 <template>
   <layout-default-dynamic>
     <div class="meal-plan">
-      <h1>
-        Essenplan <b-button
-          variant="link"
-          class="icon-button"
-          size="lg"
-        >
-          <b-icon-unlock-fill />
-        </b-button>
-      </h1>
+      <h1>Essenplan</h1>
       <b-row class="mb-3">
         <b-col
           class="text-center"

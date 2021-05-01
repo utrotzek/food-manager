@@ -49,7 +49,7 @@
                     variant="light"
                     @click="toggleDone"
                   >
-                    <b-icon-check-circle />
+                    <b-icon-unlock-fill />
                   </b-button>
                 </div>
                 <div v-else>
@@ -57,7 +57,7 @@
                     variant="light"
                     @click="toggleDone"
                   >
-                    <b-icon-check-circle-fill />
+                    <b-icon-lock-fill />
                   </b-button>
                 </div>
               </b-col>

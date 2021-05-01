@@ -6,10 +6,16 @@
     <div class="card ">
       <div class="card-body">
         <h4 class="card-title recipe-title">
-          <span v-if="plan.done">
+          <span
+            v-if="plan.done"
+            @click="onShowRecipeModal"
+          >
             <strike>{{ planTitle }}</strike>
           </span>
-          <span v-else>
+          <span
+            v-else
+            @click="onShowRecipeModal"
+          >
             {{ planTitle }}
           </span>
         </h4>
@@ -119,7 +125,7 @@ export default {
       data.done = !this.plan.done;
       this.$store.dispatch('meal/updateDayPlan', data);
     },
-    onRecipeClick() {
+    onShowRecipeModal() {
       this.$refs['recipe-details-modal'].show();
     },
     onCookingClick(){
