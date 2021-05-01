@@ -27,6 +27,7 @@
             <Recipe
               :recipe="recipe"
               :image-height="imageHeight"
+              unclickable
               light
             />
             <b-button-group class="button-group-full-width">

@@ -5,14 +5,9 @@
         <h4
           class="title"
           :class="{clickable: !unclickable}"
+          @click="onShowRecipeModal"
         >
-          <router-link
-            :to="{name: 'recipe', params: {id: recipe.id}}"
-            :disabled="unclickable"
-            :event="!unclickable ? 'click' : ''"
-          >
-            {{ truncatedTitle }}
-          </router-link>
+          {{ truncatedTitle }}
         </h4>
       </div>
       <div
@@ -62,10 +57,9 @@
           </span>
         </div>
       </div>
-      <router-link
-        :to="{name: 'recipe', params: {id: recipe.id}}"
-        :disabled="unclickable"
-        :event="!unclickable ? 'click' : ''"
+      <div
+        class="image-wrapper"
+        @click="onShowRecipeModal"
       >
         <div
           v-if="recipe.image"
@@ -100,8 +94,18 @@
             </div>
           </div>
         </ImagePlaceholder>
-      </router-link>
+      </div>
     </div>
+    <b-modal
+      id="recipe-details-modal"
+      ref="recipe-details-modal"
+      size="lg"
+      hide-footer
+    >
+      <RecipeView
+        :recipe-id="recipe.id"
+      />
+    </b-modal>
     <Breakpoints v-model="breakpoints" />
   </div>
 </template>
@@ -110,9 +114,10 @@
 import Stars from "./Stars";
 import ImagePlaceholder from "./ImagePlaceholder";
 import Breakpoints from "../tools/Breakpoints";
+import RecipeView from "../views/Recipe"
 export default {
     name: "Recipe",
-    components: {Stars, ImagePlaceholder, Breakpoints},
+    components: {Stars, ImagePlaceholder, Breakpoints, RecipeView},
     props: {
         recipe: {
             type: Object,
@@ -189,7 +194,13 @@ export default {
         }
     },
     methods: {
-
+      onShowRecipeModal() {
+        if (this.unclickable){
+          this.$refs['recipe-details-modal'].show();
+        }else{
+          this.$router.push({name: 'recipe', params: {id: this.recipe.id}})
+        }
+      }
     }
 }
 </script>
@@ -203,21 +214,10 @@ export default {
       align-self: flex-end;
     }
 
-    .title a,
-    .title a:hover {
-      color: $black;
-    }
-
-    .title a:hover,
-    .image-wrapper a:hover {
-      cursor: default;
-      text-decoration: initial;
-    }
-
-    .title.clickable a:hover,
-    .image-wrapper.clickable a:hover{
-      text-decoration: underline;
+    .title:hover,
+    .image-wrapper:hover {
       cursor: pointer;
+      text-decoration: underline;
     }
 
     .image {
