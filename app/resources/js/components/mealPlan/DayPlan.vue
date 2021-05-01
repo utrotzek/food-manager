@@ -32,7 +32,7 @@
             variant="light"
             @click="onCookingClick"
           >
-            <b-icon-egg-fried />
+            <b-icon-basket3 />
           </b-button>
         </b-button-group>
 
