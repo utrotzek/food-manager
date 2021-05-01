@@ -29,7 +29,7 @@
               >
                 <b-icon-dash-circle />
               </b-button>
-              <span>{{ from.format('DD.MM.') }} - {{ to.format('DD.MM.') }}</span>
+              <span v-if="from && to">{{ from.format('DD.MM.') }} - {{ to.format('DD.MM.') }}</span>
               <b-button
                 variant="link"
                 class="icon-button"
@@ -97,6 +97,7 @@
 import LayoutDefaultDynamic from "../layouts/LayoutDefaultDynamic";
 import Day from "../mealPlan/Day";
 import RememberList from "../recipe/RememberList";
+import { mapState } from 'vuex'
 
 export default {
   name: "MealPlan",
@@ -105,9 +106,7 @@ export default {
     return {
       loaded: false,
       recipes: null,
-      mounted: false,
-      from: this.$dayjs().startOf('week'),
-      to: this.$dayjs().startOf('week').add(6, 'day')
+      mounted: false
     }
   },
   computed: {
@@ -116,6 +115,12 @@ export default {
         return this.$refs.remember.getBoundingClientRect().top;
       }
       return 0;
+    },
+    from() {
+      return this.$store.state.meal.mealPlan.range.from;
+    },
+    to() {
+      return this.$store.state.meal.mealPlan.range.to;
     }
   },
   created () {
@@ -125,6 +130,7 @@ export default {
     window.removeEventListener('scroll', this.handleScroll);
   },
   async mounted() {
+    this.initializeMealPlanRange();
     const rememberedHandle = this.fetchRemembered();
     const daysHandle = this.fetchMealPlan();
     const mealHandle = this.fetchMeals();
@@ -141,6 +147,9 @@ export default {
     fetchMeals() {
       return this.$store.dispatch('meal/loadMeals');
     },
+    initializeMealPlanRange() {
+      this.$store.dispatch('meal/initializeMealPlanRange');
+    },
     fetchRemembered() {
       return axios.get('/api/recipes/remembered').then(res => {
         return new Promise((resolve, reject) => {
@@ -151,13 +160,11 @@ export default {
       });
     },
     onNextInterval(){
-      this.to = this.to.add(7, 'day');
-      this.from = this.from.add(7, 'day');
+      this.$store.dispatch('meal/changeMealPlanRange', {mode: 'forward'});
       this.fetchMealPlan();
     },
     onPrevInterval(){
-      this.to = this.to.subtract(7, 'day');
-      this.from = this.from.subtract(7, 'day');
+      this.$store.dispatch('meal/changeMealPlanRange', {mode: 'backwards'});
       this.fetchMealPlan();
     },
     onAssign(recipe){

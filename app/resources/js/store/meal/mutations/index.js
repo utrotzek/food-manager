@@ -70,5 +70,11 @@ export default {
     disabledRecipeAssignMode(state) {
         state.assign.enabled = false;
         state.assign.recipe = null;
+    },
+    updateMealPlanRange(state, payload){
+        state.mealPlan.range = {
+            from: payload.from,
+            to: payload.to
+        }
     }
 }

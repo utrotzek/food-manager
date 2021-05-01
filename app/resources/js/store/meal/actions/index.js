@@ -116,5 +116,62 @@ export default {
                 reject(err);
             });
         })
+    },
+    initializeMealPlanRange({commit, state, rootState}) {
+        return new Promise((resolve, reject) => {
+            if (!state.mealPlan.range.to || !state.mealPlan.range.from) {
+                switch (rootState.app.state.mealPlanDisplayRange){
+                    case "week":
+                        commit('updateMealPlanRange', {
+                            from: dayjs().startOf('week'),
+                            to: dayjs().startOf('week').add(6, 'day')
+                        })
+                        break;
+                    case "two weeks":
+                        commit('updateMealPlanRange', {
+                            from: dayjs().startOf('week'),
+                            to: dayjs().startOf('week').add(13, 'day')
+                        })
+                        break;
+                    case "three weeks":
+                        commit('updateMealPlanRange', {
+                            from: dayjs().startOf('week'),
+                            to: dayjs().startOf('week').add(20, 'day')
+                        })
+                        break;
+                }
+                resolve();
+            }
+        })
+    },
+    changeMealPlanRange({commit, state, rootState}, payload){
+        return new Promise((resolve, reject) => {
+            let changeInterval = 0;
+            switch (rootState.app.state.mealPlanDisplayRange){
+                case "week":
+                    changeInterval = 7;
+                    break;
+                case "two weeks":
+                    changeInterval = 14;
+                    break;
+                case "three weeks":
+                    changeInterval = 21;
+                    break;
+            }
+
+            if (payload.mode === "forward"){
+                commit('updateMealPlanRange', {
+                    to: state.mealPlan.range.to.add(changeInterval, 'day'),
+                    from: state.mealPlan.range.from.add(changeInterval, 'day'),
+                })
+            }else if (payload.mode === "backwards") {
+                commit('updateMealPlanRange', {
+                    to: state.mealPlan.range.to.subtract(changeInterval, 'day'),
+                    from: state.mealPlan.range.from.subtract(changeInterval, 'day'),
+                })
+            }
+            resolve();
+        })
     }
+
 }
