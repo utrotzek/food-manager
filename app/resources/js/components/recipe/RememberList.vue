@@ -17,7 +17,7 @@
             <b-icon-arrow-repeat />
           </b-button>
         </p>
-        <b-row class="text-center">
+        <b-row>
           <b-col
             v-for="recipe in remembered"
             :key="recipe.id"
@@ -128,9 +128,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-  .button-group-full-width  {
-    width: 100%;
-  }
-</style>

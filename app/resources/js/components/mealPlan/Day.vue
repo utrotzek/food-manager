@@ -3,7 +3,7 @@
     <b-row>
       <b-col
         cols="12"
-        md="3"
+        md="2"
         class="d-none d-md-block"
       >
         <div class="card bg-light">
@@ -11,7 +11,7 @@
             Termine
           </div>
           <div class="card-body">
-            <ul>
+            <ul class="appointment-list">
               <li>Termin 1</li>
               <li>Termin 2</li>
               <li>Termin 3</li>
@@ -26,7 +26,7 @@
       </b-col>
       <b-col
         cols="12"
-        md="9"
+        md="10"
       >
         <div
           class="card bg-light"
@@ -155,5 +155,9 @@ export default {
 
   .day .card.disabled {
     opacity: 0.4;
+  }
+
+  .appointment-list {
+    padding: 0 0 0 1em;
   }
 </style>

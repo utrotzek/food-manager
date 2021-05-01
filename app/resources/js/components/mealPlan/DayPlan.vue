@@ -1,51 +1,57 @@
 <template>
   <div class="plan-item">
-    <div>
-      <div
-        class="recipe-title"
-        @click="onRecipeClick"
-      >
-        <span v-if="plan.done">
-          <strike>{{ planTitle }}</strike>
-        </span>
-        <span v-else>
-          {{ planTitle }}
-        </span>
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title recipe-title">
+          <span v-if="plan.done">
+            <strike>{{ planTitle }}</strike>
+          </span>
+          <span v-else>
+            {{ planTitle }}
+          </span>
+        </h4>
       </div>
-      <b-button-group
-        v-if="day.done"
-        size="sm"
-      >
-        <b-button
-          variant="light"
-          @click="onDayPlanDone"
+      <div class="card-footer">
+        <b-button-group
+          v-if="day.done"
+          class="button-group-full-width"
+          size="sm"
         >
-          <b-icon-check-square-fill v-if="plan.done" />
-          <b-icon-check-square v-else />
-        </b-button>
-        <b-button
-          v-if="!plan.done && plan.recipe"
-          variant="light"
-          @click="onCookingClick"
-        >
-          <b-icon-egg-fried />
-        </b-button>
-      </b-button-group>
+          <b-button
+            variant="light"
+            @click="onDayPlanDone"
+          >
+            <b-icon-check-square-fill v-if="plan.done" />
+            <b-icon-check-square v-else />
+          </b-button>
+          <b-button
+            v-if="!plan.done && plan.recipe"
+            variant="light"
+            @click="onCookingClick"
+          >
+            <b-icon-egg-fried />
+          </b-button>
+        </b-button-group>
 
-      <b-button-group size="sm">
-        <b-button
-          v-if="!day.done && !plan.done"
-          variant="light"
+        <b-button-group
+          v-else
+          class="button-group-full-width"
+          size="sm"
         >
-          <b-icon-arrows-move @click="onMove" />
-        </b-button>
-        <b-button
-          v-if="!day.done && !plan.done"
-          variant="light"
-        >
-          <b-icon-trash @click="onDelete" />
-        </b-button>
-      </b-button-group>
+          <b-button
+            v-if="!day.done && !plan.done"
+            variant="light"
+          >
+            <b-icon-arrows-move @click="onMove" />
+          </b-button>
+          <b-button
+            v-if="!day.done && !plan.done"
+            variant="light"
+          >
+            <b-icon-trash @click="onDelete" />
+          </b-button>
+        </b-button-group>
+      </div>
     </div>
     <b-modal
       v-if="plan.recipe"
@@ -126,5 +132,19 @@ export default {
   }
   .recipe-title:hover {
     text-decoration: underline;
+  }
+
+  .card-title.recipe-title {
+    font-size:1.2em;
+  }
+
+  .plan-item .card {
+    height: 8em;
+  }
+
+  .plan-item .card .card-footer,
+  .plan-item .card .card-footer .btn {
+    border: 0;
+    background-color: transparent;
   }
 </style>

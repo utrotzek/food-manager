@@ -44,7 +44,7 @@
       <b-row no-gutters>
         <b-col
           cols="12"
-          md="9"
+          md="10"
         >
           <div
             v-if="loaded"
@@ -66,7 +66,7 @@
           </div>
         </b-col>
         <b-col
-          md="3"
+          md="2"
           class="d-none d-md-block"
         >
           <div

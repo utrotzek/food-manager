@@ -12,7 +12,7 @@
       />
       <template #header>
         <h4
-          class="mb-0"
+          class="mb-0 title"
           style="cursor: pointer"
           @click="onOpenDetails"
         >
@@ -103,23 +103,9 @@ export default {
 
 <style scoped lang="scss">
 @import '../../../sass/_variables.scss';
-.title-row {
-  line-height: 2em;
-}
 
 .title {
-  font-size: 1.5em;
-  white-space: nowrap;
-}
-
-.title a,
-.title a:hover {
-  color: $black;
-}
-
-.title:hover {
-  text-decoration: underline;
-  cursor: pointer;
+  font-size: 1.2em;
 }
 
 .image {
