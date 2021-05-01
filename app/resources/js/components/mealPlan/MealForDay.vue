@@ -49,7 +49,6 @@
       id="assign-plan-modal"
       ref="assign-plan-modal"
       title="Planung hinzufügen"
-      ok-title="Planung einfügen"
       centered
       hide-footer
     >
@@ -88,7 +87,10 @@
                   />
                 </b-form-group>
                 <div class="text-center">
-                  <b-button class="select-button">
+                  <b-button
+                    class="select-button"
+                    @click="onAddPlanSubmit"
+                  >
                     Zur Planung hinzufügen
                   </b-button>
                 </div>
