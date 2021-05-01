@@ -1,12 +1,8 @@
 <template>
   <div class="recipe">
-    <b-row
-      class="title-row"
-    >
-      <b-col
-        class="title-column"
-      >
-        <div
+    <div class="card">
+      <div class="card-header d-flex">
+        <h4
           class="title"
           :class="{clickable: !unclickable}"
         >
@@ -17,12 +13,12 @@
           >
             {{ truncatedTitle }}
           </router-link>
-        </div>
-      </b-col>
-    </b-row>
-
-    <b-row class="tags mb-2">
-      <b-col>
+        </h4>
+      </div>
+      <div
+        v-if="!light"
+        class="card-body tags"
+      >
         <div
           v-if="recipe.tags"
         >
@@ -34,7 +30,6 @@
           >
             {{ tag.title }}
           </b-badge>
-
           <span
             v-if="recipe.tags.length > maxTags"
             class="additional-tags"
@@ -66,54 +61,47 @@
             </b-popover>
           </span>
         </div>
-      </b-col>
-    </b-row>
-
-    <b-row>
-      <b-col
-        class="image-wrapper"
-        :class="{clickable: !unclickable}"
+      </div>
+      <router-link
+        :to="{name: 'recipe', params: {id: recipe.id}}"
+        :disabled="unclickable"
+        :event="!unclickable ? 'click' : ''"
       >
-        <router-link
-          :to="{name: 'recipe', params: {id: recipe.id}}"
-          :disabled="unclickable"
-          :event="!unclickable ? 'click' : ''"
+        <div
+          v-if="recipe.image"
+          class="image"
+          :style="{ backgroundImage: 'url(' + imagePath + ')', height: imageHeight + 'em'}"
         >
           <div
-            v-if="recipe.image"
-            class="image"
-            :style="{ backgroundImage: 'url(' + imagePath + ')' }"
+            v-if="!light"
+            class="flag-overlay"
           >
-            <div
-              class="flag-overlay"
-            >
-              <div class="stars">
-                <Stars :rating="recipe.rating" />
-              </div>
-              <div class="flags">
-                <b-icon-heart-fill v-if="recipe.favorite" />
-                <b-icon-bookmark-fill v-if="recipe.remember" />
-              </div>
+            <div class="stars">
+              <Stars :rating="recipe.rating" />
+            </div>
+            <div class="flags">
+              <b-icon-heart-fill v-if="recipe.favorite" />
+              <b-icon-bookmark-fill v-if="recipe.remember" />
             </div>
           </div>
-          <ImagePlaceholder
-            v-else
-            :placeholder-text="truncatedPlaceholderTitle"
+        </div>
+        <ImagePlaceholder
+          v-else
+          :placeholder-text="truncatedPlaceholderTitle"
+          :style="{height: imageHeight + 'em'}"
+        >
+          <div
+            v-if="recipe.favorite || recipe.remember"
+            class="flag-overlay"
           >
-            <div
-              v-if="recipe.favorite || recipe.remember"
-              class="flag-overlay"
-            >
-              <div class="flags">
-                <b-icon-heart-fill v-if="recipe.favorite" />
-                <b-icon-bookmark-fill v-if="recipe.remember" />
-              </div>
+            <div class="flags">
+              <b-icon-heart-fill v-if="recipe.favorite" />
+              <b-icon-bookmark-fill v-if="recipe.remember" />
             </div>
-          </ImagePlaceholder>
-        </router-link>
-      </b-col>
-    </b-row>
-
+          </div>
+        </ImagePlaceholder>
+      </router-link>
+    </div>
     <Breakpoints v-model="breakpoints" />
   </div>
 </template>
@@ -142,6 +130,14 @@ export default {
         unclickable: {
           type: Boolean,
           default: false
+        },
+        light: {
+          type: Boolean,
+          default: false
+        },
+        imageHeight: {
+          type: Number,
+          default: 13
         }
     },
     data() {
@@ -200,12 +196,11 @@ export default {
 
 <style scoped lang="scss">
 @import '../../../sass/_variables.scss';
-    .title-row {
-      line-height: 2em;
-    }
-
     .title {
-      font-size: 1.5em;
+      font-size: 1.2em;
+      font-weight: 400;
+      color: $black;
+      align-self: flex-end;
     }
 
     .title a,
@@ -226,7 +221,6 @@ export default {
     }
 
     .image {
-      height: 13em;
       background-position: center;
       background-size: cover;
     }
@@ -236,18 +230,9 @@ export default {
       margin-top: 0.5em;
     }
 
-    .tags {
-      height: 1.5em;
-    }
-
     .rating .star-icon {
       float:left;
       display: block;
-    }
-
-    .tags {
-      height: 1.5em;
-      line-height: 1.5em;
     }
 
     .additional-tags .btn {
@@ -255,18 +240,35 @@ export default {
     }
 
     .recipe {
-      height: 100%;
       display: flex;
       justify-content: flex-end;
       flex-direction: column;
     }
+
+    .recipe .card {
+      background-color: transparent;
+      border: none;
+    }
+
+    .recipe .card .card-header {
+      height:2.5em;
+      border: 0;
+    }
+
+    .recipe .card .card-body.tags {
+      height: 1.5em;
+      min-height: 0;
+      line-height: 1em;
+      padding: 0;
+    }
+
 </style>
 
 <style lang="scss">
 @import '../../../sass/_variables.scss';
-
-  .recipe .placeholder {
-    height: 13em;
+  .recipe .card-header {
+    background-color: transparent;
+    padding: 0;
   }
 
   .flag-overlay {

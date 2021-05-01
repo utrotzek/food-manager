@@ -24,7 +24,11 @@
             :offset="offset"
             :cols="cols"
           >
-            <RecipeLight :recipe="recipe" />
+            <Recipe
+              :recipe="recipe"
+              :image-height="imageHeight"
+              light
+            />
             <b-button-group class="button-group-full-width">
               <b-button
                 v-if="!assignDisabled"
@@ -58,10 +62,10 @@
 </template>
 
 <script>
-import RecipeLight from "./RecipeLight";
+import Recipe from "./Recipe";
 export default {
   name: "RememberList",
-  components: {RecipeLight},
+  components: {Recipe},
   props: {
     bigList: {
       type: Boolean,
@@ -70,6 +74,10 @@ export default {
     assignDisabled: {
       type: Boolean,
       default: false
+    },
+    imageHeight: {
+      type: Number,
+      default: 8
     }
   },
   data() {
@@ -95,7 +103,7 @@ export default {
       if (!this.bigList){
         return 12;
       }else{
-        return 6;
+        return 4;
       }
     }
   },

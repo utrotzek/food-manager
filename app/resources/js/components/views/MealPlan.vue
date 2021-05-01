@@ -81,7 +81,10 @@
                     <b-icon-bookmark-fill /> <b>Merkliste</b>
                   </template>
                   <b-card-body>
-                    <RememberList @assign="onAssign" />
+                    <RememberList
+                      image-height="6"
+                      @assign="onAssign"
+                    />
                   </b-card-body>
                 </b-card>
               </b-col>
