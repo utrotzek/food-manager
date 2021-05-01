@@ -91,6 +91,7 @@
                   />
                   <div class="d-block d-md-none">
                     <b-button-group
+                      v-if="!editingDisabled"
                       class="text-left buttons small-device d-md-none"
                     >
                       <b-button
@@ -161,6 +162,7 @@
             class="d-none d-md-block text-right"
           >
             <b-button-group
+              v-if="!editingDisabled"
               class="buttons medium-devices"
               vertical
             >
@@ -294,6 +296,14 @@ export default {
   name: "Recipe",
   components: {LayoutDefaultDynamic, Ingredients, Steps, Stars},
   props: {
+    recipeId: {
+      type: Number,
+      default: null
+    },
+    editingDisabled: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -321,7 +331,10 @@ export default {
     }
   },
   mounted() {
-    const recipeId = this.$route.params.id;
+    const recipeId = this.recipeId ?? this.$route.params.id;
+    if (this.$route.params.cooking){
+      this.startCooking();
+    }
 
     axios.get('/api/recipes/'+ recipeId).then((res) => {
       this.recipe = res.data;
@@ -332,17 +345,15 @@ export default {
   methods: {
     onFavorite() {
       const newValue = !this.recipe.favorite;
-      axios.put('/api/recipes/flags/' + this.recipe.id, {favorite: newValue}).then(res => {
+      this.$store.dispatch('recipe/setFlag', {id: this.recipe.id, favorite: newValue}).then(() => {
         this.recipe.favorite = newValue;
-        this.$store.commit('recipe/updateRecipe', {recipe: this.recipe, id: this.recipe.id});
-      });
+      })
     },
     onRemember() {
       const newValue = !this.recipe.remember;
-      axios.put('/api/recipes/flags/' + this.recipe.id, {remember: newValue}).then(res => {
+      this.$store.dispatch('recipe/setFlag', {id: this.recipe.id, remember: newValue}).then(() => {
         this.recipe.remember = newValue;
-        this.$store.commit('recipe/updateRecipe', {recipe: this.recipe, id: this.recipe.id});
-      });
+      })
     },
     startCooking() {
       this.cooking = true;

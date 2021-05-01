@@ -51,5 +51,8 @@ export default {
     },
     saveSearchTerm(state, payload){
         state.searchTerm = payload;
+    },
+    setRememberedRecipes(state, payload){
+        state.recipeRemembered = payload;
     }
 }

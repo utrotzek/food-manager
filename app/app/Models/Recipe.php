@@ -11,7 +11,7 @@ class Recipe extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'rating', 'portion', 'comments', 'image'];
+    protected $fillable = ['title', 'rating', 'portion', 'comments', 'image', 'remember', 'favorite'];
 
     public function setRatingAttribute($rating)
     {

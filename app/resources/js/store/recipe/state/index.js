@@ -3,6 +3,7 @@ export default {
     units: [],
     goodGroups: [],
     recipeSearchResult: [],
+    recipeRemembered: [],
     recipePageCounter: 1,
     recipeLoading: false,
     searchFilter: undefined,

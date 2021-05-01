@@ -80,6 +80,13 @@ class RecipeController extends Controller
         );
     }
 
+    public function remembered(): Response
+    {
+        return new Response(
+            RecipeLightResource::collection($this->recipeRepository->findRemembered())
+        );
+    }
+
     /**
      * Store a newly created resource in storage.
      *

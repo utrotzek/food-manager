@@ -14,7 +14,7 @@ beforeEach(function () {
 
 it('Can find items by id or slug', function () {
     $subject = new UnitRepository();
-    $itemById = $subject->findByIdOrSlug('2');
+    $itemById = $subject->findByIdOrSlug('3');
     $itemBySlug = $subject->findByIdOrSlug('Gramm');
     expect($itemById)->toEqual($itemBySlug);
 });

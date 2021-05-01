@@ -3,8 +3,10 @@ import Vuex from 'vuex'
 import localForage from 'localforage';
 import VuexPersist from 'vuex-persist';
 
+import app from './app';
 import auth from './auth';
 import recipe from './recipe';
+import meal from './meal';
 
 Vue.use(Vuex);
 
@@ -16,7 +18,9 @@ const vuexStorage = new VuexPersist({
 export default new Vuex.Store({
     plugins: [vuexStorage.plugin],
     modules: {
+        app: app,
         auth: auth,
-        recipe: recipe
+        recipe: recipe,
+        meal: meal
     }
 });

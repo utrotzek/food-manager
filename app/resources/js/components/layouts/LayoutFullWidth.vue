@@ -24,7 +24,7 @@
             </b-nav-item>
             <b-nav-item
               href="#"
-              @click="$router.push({ name: 'plan'})"
+              @click="$router.push({ name: 'meal-plan'})"
             >
               Essensplan
             </b-nav-item>
