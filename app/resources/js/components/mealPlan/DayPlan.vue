@@ -1,6 +1,9 @@
 <template>
-  <div class="plan-item">
-    <div class="card">
+  <div
+    class="plan-item"
+    :class="{withRecipe: plan.recipe}"
+  >
+    <div class="card ">
       <div class="card-body">
         <h4 class="card-title recipe-title">
           <span v-if="plan.done">
@@ -126,7 +129,9 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+  @import "../../../sass/variables";
+
   .recipe-title {
     cursor: pointer;
   }
@@ -146,5 +151,15 @@ export default {
   .plan-item .card .card-footer .btn {
     border: 0;
     background-color: transparent;
+  }
+
+  .withRecipe .card {
+    /* #d6f1d4 */
+    background-color: $recipe-light;
+  }
+
+  .card {
+    background-color: $recipe-warning;
+    color: $black;
   }
 </style>
