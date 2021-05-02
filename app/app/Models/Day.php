@@ -27,7 +27,7 @@ class Day extends Model
     {
         $pendingCount = 0;
         foreach ($this->dayPlans as $dayPlan) {
-            if (!$dayPlan->added_to_cart) {
+            if ($dayPlan->recipe && !$dayPlan->added_to_cart) {
                 $pendingCount++;
             }
         }
