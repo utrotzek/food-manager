@@ -45,6 +45,14 @@ export default {
             })
         })
     },
+    refreshDay({commit, state}, payload){
+        return new Promise((resolve, reject) => {
+            axios.get('/api/days/' + payload.id).then(res => {
+                commit('updateDay', {day: res.data});
+                resolve();
+            })
+        })
+    },
     updateDayPlan({commit, state}, payload) {
         return new Promise((resolve, reject) => {
             let data = {

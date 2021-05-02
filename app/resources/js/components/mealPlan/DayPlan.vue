@@ -117,7 +117,9 @@ export default {
   },
   methods: {
     onDelete(){
-      this.$store.dispatch('meal/deletePlanItem', {dayPlanId: this.plan.id});
+      this.$store.dispatch('meal/deletePlanItem', {dayPlanId: this.plan.id}).then(res => {
+        this.$store.dispatch('meal/refreshDay', {id: this.plan.day.id})
+      });
     },
     onMove() {
       this.$store.commit('meal/enableRecipeMoveMode', {plan: this.plan});

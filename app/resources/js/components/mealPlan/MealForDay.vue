@@ -245,7 +245,9 @@ export default {
         recipe: this.planToAdd.recipe,
         portion: this.planToAdd.portion
       }
-      this.$store.dispatch('meal/planRecipeForDay', data);
+      this.$store.dispatch('meal/planRecipeForDay', data).then(res => {
+        this.$store.dispatch('meal/refreshDay', {id: data.day.id})
+      });
       this.clearPlanToAdd();
     },
     clearPlanToAdd() {

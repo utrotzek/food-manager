@@ -12,6 +12,11 @@ class DayPlan extends Model
 
     protected $fillable = ['description', 'done', 'added_to_cart', 'portion'];
 
+    protected $casts = [
+        'added_to_cart' => 'boolean',
+        'done' => 'boolean',
+    ];
+
     public function meal(): belongsTo
     {
         return $this->belongsTo(Meal::class);

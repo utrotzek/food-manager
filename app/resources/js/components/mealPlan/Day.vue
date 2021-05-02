@@ -44,22 +44,31 @@
                 cols="4"
                 class="text-right"
               >
-                <div v-if="!day.done">
+                <span v-if="day.pendingCount > 0">
+                  <b-button
+                    variant="light"
+                    disabled
+                  >
+                    <b-icon-cart />
+                    <b-badge>{{ day.pendingCount }}</b-badge>
+                  </b-button>
+                </span>
+                <span v-if="!day.done">
                   <b-button
                     variant="light"
                     @click="toggleDone"
                   >
                     <b-icon-unlock-fill />
                   </b-button>
-                </div>
-                <div v-else>
+                </span>
+                <span v-else>
                   <b-button
                     variant="light"
                     @click="toggleDone"
                   >
                     <b-icon-lock-fill />
                   </b-button>
-                </div>
+                </span>
               </b-col>
             </b-row>
           </div>

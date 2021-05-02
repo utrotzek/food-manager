@@ -17,7 +17,8 @@ class DayResource extends JsonResource
         return [
             'id' => $this->id,
             'date' => $this->date->format('Y-m-d'),
-            'done' => $this->done
+            'done' => $this->done,
+            'pendingCount' => $this->getPendingDayPlansCount()
         ];
     }
 }
