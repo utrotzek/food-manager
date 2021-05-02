@@ -74,7 +74,7 @@
                   </template>
                   <b-card-body>
                     <RememberList
-                      image-height="6"
+                      :image-height="6"
                       @assign="onAssign"
                     />
                   </b-card-body>
