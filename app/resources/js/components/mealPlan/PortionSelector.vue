@@ -62,6 +62,8 @@
           <Ingredients
             :ingredients="fullRecipe.ingredients"
             :categories="fullRecipe.ingredientCategories"
+            :portion-original="fullRecipe.portion"
+            :portion-override="portion"
           />
         </b-col>
       </b-row>
