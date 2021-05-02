@@ -19,8 +19,11 @@
             {{ planTitle }}
           </span>
         </h4>
-        <div class="card-subtitle text-muted">
-          <b-icon-cart v-if="plan.recipe && !plan.addedToCart" />
+        <div
+          v-if="plan.recipe"
+          class="card-subtitle text-muted"
+        >
+          <b-icon-cart v-if="!plan.addedToCart" />
           {{ plan.portion }} Portionen
         </div>
       </div>
