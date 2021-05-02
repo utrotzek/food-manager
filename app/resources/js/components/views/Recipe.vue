@@ -143,6 +143,8 @@
             <Ingredients
               :ingredients="recipe.ingredients"
               :categories="recipe.ingredientCategories"
+              :portion-override="portionOverride"
+              :portion-original="recipe.portion"
             />
           </b-col>
         </b-row>
@@ -242,6 +244,8 @@
             :ingredients="recipe.ingredients"
             :categories="recipe.ingredientCategories"
             :enable-checklist="true"
+            :portion-override="portionOverride"
+            :portion-original="recipe.portion"
           />
         </b-col>
         <b-col
@@ -303,6 +307,10 @@ export default {
     editingDisabled: {
       type: Boolean,
       default: false
+    },
+    portionOverride: {
+      type: Number,
+      default: null
     }
   },
   data() {
@@ -324,10 +332,11 @@ export default {
       return (this.showIngredients ? 8 : 12);
     },
     ingredientsHeadline() {
-      if (this.recipe.portion === 1){
+      let portion = (this.portionOverride) ? this.portionOverride : this.recipe.portion;
+      if (portion === 1){
         return "Zutaten ( für eine Portion )";
       }
-      return "Zutaten ( für " + this.recipe.portion + " Portionen )";
+      return "Zutaten ( für " + portion + " Portionen )";
     }
   },
   mounted() {

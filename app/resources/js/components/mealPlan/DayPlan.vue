@@ -76,6 +76,7 @@
     >
       <Recipe
         :recipe-id="plan.recipe.id"
+        :portion-override="plan.portion"
       />
     </b-modal>
   </div>
