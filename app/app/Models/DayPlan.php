@@ -10,7 +10,7 @@ class DayPlan extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['description', 'done'];
+    protected $fillable = ['description', 'done', 'added_to_cart', 'portion'];
 
     public function meal(): belongsTo
     {

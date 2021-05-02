@@ -32,7 +32,9 @@ export default {
                 description: el.description,
                 done: Boolean(el.done),
                 meal: el.meal,
-                recipe: el.recipe
+                recipe: el.recipe,
+                addedToCart: Boolean(el.added_to_cart),
+                portion: Number(el.portion)
             });
         })
     },

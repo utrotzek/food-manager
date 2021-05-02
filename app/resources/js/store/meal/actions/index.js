@@ -77,6 +77,7 @@ export default {
 
             if (payload.recipe){
                 data['recipe_id'] = payload.recipe.id;
+                data['portion'] = payload.portion;
             }
 
             if (payload.description) {

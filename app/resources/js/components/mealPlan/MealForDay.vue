@@ -133,16 +133,30 @@
         </b-collapse>
       </b-card>
     </b-modal>
+
+    <b-modal
+      id="portion-selector-modal"
+      ref="portion-selector-modal"
+      :title="portionSelectorTitle"
+      @ok="onPortionSelectorSubmit"
+    >
+      <PortionSelector
+        v-if="planToAdd.recipe"
+        v-model="planToAdd.portion"
+        :recipe="planToAdd.recipe"
+      />
+    </b-modal>
   </div>
 </template>
 
 <script>
 import DayPlan from "./DayPlan";
 import RecipeSearch from "../recipe/RecipeSearch";
+import PortionSelector from "./PortionSelector";
 
 export default {
   name: "Meal",
-  components: {DayPlan, RecipeSearch},
+  components: {DayPlan, RecipeSearch, PortionSelector},
   props: {
     meal: {
       type: Object,
@@ -165,8 +179,14 @@ export default {
     return {
       planToAdd: {
         description: null,
-        recipe: null
+        recipe: null,
+        portion: null
       }
+    }
+  },
+  computed: {
+    portionSelectorTitle() {
+      return (this.planToAdd.recipe) ? "Portionen für Rezept " + this.planToAdd.recipe.title + " anpassen" : "";
     }
   },
   mounted() {
@@ -213,19 +233,26 @@ export default {
       this.$refs['assign-plan-modal'].hide();
     },
     onAddRecipeSubmit(recipe){
+      this.planToAdd.recipe = recipe;
+      this.planToAdd.portion = recipe.portion;
+      this.$refs['assign-plan-modal'].hide();
+      this.$refs['portion-selector-modal'].show();
+    },
+    onPortionSelectorSubmit(){
       const data = {
         meal: this.meal,
         day: this.day,
-        recipe: recipe
+        recipe: this.planToAdd.recipe,
+        portion: this.planToAdd.portion
       }
       this.$store.dispatch('meal/planRecipeForDay', data);
       this.clearPlanToAdd();
-      this.$refs['assign-plan-modal'].hide();
     },
     clearPlanToAdd() {
       this.planToAdd = {
         description: null,
-        recipe: null
+        recipe: null,
+        portion: null
       };
     }
   }

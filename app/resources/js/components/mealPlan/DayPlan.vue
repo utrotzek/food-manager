@@ -19,6 +19,10 @@
             {{ planTitle }}
           </span>
         </h4>
+        <div class="card-subtitle text-muted">
+          <b-icon-cart v-if="plan.recipe && !plan.addedToCart" />
+          {{ plan.portion }} Portionen
+        </div>
       </div>
       <div class="card-footer">
         <b-button-group
@@ -48,13 +52,11 @@
           size="sm"
         >
           <b-button
-            v-if="!day.done && !plan.done"
             variant="light"
           >
             <b-icon-arrows-move @click="onMove" />
           </b-button>
           <b-button
-            v-if="!day.done && !plan.done"
             variant="light"
           >
             <b-icon-trash @click="onDelete" />
@@ -150,7 +152,7 @@ export default {
   }
 
   .plan-item .card {
-    height: 8em;
+    height: 9em;
   }
 
   .plan-item .card .card-footer,
