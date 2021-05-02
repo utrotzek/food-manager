@@ -11,8 +11,8 @@
         </b-col>
         <b-col
           cols="12"
-          md="4"
-          offset-md="4"
+          md="5"
+          class="mx-auto"
         >
           <div class="text-center">
             <b-input-group>
@@ -36,6 +36,7 @@
                 <b-button
                   variant="light"
                   size="sm"
+                  class="ml-1"
                   @click="portion++"
                 >
                   <b-icon-plus-circle />
@@ -44,7 +45,7 @@
               <b-input-group-append>
                 <b-button
                   variant="light"
-                  class="ml-2"
+                  class="ml-3"
                   size="sm"
                   @click="portion = originalPortion"
                 >

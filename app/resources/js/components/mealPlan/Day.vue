@@ -35,13 +35,13 @@
           <div class="card-header">
             <b-row>
               <b-col
-                cols="8"
+                cols="6"
                 class="title"
               >
                 {{ title }}
               </b-col>
               <b-col
-                cols="4"
+                cols="6"
                 class="text-right"
               >
                 <span v-if="day.pendingCount > 0">
