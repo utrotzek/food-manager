@@ -85,7 +85,7 @@
 import Recipe from '../views/Recipe';
 
 export default {
-  name: "PlanItem",
+  name: "DayPlan",
   components: {Recipe},
   props: {
     plan: {
