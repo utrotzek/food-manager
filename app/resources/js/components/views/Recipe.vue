@@ -143,7 +143,7 @@
             <Ingredients
               :ingredients="recipe.ingredients"
               :categories="recipe.ingredientCategories"
-              :portion-override="portionOverride"
+              :portion-override="actualPortion"
               :portion-original="recipe.portion"
             />
           </b-col>
@@ -244,7 +244,7 @@
             :ingredients="recipe.ingredients"
             :categories="recipe.ingredientCategories"
             :enable-checklist="true"
-            :portion-override="portionOverride"
+            :portion-override="actualPortion"
             :portion-original="recipe.portion"
           />
         </b-col>
@@ -331,12 +331,15 @@ export default {
     stepsSize() {
       return (this.showIngredients ? 8 : 12);
     },
+    actualPortion() {
+      let portion = this.portionOverride ?? this.$route.params.portion ?? this.recipe.portion;
+      return Number(portion);
+    },
     ingredientsHeadline() {
-      let portion = (this.portionOverride) ? this.portionOverride : this.recipe.portion;
-      if (portion === 1){
+      if (this.actualPortion === 1){
         return "Zutaten ( für eine Portion )";
       }
-      return "Zutaten ( für " + portion + " Portionen )";
+      return "Zutaten ( für " + this.actualPortion + " Portionen )";
     }
   },
   mounted() {

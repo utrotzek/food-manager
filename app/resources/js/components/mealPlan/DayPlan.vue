@@ -137,7 +137,7 @@ export default {
       this.$refs['recipe-details-modal'].show();
     },
     onCookingClick(){
-      this.$router.push({name: 'recipe', params: {id: this.plan.recipe.id, cooking: true}});
+      this.$router.push({name: 'recipe', params: {id: this.plan.recipe.id, cooking: true, portion: this.plan.portion}});
     }
   }
 }
