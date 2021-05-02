@@ -198,13 +198,13 @@ export default {
       });
     },
     onAssignConfirmed(){
-      if (this.$store.state.meal.assign.enabled){
-        const data = {
-          meal: this.meal,
-          day: this.day,
-          recipe: this.$store.state.meal.assign.recipe
-        };
-        this.$store.dispatch('meal/planRecipeForDay', data);
+      if (this.$store.state.meal.assign.enabled) {
+        this.planToAdd = {
+          recipe: this.$store.state.meal.assign.recipe,
+          description: null,
+          portion: this.$store.state.meal.assign.recipe.portion
+        }
+        this.$refs['portion-selector-modal'].show();
       }
 
       if (this.$store.state.meal.movePlan.enabled){
