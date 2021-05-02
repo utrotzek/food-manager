@@ -10,6 +10,7 @@ use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\MealConfigController;
 use App\Http\Controllers\MealController;
 use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\ShoppingListController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,7 @@ Route::apiResources([
     'meals' => MealController::class,
     'meal-config' => MealConfigController::class,
     'recipes' => RecipeController::class,
+    'shopping-lists' => ShoppingListController::class,
     'tags' => TagController::class,
     'units' => UnitController::class,
 ]);
