@@ -214,7 +214,13 @@ export default {
           day: this.day,
           recipe: this.$store.state.meal.movePlan.plan.recipe,
         };
-        this.$store.dispatch('meal/movePlanToDay', data);
+
+        const oldDayId = this.$store.state.meal.movePlan.plan.day.id;
+        const newDayId = this.day.id;
+        this.$store.dispatch('meal/movePlanToDay', data).then(res => {
+          this.$store.dispatch('meal/refreshDay', {id: oldDayId})
+          this.$store.dispatch('meal/refreshDay', {id: newDayId})
+        });
       }
     },
     onAddPlan() {
