@@ -6,6 +6,7 @@ use Database\Seeders\Development\DaySeeder;
 use Database\Seeders\Development\GoodGroupSeeder;
 use Database\Seeders\Development\GoodSeeder;
 use Database\Seeders\Development\RecipeSeeder;
+use Database\Seeders\Development\ShoppingListItemSeeder;
 use Database\Seeders\Development\ShoppingListSeeder;
 use Database\Seeders\Development\TagSeeder;
 use Database\Seeders\Production\AppStateSeeder;
@@ -28,7 +29,8 @@ class DatabaseSeeder extends Seeder
             RecipeSeeder::class,
             DaySeeder::class,
             DayPlanSeeder::class,
-            ShoppingListSeeder::class
+            ShoppingListSeeder::class,
+            ShoppingListItemSeeder::class
         ]);
     }
 }
