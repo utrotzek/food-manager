@@ -5,5 +5,8 @@ export default  {
             overallCount+= el.items
         });
         return overallCount;
+    },
+    itemsForShoppingList: (state) => (shoppingId) => {
+        return state.items.filter(el => { return el.shopping_list_id === shoppingId });
     }
 }

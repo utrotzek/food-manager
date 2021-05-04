@@ -1,3 +1,4 @@
 export default {
-    shoppingLists: []
+    shoppingLists: [],
+    items: []
 }

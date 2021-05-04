@@ -14,7 +14,15 @@ class ShoppingListItemRepository extends BaseRepository implements ShoppingListI
 {
     public function findByShoppingListId(int $shoppingListId): Collection
     {
-        return ShoppingListItem::where('shopping_list_id', $shoppingListId)->get();
+        $entries = ShoppingListItem::query()
+            ->where('shopping_list_id', $shoppingListId)
+            ->get()
+        ;
+
+        $entries = $entries->sort(function ($el1, $el2) {
+            return $el1->good->title <=> $el2->good->title;
+        });
+        return $entries;
     }
 
     public function createForShoppingList(

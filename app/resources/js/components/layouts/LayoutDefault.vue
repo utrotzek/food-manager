@@ -46,6 +46,7 @@
                 </b-badge>
               </b-button>
               <b-button
+                v-b-modal:modal-shopping-cart
                 variant="link"
                 class="icon-button"
                 size="lg"
@@ -79,15 +80,24 @@
           assign-disabled
         />
       </b-modal>
+      <b-modal
+        id="modal-shopping-cart"
+        ref="modal-shopping-cart"
+        size="xl"
+        hide-footer
+      >
+        <ShoppingCart />
+      </b-modal>
     </div>
   </div>
 </template>
 
 <script>
 import RememberList from "../recipe/RememberList";
+import ShoppingCart from "../shoppingList/ShoppingCart";
 export default {
   name: "LayoutDefault",
-  components: {RememberList},
+  components: {RememberList, ShoppingCart},
   data() {
     return {
       loading: true
