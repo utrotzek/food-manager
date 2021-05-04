@@ -7,6 +7,7 @@ import app from './app';
 import auth from './auth';
 import recipe from './recipe';
 import meal from './meal';
+import shoppingList from './shoppingList';
 
 Vue.use(Vuex);
 
@@ -21,6 +22,7 @@ export default new Vuex.Store({
         app: app,
         auth: auth,
         recipe: recipe,
-        meal: meal
+        meal: meal,
+        shoppingList: shoppingList
     }
 });

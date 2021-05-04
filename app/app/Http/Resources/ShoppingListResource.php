@@ -18,7 +18,8 @@ class ShoppingListResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'done' => $this->done,
-            'created' => $this->created_at
+            'created' => $this->created_at,
+            'items' => $this->items->count()
         ];
     }
 }

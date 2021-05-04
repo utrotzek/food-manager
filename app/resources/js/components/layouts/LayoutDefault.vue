@@ -49,9 +49,10 @@
                 variant="link"
                 class="icon-button"
                 size="lg"
+                :disabled="shoppingCartItems === 0"
               >
                 <b-icon-cart />
-                <b-badge>9</b-badge>
+                <b-badge>{{ shoppingCartItems }}</b-badge>
               </b-button>
             </b-button-group>
           </b-nav-item>
@@ -95,10 +96,15 @@ export default {
   computed: {
     rememberList() {
       return this.$store.state.recipe.recipeRemembered;
+    },
+    shoppingCartItems() {
+      return this.$store.getters['shoppingList/allItemCount'];
     }
   },
   mounted() {
-    this.$store.dispatch('recipe/fetchRemembered').finally(() => {
+    this.$store.dispatch('recipe/fetchRemembered').then(() => {
+    })
+    this.$store.dispatch('shoppingList/fetchShoppingLists').then(() => {
       this.loading = false;
     })
   }

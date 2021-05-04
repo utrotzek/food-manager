@@ -15,7 +15,7 @@ class ShoppingList extends Model
         'done' => 'boolean'
     ];
 
-    public function shoppingListItems(): HasMany
+    public function items(): HasMany
     {
         return $this->hasMany(ShoppingListItem::class);
     }
