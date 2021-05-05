@@ -5,6 +5,7 @@
       class="items-list"
     >
       <div
+        v-if="allItems().length > 0"
         class="card-columns"
       >
         <div
@@ -14,7 +15,7 @@
         >
           <div class="card-body">
             <table
-              :cellpadding="3"
+              :cellpadding="1"
               class="table"
             >
               <tbody>
@@ -38,6 +39,7 @@
         </div>
       </div>
       <div
+        v-else
         class="text-center"
       >
         <b-alert

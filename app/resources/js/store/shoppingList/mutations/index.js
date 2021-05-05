@@ -13,19 +13,10 @@ export default {
         })
     },
     storeItemsForList(state, payload) {
-        //delete all items with the given shopping list from the store before adding them again
-        let deleteIndex = null;
-        do {
-            deleteIndex = state.items.indexOf(el => {el.shopping_list_id === payload.shopping_list_id})
-            console.log(deleteIndex);
-            if (deleteIndex > -1){
-                console.log('deleting');
-                state.items.splice(deleteIndex);
-            }
-        }while (deleteIndex > -1)
-
+        let newItems = []
+        const shoppingListId = payload.shopping_list_id;
         payload.items.forEach(el => {
-            state.items.push({
+            newItems.push({
                 id: el.id,
                 unit: el.unit,
                 unitAmount: el.unitAmount,
@@ -35,5 +26,6 @@ export default {
                 shopping_list_id: el.shopping_list_id
             })
         })
+        state.items[shoppingListId] = newItems;
     }
 }
