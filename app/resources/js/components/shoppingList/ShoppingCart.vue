@@ -2,6 +2,11 @@
   <div class="shopping-list">
     <h1>Einkaufswagen</h1>
     <div v-if="loaded">
+      <div class="text-right mb-2">
+        <b-button>
+          <b-icon-printer />
+        </b-button>
+      </div>
       <b-card
         v-for="shoppingList in $store.state.shoppingList.shoppingLists"
         :key="shoppingList.id"

@@ -14,7 +14,7 @@ class ShoppingListSeeder extends Seeder
      */
     public function run()
     {
-        ShoppingList::factory()->count(1)->create();
+        ShoppingList::factory()->count(2)->create();
         ShoppingList::factory()->done()->count(1)->create();
     }
 }

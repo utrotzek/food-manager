@@ -5,32 +5,39 @@
       class="items-list"
     >
       <div
-        v-if="items.length > 0"
         class="card-columns"
       >
-        <div class="card">
+        <div
+          v-for="(i, index) in groups"
+          :key="index"
+          class="card"
+        >
           <div class="card-body">
-            <table :cellpadding="3">
-              <tr
-                v-for="item in items"
-                :key="item.id"
-              >
-                <td class="col text-right">
-                  {{ item.unitAmount }}
-                </td>
-                <td class="col-3">
-                  {{ item.unit.title }}
-                </td>
-                <td class="col-8">
-                  {{ item.good.title }}
-                </td>
-              </tr>
+            <table
+              :cellpadding="3"
+              class="table"
+            >
+              <tbody>
+                <tr
+                  v-for="item in itemsForGroup(index * itemsPerGroup)"
+                  :key="item.id"
+                >
+                  <td class="text-right">
+                    {{ item.unitAmount }}
+                  </td>
+                  <td>
+                    {{ item.unit.title }}
+                  </td>
+                  <td>
+                    {{ item.good.title }}
+                  </td>
+                </tr>
+              </tbody>
             </table>
           </div>
         </div>
       </div>
       <div
-        v-else
         class="text-center"
       >
         <b-alert
@@ -55,18 +62,28 @@ export default {
   },
   data() {
     return {
-      loaded: false
+      loaded: false,
+      itemsPerGroup: 10
     }
   },
   computed: {
-    items() {
-      return this.$store.getters["shoppingList/itemsForShoppingList"](this.shoppingList.id);
-    }
+    groups() {
+      return Math.ceil(this.shoppingList.items / this.itemsPerGroup);
+    },
   },
   mounted() {
     this.$store.dispatch('shoppingList/fetchItems', {shopping_list_id: this.shoppingList.id}).then(res => {
       this.loaded = true;
     })
+  },
+  methods: {
+    itemsForGroup(from){
+      const end = from + this.itemsPerGroup;
+      return this.allItems().slice(from, end);
+    },
+    allItems(){
+      return  this.$store.getters["shoppingList/itemsForShoppingList"](this.shoppingList.id)
+    }
   }
 }
 </script>

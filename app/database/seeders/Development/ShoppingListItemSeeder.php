@@ -19,11 +19,18 @@ class ShoppingListItemSeeder extends Seeder
      */
     public function run(Generator $faker)
     {
-        $shoppingList = ShoppingList::find(1)->first();
+        $shoppingListOne = ShoppingList::find(1);
+        $shoppingListTwo = ShoppingList::find(2);
 
         ShoppingListItem::factory()
-            ->count(10)
-            ->for($shoppingList)
+            ->count(35)
+            ->for($shoppingListOne)
+            ->create()
+        ;
+
+        ShoppingListItem::factory()
+            ->count(12)
+            ->for($shoppingListTwo)
             ->create()
         ;
     }
