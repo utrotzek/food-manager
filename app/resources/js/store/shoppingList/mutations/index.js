@@ -1,7 +1,8 @@
 import dayjs from "dayjs";
 
 export default {
-    addLists(state, payload){
+    storeLists(state, payload){
+        state.shoppingLists = [];
         payload.shoppingLists.forEach(el => {
             state.shoppingLists.push({
                 id: el.id,
