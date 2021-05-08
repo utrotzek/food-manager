@@ -22,6 +22,7 @@ class AppStateSeeder extends Seeder
     public function run()
     {
        $this->addDefaultState('MealPlanDisplayRange', 'week');
+       $this->addDefaultState('ShoppingListSorting', 'by_title');
     }
 
     protected function addDefaultState(string $name, string $value): void

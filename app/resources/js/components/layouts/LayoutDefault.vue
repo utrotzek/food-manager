@@ -112,11 +112,12 @@ export default {
     }
   },
   mounted() {
-    this.$store.dispatch('recipe/fetchRemembered').then(() => {
-    })
-    this.$store.dispatch('shoppingList/fetchShoppingLists').then(() => {
-      this.loading = false;
-    })
+    this.$store.dispatch('recipe/fetchRemembered')
+      .then(() =>this.$store.dispatch('shoppingList/fetchShoppingLists'))
+      .then(() =>this.$store.dispatch('app/initializeAppState'))
+      .then(() => {
+        this.loading = false;
+      })
   }
 }
 </script>
