@@ -92,7 +92,8 @@ export default {
         case (SHOPPING_LIST_SORTING.TITLE):
           return this.itemsForIndex(index);
         case (SHOPPING_LIST_SORTING.GOOD_GROUP):
-          return this.allItems().filter(elFind => elFind.good.group.id === group.id);
+          let items = this.allItems().filter(elFind => elFind.good.group.id === group.id);
+          return items.sort((a,b) => a.good.title.localeCompare(b.good.title));
       }
     },
     itemsForIndex(index){
