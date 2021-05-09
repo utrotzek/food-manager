@@ -15,6 +15,16 @@ export default {
           layout: LayoutDefault,
       };
   },
+  mounted() {
+    Vue.nextTick(() => {
+      this.$store.dispatch('recipe/fetchRemembered')
+        .then(() => this.$store.dispatch('shoppingList/fetchShoppingLists'))
+        .then(() => this.$store.dispatch('app/initializeAppState'))
+        .then(() => {
+          this.loading = false;
+        });
+    });
+  },
   methods: {
       start() {
           this.$refs.topProgress.start();
