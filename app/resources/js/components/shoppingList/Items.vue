@@ -9,18 +9,18 @@
         class="card-columns"
       >
         <div
-          v-for="(i, index) in groups"
+          v-for="(group, index) in groups"
           :key="index"
           class="card"
         >
           <div class="card-body">
+            <h4>{{ group.title }}</h4>
             <table
-              :cellpadding="1"
               class="table"
             >
               <tbody>
                 <tr
-                  v-for="item in itemsForGroup(index * itemsPerGroup)"
+                  v-for="item in itemsForGroup(group, index)"
                   :key="item.id"
                 >
                   <td class="text-right">
@@ -54,6 +54,8 @@
 </template>
 
 <script>
+import {SHOPPING_LIST_SORTING} from "../../constants/shoppingListConstants";
+
 export default {
   name: "ShoppingListItems",
   props: {
@@ -65,12 +67,18 @@ export default {
   data() {
     return {
       loaded: false,
-      itemsPerGroup: 10
+      itemsPerGroup: 20
     }
   },
   computed: {
     groups() {
-      return Math.ceil(this.shoppingList.items / this.itemsPerGroup);
+      switch (this.$store.state.app.shoppingList.sorting) {
+        case (SHOPPING_LIST_SORTING.TITLE):
+          return Math.ceil(this.shoppingList.items / this.itemsPerGroup);
+        case (SHOPPING_LIST_SORTING.GOOD_GROUP):
+          return this.goodGroups();
+      }
+      return [];
     },
   },
   mounted() {
@@ -79,12 +87,33 @@ export default {
     })
   },
   methods: {
-    itemsForGroup(from){
+    itemsForGroup(group, index) {
+      switch (this.$store.state.app.shoppingList.sorting) {
+        case (SHOPPING_LIST_SORTING.TITLE):
+          return this.itemsForIndex(index);
+        case (SHOPPING_LIST_SORTING.GOOD_GROUP):
+          return this.allItems().filter(elFind => elFind.good.group.id === group.id);
+      }
+    },
+    itemsForIndex(index){
+      const from = index * this.itemsPerGroup;
       const end = from + this.itemsPerGroup;
       return this.allItems().slice(from, end);
     },
     allItems(){
       return  this.$store.getters["shoppingList/itemsForShoppingList"](this.shoppingList.id)
+    },
+    goodGroups() {
+      let goodGroups = [];
+      if (this.loaded) {
+        this.allItems().forEach(el => {
+          const index = goodGroups.findIndex(elFind => elFind.id === el.good.group.id);
+          if (index === -1) {
+            goodGroups.push(el.good.group);
+          }
+        })
+      }
+      return goodGroups;
     }
   }
 }

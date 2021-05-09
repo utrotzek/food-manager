@@ -27,7 +27,7 @@ class ShoppingListItemFactory extends Factory
         return [
             'unit_amount' => $this->faker->randomFloat(2, 1, 500),
             'unit_id' => Unit::all()->random()->id,
-            'good_id' => Good::all()->random()->id,
+            'good_id' => Good::whereIn('good_group_id', [1,2,3,4])->get()->random()->id,
             'day_plan_id' => DayPlan::all()->random()->id
         ];
     }
