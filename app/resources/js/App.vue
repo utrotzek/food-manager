@@ -15,15 +15,15 @@ export default {
           layout: LayoutDefault,
       };
   },
-  mounted() {
-    Vue.nextTick(() => {
-      this.$store.dispatch('recipe/fetchRemembered')
-        .then(() => this.$store.dispatch('shoppingList/fetchShoppingLists'))
-        .then(() => this.$store.dispatch('app/initializeAppState'))
-        .then(() => {
-          this.loading = false;
-        });
-    });
+  async mounted() {
+    const rememberedHandle = this.$store.dispatch('recipe/fetchRemembered')
+    const shoppingListHandle = this.$store.dispatch('shoppingList/fetchShoppingLists');
+    const appStateHandle = this.$store.dispatch('app/initializeAppState');
+
+    await rememberedHandle;
+    await shoppingListHandle;
+    await appStateHandle;
+    this.loading = false;
   },
   methods: {
       start() {
