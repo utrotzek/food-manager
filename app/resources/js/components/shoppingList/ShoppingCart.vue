@@ -49,6 +49,9 @@
                       <b-select-option :value="SHOPPING_LIST_SORTING.GOOD_GROUP">
                         Warengruppen
                       </b-select-option>
+                      <b-select-option :value="SHOPPING_LIST_SORTING.DATE">
+                        Datum
+                      </b-select-option>
                     </b-select>
                     <b-button>
                       <b-icon-printer />

@@ -77,6 +77,8 @@ export default {
           return Math.ceil(this.shoppingList.items / this.itemsPerGroup);
         case (SHOPPING_LIST_SORTING.GOOD_GROUP):
           return this.goodGroups();
+        case (SHOPPING_LIST_SORTING.DATE):
+          return this.dates();
       }
       return [];
     },
@@ -88,13 +90,19 @@ export default {
   },
   methods: {
     itemsForGroup(group, index) {
+      let items = [];
       switch (this.$store.state.app.shoppingList.sorting) {
         case (SHOPPING_LIST_SORTING.TITLE):
-          return this.itemsForIndex(index);
+          items = this.itemsForIndex(index);
+          break;
         case (SHOPPING_LIST_SORTING.GOOD_GROUP):
-          let items = this.allItems().filter(elFind => elFind.good.group.id === group.id);
-          return items.sort((a,b) => a.good.title.localeCompare(b.good.title));
+          items = this.allItems().filter(elFind => elFind.good.group.id === group.id);
+          break;
+        case (SHOPPING_LIST_SORTING.DATE):
+          items = this.allItems().filter(elFind => elFind.date.isSame(group.date, 'day'));
+          break;
       }
+      return items.sort((a,b) => a.good.title.localeCompare(b.good.title))
     },
     itemsForIndex(index){
       const from = index * this.itemsPerGroup;
@@ -106,15 +114,26 @@ export default {
     },
     goodGroups() {
       let goodGroups = [];
-      if (this.loaded) {
-        this.allItems().forEach(el => {
-          const index = goodGroups.findIndex(elFind => elFind.id === el.good.group.id);
-          if (index === -1) {
-            goodGroups.push(el.good.group);
-          }
-        })
-      }
+      this.allItems().forEach(el => {
+        const index = goodGroups.findIndex(elFind => elFind.id === el.good.group.id);
+        if (index === -1) {
+          goodGroups.push(el.good.group);
+        }
+      })
       return goodGroups;
+    },
+    dates() {
+      let dates = [];
+      this.allItems().forEach(el => {
+        const index = dates.findIndex(elFind => elFind.date.isSame(el.date, 'day'));
+        if (index === -1){
+          dates.push({
+            title: el.date.format("dddd (DD.MM)"),
+            date: el.date
+          })
+        }
+      })
+      return dates;
     }
   }
 }

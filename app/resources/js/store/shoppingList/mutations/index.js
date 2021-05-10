@@ -24,7 +24,8 @@ export default {
                 good: el.good,
                 recipe_id: el.recipe_id,
                 description: el.desciption,
-                shopping_list_id: el.shopping_list_id
+                shopping_list_id: el.shopping_list_id,
+                date: dayjs(el.date)
             })
         })
         state.items[shoppingListId] = newItems;
