@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import {DUMMY_DATE} from '../../../constants/shoppingListConstants';
 
 export default {
     storeLists(state, payload){
@@ -34,6 +35,7 @@ export default {
         payload.items.forEach(el => {
             state.items.push({
                 id: el.id,
+                date: el.date !== null ? dayjs(el.date) : DUMMY_DATE,
                 unit: el.unit,
                 unitAmount: el.unitAmount,
                 good: el.good,

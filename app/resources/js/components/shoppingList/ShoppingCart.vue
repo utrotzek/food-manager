@@ -142,10 +142,7 @@ export default {
        description: this.form.shoppingItem.description,
        shoppingListId: this.form.shoppingItem.shoppingListId
       }
-      this.$store.dispatch('shoppingList/addItem', data).then(() => {
-        console.log('force rerender');
-        this.$forceUpdate();
-      })
+      this.$store.dispatch('shoppingList/addItem', data);
     }
   }
 }

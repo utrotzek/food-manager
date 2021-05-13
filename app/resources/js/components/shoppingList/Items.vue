@@ -16,6 +16,7 @@
           <div class="card-body">
             <h4>{{ group.title }}</h4>
             <table
+              :key="renderKey"
               class="table"
             >
               <tbody>
@@ -57,7 +58,7 @@
 </template>
 
 <script>
-import {SHOPPING_LIST_SORTING} from "../../constants/shoppingListConstants";
+import {SHOPPING_LIST_SORTING, DUMMY_DATE} from "../../constants/shoppingListConstants";
 
 export default {
   name: "ShoppingListItems",
@@ -70,7 +71,8 @@ export default {
   data() {
     return {
       loaded: false,
-      itemsPerGroup: 20
+      itemsPerGroup: 20,
+      renderKey: 0
     }
   },
   computed: {
@@ -82,9 +84,9 @@ export default {
         case (SHOPPING_LIST_SORTING.TITLE):
           return Math.ceil(this.shoppingList.items / this.itemsPerGroup);
         case (SHOPPING_LIST_SORTING.GOOD_GROUP):
-          return this.goodGroups();
+          return this.getGoodGroups();
         case (SHOPPING_LIST_SORTING.DATE):
-          return this.dates();
+          return this.getDateGroups();
       }
       return [];
     },
@@ -99,27 +101,28 @@ export default {
       let items = [];
       switch (this.$store.state.app.shoppingList.sorting) {
         case (SHOPPING_LIST_SORTING.TITLE):
-          items = this.itemsForIndex(index);
-          break;
+          return this.itemsForIndex(index);
         case (SHOPPING_LIST_SORTING.GOOD_GROUP):
           items = this.allItems.filter(elFind => elFind.good.group.id === group.id);
-          break;
+          return this.sortItems(items);
         case (SHOPPING_LIST_SORTING.DATE):
           items = this.allItems.filter(elFind => elFind.date.isSame(group.date, 'day'));
-          break;
+          return this.sortItems(items);
       }
+    },
+    sortItems(items) {
       return items.sort((a,b) => {
         const titleA = a.good !== null ? a.good.title : a.description;
         const titleB = b.good !== null ? b.good.title : b.description;
-        titleA.localeCompare(titleB)
+        return titleA.localeCompare(titleB);
       })
     },
     itemsForIndex(index){
       const from = index * this.itemsPerGroup;
       const end = from + this.itemsPerGroup;
-      return this.allItems.slice(from, end);
+      return this.sortItems(this.allItems).slice(from, end);
     },
-    goodGroups() {
+    getGoodGroups() {
       let goodGroups = [];
       this.allItems.forEach(el => {
         const index = goodGroups.findIndex(elFind => elFind.id === el.good.group.id);
@@ -129,15 +132,22 @@ export default {
       })
       return goodGroups;
     },
-    dates() {
+    getDateGroups() {
       let dates = [];
       this.allItems.forEach(el => {
-        if (el.hasOwnProperty('date')){
+        if (el.date !== DUMMY_DATE){
           const index = dates.findIndex(elFind => elFind.date.isSame(el.date, 'day'));
           if (index === -1){
             dates.push({
               title: el.date.format("dddd (DD.MM)"),
               date: el.date
+            })
+          }
+        }else{
+          if (dates.findIndex(elFind => elFind.date.isSame(DUMMY_DATE, 'day')) === -1){
+            dates.push({
+              title: 'Ohne Datumsangabe',
+              date: DUMMY_DATE
             })
           }
         }
