@@ -9,8 +9,8 @@
         class="card-columns"
       >
         <div
-          v-for="(group, index) in groups"
-          :key="index"
+          v-for="group in groups"
+          :key="group.key"
           class="card"
         >
           <div class="card-body">
@@ -21,7 +21,7 @@
             >
               <tbody>
                 <tr
-                  v-for="item in itemsForGroup(group, index)"
+                  v-for="item in itemsForGroup(group)"
                   :key="item.id"
                 >
                   <td class="text-right">
@@ -82,7 +82,7 @@ export default {
     groups() {
       switch (this.$store.state.app.shoppingList.sorting) {
         case (SHOPPING_LIST_SORTING.TITLE):
-          return Math.ceil(this.shoppingList.items / this.itemsPerGroup);
+          return this.getItemGroups();
         case (SHOPPING_LIST_SORTING.GOOD_GROUP):
           return this.getGoodGroups();
         case (SHOPPING_LIST_SORTING.DATE):
@@ -97,11 +97,11 @@ export default {
     })
   },
   methods: {
-    itemsForGroup(group, index) {
+    itemsForGroup(group) {
       let items = [];
       switch (this.$store.state.app.shoppingList.sorting) {
         case (SHOPPING_LIST_SORTING.TITLE):
-          return this.itemsForIndex(index);
+          return this.itemsForIndex(group.id);
         case (SHOPPING_LIST_SORTING.GOOD_GROUP):
           items = this.allItems.filter(elFind => {
             if (elFind.good){
@@ -128,29 +128,45 @@ export default {
       const end = from + this.itemsPerGroup;
       return this.sortItems(this.allItems).slice(from, end);
     },
+    addGroupToList(list, group){
+      list.push({
+        id: group.id,
+        key: "good-group-" + group.id,
+        title: group.title
+      });
+    },
+    getItemGroups() {
+      const groupCount = Math.ceil(this.shoppingList.items / this.itemsPerGroup);
+      let groups = [];
+      for(let i=0; i < groupCount; i++){
+        groups.push({
+          id: i,
+          key: "items-" + i,
+          title: ""
+        })
+      }
+      return groups;
+    },
     getGoodGroups() {
       let goodGroups = [];
       this.allItems.forEach(el => {
         if (el.good){
           const index = goodGroups.findIndex(elFind => elFind.id === el.good.group.id);
           if (index === -1) {
-            goodGroups.push(el.good.group);
+            this.addGroupToList(goodGroups, el.good.group);
           }
         }else{
           const index = goodGroups.findIndex(elFind => elFind.id === DUMMY_GOOD_GROUP.id);
           if (index === -1) {
-            goodGroups.push(DUMMY_GOOD_GROUP);
+            this.addGroupToList(goodGroups, DUMMY_GOOD_GROUP);
           }
         }
       })
-      const groups = goodGroups.sort((a,b) => {
+      return goodGroups.sort((a,b) => {
         if (a.sort < b.sort) return -1;
         if (a.sort > b.sort) return 1;
         return 0;
       });
-
-      console.log(groups);
-      return groups;
     },
     getDateGroups() {
       let dates = [];
@@ -159,20 +175,28 @@ export default {
           const index = dates.findIndex(elFind => elFind.date.isSame(el.date, 'day'));
           if (index === -1){
             dates.push({
+              id:  el.date.format('DDMMYYYY'),
+              key: "date-group-" + el.date.format('DDMMYYYY'),
               title: el.date.format("dddd (DD.MM)"),
               date: el.date
-            })
+            });
           }
         }else{
           if (dates.findIndex(elFind => elFind.date.isSame(DUMMY_DATE, 'day')) === -1){
             dates.push({
-              title: 'Ohne Datumsangabe',
+              id:  DUMMY_DATE.format('DDMMYYYY'),
+              key: "date-group-" + DUMMY_DATE.format('DDMMYYYY'),
+              title: "Ohne Datum",
               date: DUMMY_DATE
-            })
+            });
           }
         }
       })
-      return dates;
+      return dates.sort((a,b) => {
+        if (a.date < b.date) return -1;
+        if (a.date > b.date) return 1;
+        return 0;
+      })
     }
   }
 }
