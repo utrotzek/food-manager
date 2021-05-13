@@ -1,6 +1,6 @@
 <template>
   <div class="shopping-list">
-    <h1>Einkaufswagen</h1>
+    <h1>Einkauszettel</h1>
     <div v-if="loaded">
       <b-card
         v-for="shoppingList in $store.state.shoppingList.shoppingLists"
