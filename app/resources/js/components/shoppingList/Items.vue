@@ -13,8 +13,13 @@
           :key="group.key"
           class="card"
         >
+          <div
+            v-if="group.title"
+            class="card-header"
+          >
+            {{ group.title }}
+          </div>
           <div class="card-body">
-            <h4>{{ group.title }}</h4>
             <table
               :key="renderKey"
               class="table"
@@ -23,18 +28,24 @@
                 <tr
                   v-for="item in itemsForGroup(group)"
                   :key="item.id"
+                  class="d-flex"
                 >
-                  <td class="text-right">
+                  <td class="text-right col-3">
                     {{ item.unitAmount }}
                   </td>
-                  <td>
+                  <td class="col-3">
                     {{ item.unit.title }}
                   </td>
-                  <td v-if="item.good">
-                    {{ item.good.title }}
+                  <td class="col">
+                    {{ item.good ? item.good.title : item.description }}
                   </td>
-                  <td>
-                    {{ item.description }}
+                  <td class="col-1">
+                    <b-button
+                      variant="light"
+                      class="light-icon-button"
+                    >
+                      <b-icon-pen />
+                    </b-button>
                   </td>
                 </tr>
               </tbody>
@@ -202,8 +213,25 @@ export default {
 }
 </script>
 
-<style scoped>
-  .card-columns {
+<style scoped lang="scss">
+@import '../../../../node_modules/bootstrap/scss/_functions.scss';
+@import '../../../../node_modules/bootstrap/scss/_variables.scss';
+@import '../../../../node_modules/bootstrap/scss/_mixins.scss';
+
+.card-columns {
+  @include media-breakpoint-up(xs) {
+    column-count: 1;
+  }
+  @include media-breakpoint-up(lg) {
     column-count: 2;
   }
+}
+
+.card-body {
+  padding: 0;
+}
+
+.table th, .table td {
+  padding: 0.3rem;
+}
 </style>
