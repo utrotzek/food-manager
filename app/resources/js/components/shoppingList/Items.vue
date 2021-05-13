@@ -117,9 +117,7 @@ export default {
           items = this.allItems.filter(elFind => {
             if (elFind.good){
               return elFind.good.group.id === group.id;
-            }else{
-              return true;
-            }
+            }else return group.id === DUMMY_GOOD_GROUP.id;
           });
           return this.sortItems(items);
         case (SHOPPING_LIST_SORTING.DATE):
