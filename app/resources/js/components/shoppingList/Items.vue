@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import {SHOPPING_LIST_SORTING, DUMMY_DATE} from "../../constants/shoppingListConstants";
+import {SHOPPING_LIST_SORTING, DUMMY_DATE, DUMMY_GOOD_GROUP} from "../../constants/shoppingListConstants";
 
 export default {
   name: "ShoppingListItems",
@@ -103,7 +103,13 @@ export default {
         case (SHOPPING_LIST_SORTING.TITLE):
           return this.itemsForIndex(index);
         case (SHOPPING_LIST_SORTING.GOOD_GROUP):
-          items = this.allItems.filter(elFind => elFind.good.group.id === group.id);
+          items = this.allItems.filter(elFind => {
+            if (elFind.good){
+              return elFind.good.group.id === group.id;
+            }else{
+              return true;
+            }
+          });
           return this.sortItems(items);
         case (SHOPPING_LIST_SORTING.DATE):
           items = this.allItems.filter(elFind => elFind.date.isSame(group.date, 'day'));
@@ -125,12 +131,26 @@ export default {
     getGoodGroups() {
       let goodGroups = [];
       this.allItems.forEach(el => {
-        const index = goodGroups.findIndex(elFind => elFind.id === el.good.group.id);
-        if (index === -1) {
-          goodGroups.push(el.good.group);
+        if (el.good){
+          const index = goodGroups.findIndex(elFind => elFind.id === el.good.group.id);
+          if (index === -1) {
+            goodGroups.push(el.good.group);
+          }
+        }else{
+          const index = goodGroups.findIndex(elFind => elFind.id === DUMMY_GOOD_GROUP.id);
+          if (index === -1) {
+            goodGroups.push(DUMMY_GOOD_GROUP);
+          }
         }
       })
-      return goodGroups;
+      const groups = goodGroups.sort((a,b) => {
+        if (a.sort < b.sort) return -1;
+        if (a.sort > b.sort) return 1;
+        return 0;
+      });
+
+      console.log(groups);
+      return groups;
     },
     getDateGroups() {
       let dates = [];

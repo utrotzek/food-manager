@@ -7,3 +7,8 @@ export const SHOPPING_LIST_SORTING = {
 }
 
 export const DUMMY_DATE = dayjs("01-01-2999", "MM-DD-YYYY");
+export const DUMMY_GOOD_GROUP = {
+    id: null,
+    title: "Ohne Warengruppe",
+    sort: 9999
+};
