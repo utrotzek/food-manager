@@ -24,7 +24,7 @@
               placeholder="Anzahl"
               :state="getValidationState(validationContext)"
               :autofocus="!goodId"
-              @change="amountUpdated"
+              @change="onChanged"
             />
             <b-form-invalid-feedback id="amount-feedback">
               {{ validationContext.errors[0] }}
@@ -69,6 +69,7 @@
         </validation-provider>
       </b-col>
       <b-col
+        v-if="!freeText"
         cols="10"
         md="6"
       >
@@ -101,6 +102,36 @@
             :force-show="!valid"
           >
             {{ errors[0] }}
+          </b-form-invalid-feedback>
+        </validation-provider>
+      </b-col>
+      <b-col
+        v-else
+        cols="10"
+        md="6"
+      >
+        <validation-provider
+          v-slot="validationContext"
+          ref="description"
+          name="Ware"
+          rules="required"
+        >
+          <b-form-group
+            id="description-group"
+            label="Ware"
+            label-for="description"
+            label-sr-only
+          >
+            <b-form-input
+              v-model="form.description"
+              placeholder="Ware eingeben"
+              name="description"
+              :state="getValidationState(validationContext)"
+              @change="onChanged"
+            />
+          </b-form-group>
+          <b-form-invalid-feedback id="description-feedback">
+            {{ validationContext.errors[0] }}
           </b-form-invalid-feedback>
         </validation-provider>
       </b-col>
@@ -147,6 +178,10 @@ export default {
     category: {
       type: Number,
       default: null
+    },
+    freeText: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -155,7 +190,8 @@ export default {
         amount: this.amount,
         unitId: this.unitId,
         goodId: this.goodId,
-        goodCreate: null
+        goodCreate: null,
+        description: null
       }
     }
   },
@@ -178,7 +214,9 @@ export default {
   mounted() {
     this.$refs.amount.validate(this.form.amount);
     this.$refs.unit.validate(this.form.unitId);
-    this.$refs.good.validate(this.form.goodId);
+    if (!this.freeText){
+      this.$refs.good.validate(this.form.goodId);
+    }
   },
   methods: {
     getValidationState({ dirty, validated, valid = null }) {
@@ -200,7 +238,7 @@ export default {
       this.emitChanged();
       this.$refs.unit.validate(this.form.unitId);
     },
-    amountUpdated(){
+    onChanged(){
       this.emitChanged();
     },
     emitChanged(){
@@ -211,6 +249,7 @@ export default {
           unitId: parseInt(this.form.unitId),
           amount: parseFloat(this.form.amount.replace(',', '.')),
           goodId: parseInt(this.form.goodId),
+          description:  this.form.description,
           category: this.category
         }
       });

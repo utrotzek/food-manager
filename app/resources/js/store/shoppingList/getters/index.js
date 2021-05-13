@@ -7,10 +7,6 @@ export default  {
         return overallCount;
     },
     itemsForShoppingList: (state) => (shoppingId) => {
-        if (state.items.hasOwnProperty(shoppingId)){
-            return state.items[shoppingId];
-        }else{
-            return [];
-        }
+        return state.items.filter(el => el.shopping_list_id === shoppingId);
     }
 }

@@ -14,20 +14,33 @@ export default {
         })
     },
     storeItemsForList(state, payload) {
-        let newItems = []
         const shoppingListId = payload.shopping_list_id;
+        const shoppingListIndex = state.shoppingLists.findIndex(el => el.id === shoppingListId);
+
+        //delete all items with the given shopping list from the store before adding them again
+        if (payload.clearExisting){
+            let deleteIndex = null;
+            do {
+                deleteIndex = state.items.indexOf(el => {el.shopping_list_id === shoppingListId})
+                if (deleteIndex > -1){
+                    state.items.splice(deleteIndex);
+                }
+            }while (deleteIndex > -1)
+            state.shoppingLists[shoppingListIndex].items = payload.items.length;
+        }else{
+            state.shoppingLists[shoppingListIndex].items += payload.items.length;
+        }
+
         payload.items.forEach(el => {
-            newItems.push({
+            state.items.push({
                 id: el.id,
                 unit: el.unit,
                 unitAmount: el.unitAmount,
                 good: el.good,
                 recipe_id: el.recipe_id,
-                description: el.desciption,
-                shopping_list_id: el.shopping_list_id,
-                date: dayjs(el.date)
+                description: el.description,
+                shopping_list_id: el.shopping_list_id
             })
         })
-        state.items[shoppingListId] = newItems;
     }
 }

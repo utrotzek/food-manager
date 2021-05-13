@@ -5,7 +5,7 @@
       class="items-list"
     >
       <div
-        v-if="allItems().length > 0"
+        v-if="allItems.length > 0"
         class="card-columns"
       >
         <div
@@ -29,8 +29,11 @@
                   <td>
                     {{ item.unit.title }}
                   </td>
-                  <td>
+                  <td v-if="item.good">
                     {{ item.good.title }}
+                  </td>
+                  <td>
+                    {{ item.description }}
                   </td>
                 </tr>
               </tbody>
@@ -71,6 +74,9 @@ export default {
     }
   },
   computed: {
+    allItems(){
+      return this.$store.getters["shoppingList/itemsForShoppingList"](this.shoppingList.id);
+    },
     groups() {
       switch (this.$store.state.app.shoppingList.sorting) {
         case (SHOPPING_LIST_SORTING.TITLE):
@@ -96,25 +102,26 @@ export default {
           items = this.itemsForIndex(index);
           break;
         case (SHOPPING_LIST_SORTING.GOOD_GROUP):
-          items = this.allItems().filter(elFind => elFind.good.group.id === group.id);
+          items = this.allItems.filter(elFind => elFind.good.group.id === group.id);
           break;
         case (SHOPPING_LIST_SORTING.DATE):
-          items = this.allItems().filter(elFind => elFind.date.isSame(group.date, 'day'));
+          items = this.allItems.filter(elFind => elFind.date.isSame(group.date, 'day'));
           break;
       }
-      return items.sort((a,b) => a.good.title.localeCompare(b.good.title))
+      return items.sort((a,b) => {
+        const titleA = a.good !== null ? a.good.title : a.description;
+        const titleB = b.good !== null ? b.good.title : b.description;
+        titleA.localeCompare(titleB)
+      })
     },
     itemsForIndex(index){
       const from = index * this.itemsPerGroup;
       const end = from + this.itemsPerGroup;
-      return this.allItems().slice(from, end);
-    },
-    allItems(){
-      return  this.$store.getters["shoppingList/itemsForShoppingList"](this.shoppingList.id)
+      return this.allItems.slice(from, end);
     },
     goodGroups() {
       let goodGroups = [];
-      this.allItems().forEach(el => {
+      this.allItems.forEach(el => {
         const index = goodGroups.findIndex(elFind => elFind.id === el.good.group.id);
         if (index === -1) {
           goodGroups.push(el.good.group);
@@ -124,13 +131,15 @@ export default {
     },
     dates() {
       let dates = [];
-      this.allItems().forEach(el => {
-        const index = dates.findIndex(elFind => elFind.date.isSame(el.date, 'day'));
-        if (index === -1){
-          dates.push({
-            title: el.date.format("dddd (DD.MM)"),
-            date: el.date
-          })
+      this.allItems.forEach(el => {
+        if (el.hasOwnProperty('date')){
+          const index = dates.findIndex(elFind => elFind.date.isSame(el.date, 'day'));
+          if (index === -1){
+            dates.push({
+              title: el.date.format("dddd (DD.MM)"),
+              date: el.date
+            })
+          }
         }
       })
       return dates;

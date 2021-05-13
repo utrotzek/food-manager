@@ -20,7 +20,9 @@ class ShoppingListItemRepository extends BaseRepository implements ShoppingListI
         ;
 
         $entries = $entries->sort(function ($el1, $el2) {
-            return $el1->good->title <=> $el2->good->title;
+            $titleA = $el1->good->title ?? $el1->description;
+            $titleB = $el2->good->title ?? $el2->description;
+            return $titleA <=> $titleB;
         });
         return $entries;
     }

@@ -33,6 +33,15 @@
               <b-col>
                 <div class="float-right mb-2">
                   <b-form class="form-inline">
+                    <b-button
+                      class="mr-2"
+                      @click="onNewItem(shoppingList)"
+                    >
+                      <b-icon-plus-circle />
+                    </b-button>
+                    <b-button class="mr-2">
+                      <b-icon-printer />
+                    </b-button>
                     <label
                       class="mr-1"
                       for="group-by"
@@ -53,9 +62,6 @@
                         Datum
                       </b-select-option>
                     </b-select>
-                    <b-button>
-                      <b-icon-printer />
-                    </b-button>
                   </b-form>
                 </div>
               </b-col>
@@ -66,6 +72,20 @@
           </b-card-body>
         </b-collapse>
       </b-card>
+
+      <b-modal
+        id="new-item-modal"
+        ref="new-item-modal"
+        title="Neuer Eintrag für den Einkaufszettel"
+        cancel-title="Abbrechen"
+        ok-title="Speichern"
+        @ok="onSave"
+      >
+        <IngredientsSingleEdit
+          free-text
+          @changed="onItemChange"
+        />
+      </b-modal>
     </div>
   </div>
 </template>
@@ -73,15 +93,17 @@
 <script>
 import Items from "./Items";
 import {SHOPPING_LIST_SORTING} from "../../constants/shoppingListConstants"
+import IngredientsSingleEdit from "../recipe/IngredientsSingleEdit";
 
 export default {
   name: "ShoppingCart",
-  components: {Items},
+  components: {Items, IngredientsSingleEdit},
   data() {
     return {
       loaded: false,
       form: {
-        sorted: null
+        sorted: null,
+        shoppingItem: null,
       }
     }
   },
@@ -93,10 +115,37 @@ export default {
   mounted() {
     this.loaded = true;
     this.form.sorted = this.$store.state.app.shoppingList.sorting;
+    this.$store.dispatch('recipe/fetchIngredientItems');
   },
   methods: {
     onSortingChange() {
       this.$store.dispatch('app/updateShoppingListSorting', {sorting: this.form.sorted});
+    },
+    onItemChange(changeData) {
+      this.form.shoppingItem = {
+        goodId: changeData.data.goodId,
+        unitId: changeData.data.unitId,
+        amount: changeData.data.amount,
+        description: changeData.data.description,
+        shoppingListId: this.form.shoppingItem.shoppingListId
+      }
+    },
+    onNewItem(shoppingList) {
+      this.form.shoppingItem = {shoppingListId: shoppingList.id};
+      this.$refs['new-item-modal'].show();
+    },
+    onSave() {
+      const data = {
+       goodId: this.form.shoppingItem.goodId,
+       unitId: this.form.shoppingItem.unitId,
+       amount: this.form.shoppingItem.amount,
+       description: this.form.shoppingItem.description,
+       shoppingListId: this.form.shoppingItem.shoppingListId
+      }
+      this.$store.dispatch('shoppingList/addItem', data).then(() => {
+        console.log('force rerender');
+        this.$forceUpdate();
+      })
     }
   }
 }

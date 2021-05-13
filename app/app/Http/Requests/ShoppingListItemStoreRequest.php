@@ -24,7 +24,7 @@ class ShoppingListItemStoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'good_id' => 'int|exists:App\Models\Good,id',
+            'good_id' => 'nullable|int|exists:App\Models\Good,id',
             'day_plan_id' => 'int|exists:App\Models\DayPlan,id',
             'unit_id' => 'int|exists:App\Models\Unit,id',
             'unit_amount' => 'required|numeric',
