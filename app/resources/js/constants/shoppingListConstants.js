@@ -6,7 +6,7 @@ export const SHOPPING_LIST_SORTING = {
     DATE: "by_date",
 }
 
-export const DUMMY_DATE = dayjs("01-01-2999", "MM-DD-YYYY");
+export const DUMMY_DATE = dayjs('2999-01-01 11:49')
 export const DUMMY_GOOD_GROUP = {
     id: null,
     title: "Ohne Warengruppe",

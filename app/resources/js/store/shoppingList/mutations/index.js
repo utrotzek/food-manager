@@ -22,7 +22,9 @@ export default {
         if (payload.clearExisting){
             let deleteIndex = null;
             do {
-                deleteIndex = state.items.indexOf(el => {el.shopping_list_id === shoppingListId})
+                deleteIndex = state.items.findIndex(el => {
+                    return el.shopping_list_id === shoppingListId
+                });
                 if (deleteIndex > -1){
                     state.items.splice(deleteIndex);
                 }
@@ -41,7 +43,7 @@ export default {
                 good: el.good,
                 recipe_id: el.recipe_id,
                 description: el.description,
-                shopping_list_id: el.shopping_list_id
+                shopping_list_id: shoppingListId
             })
         })
     }

@@ -140,7 +140,8 @@ export default {
       list.push({
         id: group.id,
         key: "good-group-" + group.id,
-        title: group.title
+        title: group.title,
+        sort: group.sort
       });
     },
     getItemGroups() {
@@ -190,7 +191,9 @@ export default {
             });
           }
         }else{
-          if (dates.findIndex(elFind => elFind.date.isSame(DUMMY_DATE, 'day')) === -1){
+          const foundIndex = dates.findIndex(elFind => elFind.date.isSame(DUMMY_DATE, 'day'));
+          console.log(foundIndex);
+          if (foundIndex === -1){
             dates.push({
               id:  DUMMY_DATE.format('DDMMYYYY'),
               key: "date-group-" + DUMMY_DATE.format('DDMMYYYY'),
