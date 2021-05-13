@@ -21,25 +21,24 @@
           </div>
           <div class="card-body">
             <table
-              :key="renderKey"
               class="table"
             >
               <tbody>
                 <tr
                   v-for="item in itemsForGroup(group)"
-                  :key="item.id"
+                  :key="group.key + '-' + item.id"
                   class="d-flex"
                 >
-                  <td class="text-right col-3">
-                    {{ item.unitAmount }}
+                  <td class="text-right col-2">
+                    {{ item.unitAmount.toLocaleString('de-DE', {minimumFractionDigits: 0, maximumFractionDigits: 1}) }}
                   </td>
                   <td class="col-3">
                     {{ item.unit.title }}
                   </td>
-                  <td class="col">
+                  <td class="col-5">
                     {{ item.good ? item.good.title : item.description }}
                   </td>
-                  <td class="col-1">
+                  <td class="col-2 col-lg-1">
                     <b-button
                       variant="light"
                       class="light-icon-button"
