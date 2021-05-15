@@ -45,7 +45,10 @@
                 >
                   Löschen
                 </b-button>
-                <b-button @click="onSaveFreeText">
+                <b-button
+                  type="submit"
+                  @click="onSaveFreeText"
+                >
                   Speichern
                 </b-button>
               </b-button-group>
@@ -83,7 +86,10 @@
               >
                 Löschen
               </b-button>
-              <b-button @click="onSaveIngredient">
+              <b-button
+                type="submit"
+                @click="onSaveIngredient"
+              >
                 Speichern
               </b-button>
             </b-button-group>
@@ -180,6 +186,7 @@ export default {
       this.save(payload);
     },
     onSaveFreeText() {
+      console.log('Test');
       let payload = {
         freeText: {
           description: this.form.description,
