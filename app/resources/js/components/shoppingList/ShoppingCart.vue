@@ -33,12 +33,6 @@
               <b-col>
                 <div class="float-right mb-2">
                   <b-form class="form-inline">
-                    <b-button
-                      class="mr-2"
-                      @click="onNewItem(shoppingList)"
-                    >
-                      <b-icon-plus-circle />
-                    </b-button>
                     <b-button class="mr-2">
                       <b-icon-printer />
                     </b-button>
@@ -64,6 +58,19 @@
                     </b-select>
                   </b-form>
                 </div>
+              </b-col>
+            </b-row>
+          </b-card-body>
+          <b-card-body class="p-0 pb-2">
+            <b-row>
+              <b-col class="text-center">
+                <b-button
+                  variant="primary"
+                  class="mr-2 add-button"
+                  @click="onNewItem(shoppingList)"
+                >
+                  <b-icon-plus-circle /> Neuer Eintrag
+                </b-button>
               </b-col>
             </b-row>
           </b-card-body>

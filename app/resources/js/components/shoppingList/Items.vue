@@ -116,7 +116,11 @@ export default {
             return value;
         }
       }else{
-        return value;
+        if (mode === 'text'){
+          return value;
+        }else{
+          return '';
+        }
       }
     }
   },

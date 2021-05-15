@@ -9,7 +9,7 @@
         title="Freitext"
         active
       >
-        <b-form @submit.prevent="onSave">
+        <b-form @submit.prevent="onSaveFreeText">
           <b-row>
             <b-col cols="4">
               <b-form-group label="Anzahl">
