@@ -20,6 +20,15 @@ export default {
             })
         });
     },
+    deleteItem({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            const itemId = payload.id;
+            axios.delete('/api/shopping-list-items/' + itemId).then(res => {
+                commit('deleteItem', {id: itemId});
+                resolve();
+            });
+        })
+    },
     editItem({commit}, payload) {
         return new Promise((resolve, reject) => {
             let data = {};

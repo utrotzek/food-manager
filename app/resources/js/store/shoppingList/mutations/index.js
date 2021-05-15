@@ -62,5 +62,10 @@ export default {
         state.items[index].descriptionAmount = item.descriptionAmount;
         state.items[index].description = item.description;
         state.items[index].shopping_list_id = shoppingListId;
+    },
+    deleteItem(state, payload){
+        const itemId = payload.id;
+        const index = state.items.findIndex(el => el.id === itemId);
+        state.items.splice(index,1);
     }
 }
