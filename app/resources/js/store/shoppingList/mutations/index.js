@@ -47,5 +47,20 @@ export default {
                 shopping_list_id: shoppingListId
             })
         })
+     },
+    updateItem(state, payload){
+        const shoppingListId = payload.shopping_list_id;
+        const item = payload.item;
+        const index = state.items.findIndex(el => el.id === item.id);
+
+        state.items[index].id = item.id;
+        state.items[index].date = item.date !== null ? dayjs(item.date) : DUMMY_DATE;
+        state.items[index].unit = item.unit;
+        state.items[index].unitAmount = item.unitAmount;
+        state.items[index].good = item.good;
+        state.items[index].recipe_id = item.recipe_id;
+        state.items[index].descriptionAmount = item.descriptionAmount;
+        state.items[index].description = item.description;
+        state.items[index].shopping_list_id = shoppingListId;
     }
 }

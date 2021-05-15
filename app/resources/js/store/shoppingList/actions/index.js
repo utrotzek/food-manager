@@ -20,7 +20,38 @@ export default {
             })
         });
     },
-    addItem({commit}, payload){
+    editItem({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            let data = {};
+            const itemId = payload.id;
+            if (payload.ingredient){
+                data = {
+                    good_id: payload.ingredient.goodId,
+                    unit_id: payload.ingredient.unitId,
+                    unit_amount: payload.ingredient.amount,
+                    shopping_list_id: payload.shoppingListId
+                }
+            }else if (payload.freeText){
+                data = {
+                    description: payload.freeText.description,
+                    descriptionAmount: payload.freeText.descriptionAmount,
+                    shopping_list_id: payload.shoppingListId
+                }
+            }else{
+                reject('Wrong payload. Ingredient or freeText must be defined');
+            }
+
+            axios.put('/api/shopping-list-items/' + itemId, data).then(res => {
+                const commitData = {
+                    shopping_list_id: payload.shoppingListId,
+                    item: res.data.item
+                }
+                commit('updateItem', commitData)
+                resolve();
+            });
+        })
+    },
+    addItem({commit}, payload) {
         return new Promise((resolve, reject) => {
             let data = {};
             if (payload.ingredient){

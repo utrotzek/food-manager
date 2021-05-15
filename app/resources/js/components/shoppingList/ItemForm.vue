@@ -7,7 +7,7 @@
     >
       <b-tab
         title="Freitext"
-        active
+        :active="modeFreeText"
       >
         <b-form @submit.prevent="onSaveFreeText">
           <b-row>
@@ -46,10 +46,16 @@
           </b-row>
         </b-form>
       </b-tab>
-      <b-tab title="Lebensmittel">
+      <b-tab
+        title="Lebensmittel"
+        :active="modeIngredient"
+      >
         <b-row>
           <b-col>
             <IngredientsSingleEdit
+              :amount="form.ingredient.amount"
+              :good-id="form.ingredient.goodId"
+              :unit-id="form.ingredient.unitId"
               @changed="onItemChange"
             />
           </b-col>
@@ -84,20 +90,54 @@ export default {
     shoppingList: {
       type: Object,
       required: true
+    },
+    item: {
+      type: Object,
+      default() {
+        return null;
+      }
     }
   },
   data(){
     return {
       form: {
-        item: null,
+        ingredient: {
+          goodId: null,
+          unitId: null,
+          amount: null
+        },
         description: null,
         descriptionAmount: null
+      },
+      editMode: false
+    }
+  },
+  computed: {
+    modeFreeText() {
+      return this.form.description !== null;
+    },
+    modeIngredient() {
+      return this.form.ingredient.goodId !== null;
+    }
+  },
+  created() {
+    if (this.item) {
+      if (this.item.good){
+        this.form.ingredient = {
+          goodId: this.item.good.id,
+          unitId: this.item.unit.id,
+          amount: this.item.unitAmount
+        }
+      } else {
+        this.form.description = this.item.description;
+        this.form.descriptionAmount = this.item.descriptionAmount;
       }
+      this.editMode =  true;
     }
   },
   methods: {
     onItemChange(changeData) {
-      this.form.item = {
+      this.form.ingredient = {
         goodId: changeData.data.goodId,
         unitId: changeData.data.unitId,
         amount: changeData.data.amount,
@@ -106,15 +146,13 @@ export default {
     onSaveIngredient() {
       let payload = {
         ingredient: {
-          goodId: this.form.item.goodId,
-          unitId: this.form.item.unitId,
-          amount: this.form.item.amount,
+          goodId: this.form.ingredient.goodId,
+          unitId: this.form.ingredient.unitId,
+          amount: this.form.ingredient.amount,
         },
         shoppingListId: this.shoppingList.id
       };
-      this.$store.dispatch('shoppingList/addItem', payload).then(() => {
-        this.$emit('saved');
-      });
+      this.save(payload);
     },
     onSaveFreeText() {
       let payload = {
@@ -124,9 +162,19 @@ export default {
         },
         shoppingListId: this.shoppingList.id
       }
-      this.$store.dispatch('shoppingList/addItem', payload).then(() => {
-        this.$emit('saved');
-      });
+      this.save(payload);
+    },
+    save(payload){
+      if (!this.editMode){
+        this.$store.dispatch('shoppingList/addItem', payload).then(() => {
+          this.$emit('saved');
+        });
+      }else {
+        payload['id'] = this.item.id;
+        this.$store.dispatch('shoppingList/editItem', payload).then(() => {
+          this.$emit('saved');
+        });
+      }
     },
     onAbort() {
       this.$emit('aborted');

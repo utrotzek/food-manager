@@ -56,13 +56,24 @@ class ShoppingListItemRepository extends BaseRepository implements ShoppingListI
         array $attributes
     ): ShoppingListItem {
         $shoppingListItem->fill($attributes);
-        $shoppingListItem->unit()->associate($unit);
         $shoppingListItem->shoppingList()->associate($shoppingList);
+
+        if ($unit) {
+            $shoppingListItem->unit()->associate($unit);
+        } else {
+            $shoppingListItem->unit()->disassociate();
+        }
+
         if ($dayPlan) {
             $shoppingListItem->dayPlan()->associate($dayPlan);
+        } else {
+            $shoppingListItem->dayPlan()->disassociate();
         }
+
         if ($good) {
             $shoppingListItem->good()->associate($good);
+        } else {
+            $shoppingListItem->good()->disassociate();
         }
         $shoppingListItem->save();
         return $shoppingListItem->fresh();

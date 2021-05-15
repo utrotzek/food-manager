@@ -69,6 +69,7 @@
                     <b-button
                       variant="light"
                       class="light-icon-button"
+                      @click="onEditItem(item)"
                     >
                       <b-icon-pen />
                     </b-button>
@@ -91,11 +92,26 @@
         </b-alert>
       </div>
     </div>
+
+    <b-modal
+      id="edit-item-modal"
+      ref="edit-item-modal"
+      title="Eintrag bearbeiten"
+      hide-footer
+    >
+      <ItemForm
+        :item="editItem"
+        :shopping-list="shoppingList"
+        @saved="closeEditModal"
+        @aborted="closeEditModal"
+      />
+    </b-modal>
   </div>
 </template>
 
 <script>
 import {SHOPPING_LIST_SORTING, DUMMY_DATE, DUMMY_GOOD_GROUP} from "../../constants/shoppingListConstants";
+import ItemForm from "./ItemForm";
 
 export default {
   name: "ShoppingListItems",
@@ -124,6 +140,9 @@ export default {
       }
     }
   },
+  components: {
+    ItemForm
+  },
   props: {
     shoppingList: {
       type: Object,
@@ -134,7 +153,8 @@ export default {
     return {
       loaded: false,
       itemsPerGroup: 20,
-      renderKey: 0
+      renderKey: 0,
+      editItem: null
     }
   },
   computed: {
@@ -159,6 +179,14 @@ export default {
     })
   },
   methods: {
+    onEditItem(item) {
+      this.editItem = item;
+      this.$refs['edit-item-modal'].show();
+    },
+    closeEditModal(){
+      this.editItem = null;
+      this.$refs['edit-item-modal'].hide();
+    },
     itemsForGroup(group) {
       let items = [];
       switch (this.$store.state.app.shoppingList.sorting) {
