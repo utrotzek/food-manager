@@ -21,6 +21,7 @@ class ShoppingListItemResource extends JsonResource
             'good' => new GoodResource($this->good),
             'recipe_id' => $this->dayPlan->recipe->id ?? null,
             'shopping_list_id' => $this->shopping_list_id,
+            'descriptionAmount' => $this->descriptionAmount,
             'description' => $this->description,
             'date' => $this->dayPlan->day->date ?? null
         ];

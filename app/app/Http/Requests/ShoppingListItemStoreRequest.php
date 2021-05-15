@@ -25,10 +25,11 @@ class ShoppingListItemStoreRequest extends FormRequest
     {
         return [
             'good_id' => 'nullable|int|exists:App\Models\Good,id',
-            'day_plan_id' => 'int|exists:App\Models\DayPlan,id',
-            'unit_id' => 'int|exists:App\Models\Unit,id',
-            'unit_amount' => 'required|numeric',
+            'day_plan_id' => 'nullable|int|exists:App\Models\DayPlan,id',
+            'unit_id' => 'nullable|int|exists:App\Models\Unit,id',
+            'unit_amount' => 'numeric',
             'shopping_list_id' => 'required|exists:App\Models\ShoppingList,id',
+            'descriptionAmount' => 'nullable|string',
             'description' => 'nullable|string'
         ];
     }

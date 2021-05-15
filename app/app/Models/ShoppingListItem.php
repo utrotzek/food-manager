@@ -10,7 +10,7 @@ class ShoppingListItem extends Model
 {
     use HasFactory;
 
-    public $fillable = ['unit_amount', 'description'];
+    public $fillable = ['unit_amount', 'description', 'descriptionAmount'];
 
     public function unit(): belongsTo
     {

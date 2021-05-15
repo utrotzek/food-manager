@@ -23,7 +23,14 @@ class ShoppingListItemSeeder extends Seeder
         $shoppingListTwo = ShoppingList::find(2);
 
         ShoppingListItem::factory()
-            ->count(35)
+            ->count(30)
+            ->for($shoppingListOne)
+            ->create()
+        ;
+
+        ShoppingListItem::factory()
+            ->freeText()
+            ->count(8)
             ->for($shoppingListOne)
             ->create()
         ;

@@ -31,4 +31,16 @@ class ShoppingListItemFactory extends Factory
             'day_plan_id' => DayPlan::all()->random()->id
         ];
     }
+
+    public function freeText() {
+        return $this->state(function (array $attributes){
+            return [
+                'descriptionAmount' => $this->faker->randomFloat(2, 1, 500). " ".$this->faker->text('5'),
+                'unit_id' => null,
+                'good_id' => null,
+                'day_plan_id' => null,
+                'description' => $this->faker->text(40)
+            ];
+        });
+    }
 }

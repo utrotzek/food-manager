@@ -42,6 +42,7 @@ export default {
                 unitAmount: el.unitAmount,
                 good: el.good,
                 recipe_id: el.recipe_id,
+                descriptionAmount: el.descriptionAmount,
                 description: el.description,
                 shopping_list_id: shoppingListId
             })

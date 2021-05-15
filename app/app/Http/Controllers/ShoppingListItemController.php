@@ -61,7 +61,7 @@ class ShoppingListItemController extends Controller
         $good = $request->input('good_id') ? $this->goodRepository->findByIdOrSlug($request->input('good_id')) : null;
         $dayPlan = $request->input('day_plan_id') ? $this->dayPlanRepository->findById($request->input('day_plan_id')) : null;
 
-        $unit = $this->unitRepository->findByIdOrSlug($request->input('unit_id'));
+        $unit = $request->input('good_id') ? $this->unitRepository->findByIdOrSlug($request->input('unit_id')) : null;
         $shoppingList = $this->shoppingListRepository->findById($request->input('shopping_list_id'));
 
         $newItem = $this->shoppingListItemRepository->createForShoppingList(
@@ -69,7 +69,7 @@ class ShoppingListItemController extends Controller
             $good,
             $unit,
             $dayPlan,
-            $request->only(['description',  'unit_amount'])
+            $request->only(['descriptionAmount', 'description',  'unit_amount'])
         );
         return new Response([
             'message' => sprintf('Shopping list item "%1$s" successfully created', $newItem),

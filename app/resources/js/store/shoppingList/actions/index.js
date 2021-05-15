@@ -22,13 +22,24 @@ export default {
     },
     addItem({commit}, payload){
         return new Promise((resolve, reject) => {
-            const data = {
-                good_id: payload.goodId,
-                unit_id: payload.unitId,
-                unit_amount: payload.amount,
-                description: payload.description,
-                shopping_list_id: payload.shoppingListId
+            let data = {};
+            if (payload.ingredient){
+                data = {
+                    good_id: payload.ingredient.goodId,
+                    unit_id: payload.ingredient.unitId,
+                    unit_amount: payload.ingredient.amount,
+                    shopping_list_id: payload.shoppingListId
+                }
+            }else if (payload.freeText){
+                data = {
+                    description: payload.freeText.description,
+                    descriptionAmount: payload.freeText.descriptionAmount,
+                    shopping_list_id: payload.shoppingListId
+                }
+            }else{
+                reject('Wrong payload. Ingredient or freeText must be defined');
             }
+
             axios.post('/api/shopping-list-items', data).then(res => {
                 const commitData = {
                     shopping_list_id: payload.shoppingListId,

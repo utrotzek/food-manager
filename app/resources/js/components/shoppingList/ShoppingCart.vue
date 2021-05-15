@@ -77,13 +77,12 @@
         id="new-item-modal"
         ref="new-item-modal"
         title="Neuer Eintrag für den Einkaufszettel"
-        cancel-title="Abbrechen"
-        ok-title="Speichern"
-        @ok="onSave"
+        hide-footer
       >
-        <IngredientsSingleEdit
-          free-text
-          @changed="onItemChange"
+        <ItemForm
+          :shopping-list="form.newItemShoppingList"
+          @saved="closeModal"
+          @aborted="closeModal"
         />
       </b-modal>
     </div>
@@ -93,17 +92,17 @@
 <script>
 import Items from "./Items";
 import {SHOPPING_LIST_SORTING} from "../../constants/shoppingListConstants"
-import IngredientsSingleEdit from "../recipe/IngredientsSingleEdit";
+import ItemForm from "./ItemForm";
 
 export default {
   name: "ShoppingCart",
-  components: {Items, IngredientsSingleEdit},
+  components: {Items, ItemForm},
   data() {
     return {
       loaded: false,
       form: {
         sorted: null,
-        shoppingItem: null,
+        newItemShoppingList: null
       }
     }
   },
@@ -121,29 +120,14 @@ export default {
     onSortingChange() {
       this.$store.dispatch('app/updateShoppingListSorting', {sorting: this.form.sorted});
     },
-    onItemChange(changeData) {
-      this.form.shoppingItem = {
-        goodId: changeData.data.goodId,
-        unitId: changeData.data.unitId,
-        amount: changeData.data.amount,
-        description: changeData.data.description,
-        shoppingListId: this.form.shoppingItem.shoppingListId
-      }
-    },
     onNewItem(shoppingList) {
-      this.form.shoppingItem = {shoppingListId: shoppingList.id};
+      this.form.newItemShoppingList = shoppingList;
       this.$refs['new-item-modal'].show();
     },
-    onSave() {
-      const data = {
-       goodId: this.form.shoppingItem.goodId,
-       unitId: this.form.shoppingItem.unitId,
-       amount: this.form.shoppingItem.amount,
-       description: this.form.shoppingItem.description,
-       shoppingListId: this.form.shoppingItem.shoppingListId
-      }
-      this.$store.dispatch('shoppingList/addItem', data);
-    }
+    closeModal(){
+      this.form.newItemShoppingList = null;
+      this.$refs['new-item-modal'].hide();
+    },
   }
 }
 </script>

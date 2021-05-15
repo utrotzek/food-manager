@@ -29,14 +29,41 @@
                   :key="group.key + '-' + item.id"
                   class="d-flex"
                 >
-                  <td class="text-right col-2">
+                  <td
+                    v-if="item.good"
+                    class="text-right col-2"
+                  >
                     {{ item.unitAmount.toLocaleString('de-DE', {minimumFractionDigits: 0, maximumFractionDigits: 1}) }}
                   </td>
-                  <td class="col-3">
+                  <td
+                    v-if="item.good"
+                    class="col-3"
+                  >
                     {{ item.unit.title }}
                   </td>
-                  <td class="col-5">
-                    {{ item.good ? item.good.title : item.description }}
+                  <td
+                    v-if="item.good"
+                    class="col-5"
+                  >
+                    {{ item.good.title }}
+                  </td>
+                  <td
+                    v-if="!item.good"
+                    class="col-2 text-right"
+                  >
+                    {{ item.descriptionAmount | unitFreeText('unit') }}
+                  </td>
+                  <td
+                    v-if="!item.good"
+                    class="col-3"
+                  >
+                    {{ item.descriptionAmount | unitFreeText('text') }}
+                  </td>
+                  <td
+                    v-if="!item.good"
+                    class="col-5"
+                  >
+                    {{ item.description }}
                   </td>
                   <td class="col-2 col-lg-1">
                     <b-button
@@ -72,6 +99,27 @@ import {SHOPPING_LIST_SORTING, DUMMY_DATE, DUMMY_GOOD_GROUP} from "../../constan
 
 export default {
   name: "ShoppingListItems",
+  filters: {
+    unitFreeText: function (value, mode){
+      if (!value) return '';
+      value = value.toString().trim();
+      //extract amount (number at the beginning of the string)
+      const matches = value.match(/^(?:\s+)?([\d\.\,]+)(.*)/);
+
+      if (matches) {
+        switch (mode){
+          case 'unit':
+            return matches[1].trim();
+          case 'text':
+            return matches[2].trim();
+          default:
+            return value;
+        }
+      }else{
+        return value;
+      }
+    }
+  },
   props: {
     shoppingList: {
       type: Object,
