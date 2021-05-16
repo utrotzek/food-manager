@@ -189,12 +189,6 @@ export default {
   mounted() {
     this.$store.dispatch('shoppingList/fetchItems', {shopping_list_id: this.shoppingList.id}).then(res => {
       this.loaded = true;
-
-      if (this.printView) {
-        Vue.nextTick(() => {
-          window.print();
-        })
-      }
     })
   },
   methods: {
@@ -313,35 +307,37 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import '../../../../node_modules/bootstrap/scss/_functions.scss';
-@import '../../../../node_modules/bootstrap/scss/_variables.scss';
-@import '../../../../node_modules/bootstrap/scss/_mixins.scss';
-
-.card-columns {
-  @include media-breakpoint-up(xs) {
-    column-count: 1;
-  }
-  @include media-breakpoint-up(lg) {
-    column-count: 2;
-  }
-}
-
-.card-body {
-  padding: 0;
-}
-
-.table th, .table td {
-  padding: 0.3rem;
-}
-</style>
-
-<style media="print">
-  body {
-    color: black !important;
-    font-size: 14pt !important;
-  }
+  @import '../../../../node_modules/bootstrap/scss/_functions.scss';
+  @import '../../../../node_modules/bootstrap/scss/_variables.scss';
+  @import '../../../../node_modules/bootstrap/scss/_mixins.scss';
 
   .card-columns {
-    column-count: 2 !important;
+    @include media-breakpoint-up(xs) {
+      column-count: 1;
+    }
+    @include media-breakpoint-up(lg) {
+      column-count: 2;
+    }
+  }
+
+  .card-body {
+    padding: 0;
+  }
+
+  .table th, .table td {
+    padding: 0.3rem;
+  }
+</style>
+
+<style>
+  @media print {
+    body {
+      color: black !important;
+      font-size: 14pt !important;
+    }
+
+    .card-columns {
+      column-count: 2 !important;
+    }
   }
 </style>

@@ -24,15 +24,28 @@ export default {
   components: {LayoutDefaultDynamic, Items},
   data() {
     return {
-      shoppingListId: null,
       shoppingList: null,
       loaded: false
     }
   },
+  watch: {
+    '$route.params': {
+      handler(newValue) {
+        const { id } = newValue
+        this.loadShoppingList(id);
+      },
+      immediate: true,
+    }
+  },
   mounted() {
-    this.shoppingListId = parseInt(this.$route.params.id);
-    this.shoppingList = this.$store.getters["shoppingList/shoppingListForId"](this.shoppingListId);
+    const id = parseInt(this.$route.params.id);
+    this.loadShoppingList(id);
     this.loaded = true;
+  },
+  methods: {
+    loadShoppingList(id) {
+      this.shoppingList = this.$store.getters["shoppingList/shoppingListForId"](id);
+    }
   }
 }
 </script>
