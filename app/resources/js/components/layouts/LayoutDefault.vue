@@ -50,7 +50,6 @@
                 variant="link"
                 class="icon-button"
                 size="lg"
-                :disabled="shoppingCartItems === 0"
               >
                 <b-icon-cart />
                 <b-badge>{{ shoppingCartItems }}</b-badge>

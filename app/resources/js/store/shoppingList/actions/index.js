@@ -24,6 +24,16 @@ export default {
             })
         });
     },
+    deleteList({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            const listId = payload.id;
+            axios.delete('/api/shopping-lists/' + listId).then(() => {
+                const commitData = {id: listId};
+                commit('deleteList', commitData);
+                resolve();
+            });
+        });
+    },
     editList({commit}, payload) {
         return new Promise((resolve, reject) => {
             const data = {title: payload.title};

@@ -2,91 +2,101 @@
   <div class="shopping-list">
     <h1>Einkauszettel</h1>
     <div v-if="loaded">
-      <b-card
-        v-for="shoppingList in $store.state.shoppingList.shoppingLists"
-        :key="shoppingList.id"
-        no-body
-        class="mb-1"
-      >
-        <b-card-header
-          header-tag="header"
-          class="p-1"
-          role="tab"
+      <div v-if="$store.state.shoppingList.shoppingLists.length > 0">
+        <b-card
+          v-for="shoppingList in $store.state.shoppingList.shoppingLists"
+          :key="shoppingList.id"
+          no-body
+          class="mb-1"
         >
-          <b-button
-            v-b-toggle="'collapse-' + shoppingList.id"
-            block
-            variant="dark"
+          <b-card-header
+            header-tag="header"
+            class="p-1"
+            role="tab"
           >
-            {{ shoppingList.title }}
-            <b-badge>{{ shoppingList.items }}</b-badge>
-          </b-button>
-        </b-card-header>
-        <b-collapse
-          :id="'collapse-' + shoppingList.id"
-          visible
-          accordion="shopping-list"
-          role="tabpanel"
+            <b-button
+              v-b-toggle="'collapse-' + shoppingList.id"
+              block
+              variant="dark"
+            >
+              {{ shoppingList.title }}
+              <b-badge>{{ shoppingList.items }}</b-badge>
+            </b-button>
+          </b-card-header>
+          <b-collapse
+            :id="'collapse-' + shoppingList.id"
+            visible
+            accordion="shopping-list"
+            role="tabpanel"
+          >
+            <b-card-body>
+              <b-row class="mb-1">
+                <b-col class="float-left">
+                  <b-button class="mr-1">
+                    <b-icon-pen @click="onEditList(shoppingList)" />
+                  </b-button>
+                  <b-button class="mr-1">
+                    <b-icon-trash @click="onDeleteList(shoppingList)" />
+                  </b-button>
+                  <b-button>
+                    <b-icon-printer />
+                  </b-button>
+                </b-col>
+                <b-col>
+                  <div class="float-right">
+                    <b-form inline>
+                      <label
+                        class="mr-1"
+                        for="group-by"
+                      >Gruppierung</label>
+                      <b-select
+                        id="group-by"
+                        v-model="form.sorted"
+                        class="mr-1"
+                        @change="onSortingChange"
+                      >
+                        <b-select-option :value="SHOPPING_LIST_SORTING.TITLE">
+                          Alphabetisch
+                        </b-select-option>
+                        <b-select-option :value="SHOPPING_LIST_SORTING.GOOD_GROUP">
+                          Warengruppen
+                        </b-select-option>
+                        <b-select-option :value="SHOPPING_LIST_SORTING.DATE">
+                          Datum
+                        </b-select-option>
+                      </b-select>
+                    </b-form>
+                  </div>
+                </b-col>
+              </b-row>
+            </b-card-body>
+            <b-card-body class="p-0 pb-2">
+              <b-row>
+                <b-col class="text-center">
+                  <b-button
+                    variant="primary"
+                    class="mr-2 add-button"
+                    @click="onNewItem(shoppingList)"
+                  >
+                    <b-icon-plus-circle /> Neuer Eintrag
+                  </b-button>
+                </b-col>
+              </b-row>
+            </b-card-body>
+            <b-card-body>
+              <Items :shopping-list="shoppingList" />
+            </b-card-body>
+          </b-collapse>
+        </b-card>
+      </div>
+      <div v-else>
+        <b-alert
+          variant="info"
+          show
         >
-          <b-card-body>
-            <b-row class="mb-1">
-              <b-col class="float-left">
-                <b-button class="mr-1">
-                  <b-icon-pen @click="onEditList(shoppingList)" />
-                </b-button>
-                <b-button class="mr-1">
-                  <b-icon-trash />
-                </b-button>
-                <b-button>
-                  <b-icon-printer />
-                </b-button>
-              </b-col>
-              <b-col>
-                <div class="float-right">
-                  <b-form inline>
-                    <label
-                      class="mr-1"
-                      for="group-by"
-                    >Gruppierung</label>
-                    <b-select
-                      id="group-by"
-                      v-model="form.sorted"
-                      class="mr-1"
-                      @change="onSortingChange"
-                    >
-                      <b-select-option :value="SHOPPING_LIST_SORTING.TITLE">
-                        Alphabetisch
-                      </b-select-option>
-                      <b-select-option :value="SHOPPING_LIST_SORTING.GOOD_GROUP">
-                        Warengruppen
-                      </b-select-option>
-                      <b-select-option :value="SHOPPING_LIST_SORTING.DATE">
-                        Datum
-                      </b-select-option>
-                    </b-select>
-                  </b-form>
-                </div>
-              </b-col>
-            </b-row>
-          </b-card-body>
-          <b-card-body class="p-0 pb-2">
-            <b-row>
-              <b-col class="text-center">
-                <b-button
-                  variant="primary"
-                  class="mr-2 add-button"
-                  @click="onNewItem(shoppingList)"
-                >
-                  <b-icon-plus-circle /> Neuer Eintrag
-                </b-button>
-              </b-col>
-            </b-row>
-          </b-card-body>
-          <b-card-body>
-            <Items :shopping-list="shoppingList" />
-          </b-card-body>
-        </b-collapse>
-      </b-card>
+          Es keine Einkaufslisten vorhanden. Bitte legen Sie zuerst eine Liste an.
+        </b-alert>
+      </div>
 
       <b-modal
         id="new-item-modal"
@@ -127,6 +137,24 @@
         @save="closeShoppingListForm"
       />
     </b-modal>
+
+    <b-modal
+      id="delete-shopping-list-modal"
+      ref="delete-shopping-list-modal"
+      title="Liste löschen?"
+      ok-title="Löschen"
+      cancel-title="Abbrechen"
+      ok-variant="danger"
+      @ok="onDeleteListConfirm"
+      @cancel="closeDeleteListModal"
+    >
+      <p v-if="form.deleteShoppingList">
+        Wollen Sie die Einkaufsliste <b>{{ form.deleteShoppingList.title }}</b> wirklich löschen?
+      </p>
+      <p v-if="form.deleteShoppingList && form.deleteShoppingList.items > 0">
+        Alle <b>{{ form.deleteShoppingList.items }}</b> vernüpften Einträge werden ebenfalls gelöscht und sind nicht wiederherstellbar.
+      </p>
+    </b-modal>
   </div>
 </template>
 
@@ -145,7 +173,8 @@ export default {
       form: {
         sorted: null,
         newItemShoppingList: null,
-        editShoppingList: null
+        editShoppingList: null,
+        deleteShoppingList: null
       }
     }
   },
@@ -160,6 +189,19 @@ export default {
     this.$store.dispatch('recipe/fetchIngredientItems');
   },
   methods: {
+    onDeleteList(shoppingList) {
+      this.form.deleteShoppingList = shoppingList;
+      this.$refs['delete-shopping-list-modal'].show();
+    },
+    onDeleteListConfirm() {
+      this.$store.dispatch('shoppingList/deleteList', {id: this.form.deleteShoppingList.id}).then(() => {
+        this.closeDeleteListModal();
+      })
+    },
+    closeDeleteListModal() {
+      this.form.deleteShoppingList = null;
+      this.$refs['delete-shopping-list-modal'].hide();
+    },
     onEditList(shoppingList) {
       this.form.editShoppingList = shoppingList;
       this.$refs['shopping-list-modal'].show();
