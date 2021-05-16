@@ -107,6 +107,27 @@ export default {
             });
         })
     },
+    moveItem({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            const shoppingListId = payload.shoppingList.id;
+            const oldShoppingListId = payload.item.shopping_list_id;
+            const itemId = payload.item.id;
+            const data = {
+                id: itemId,
+                shopping_list_id: shoppingListId
+            };
+
+            axios.put('/api/shopping-list-items/move/' + itemId, data).then(res => {
+                const commitData = {
+                    shopping_list_id: shoppingListId,
+                    old_shopping_list_id: oldShoppingListId,
+                    item: res.data.item
+                }
+                commit('moveItem', commitData)
+                resolve();
+            });
+        });
+    },
     addItem({commit}, payload) {
         return new Promise((resolve, reject) => {
             let data = {};

@@ -78,4 +78,12 @@ class ShoppingListItemRepository extends BaseRepository implements ShoppingListI
         $shoppingListItem->save();
         return $shoppingListItem->fresh();
     }
+
+    public function moveToShoppingList(ShoppingListItem $shoppingListItem, ShoppingList $shoppingList): ShoppingListItem
+    {
+        $shoppingListItem->shoppingList()->disassociate();
+        $shoppingListItem->shoppingList()->associate($shoppingList);
+        $shoppingListItem->save();
+        return $shoppingListItem->fresh();
+    }
 }

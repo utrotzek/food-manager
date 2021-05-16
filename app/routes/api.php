@@ -36,6 +36,8 @@ Route::post('/recipes/validate/{recipe?}', [RecipeController::class, 'validateRe
 Route::put('/recipes/flags/{recipe}', [RecipeController::class, 'flags']);
 Route::get('/recipes/remembered', [RecipeController::class, 'remembered']);
 
+Route::put('/shopping-list-items/move/{shopping_list_item}', [ShoppingListItemController::class, 'move']);
+
 Route::apiResources([
     'app-states' => AppStateController::class,
     'days' => DayController::class,

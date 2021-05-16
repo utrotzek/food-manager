@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ShoppingListItemStoreRequest;
 use App\Http\Resources\ShoppingListItemResource;
-use App\Models\ShoppingList;
 use App\Models\ShoppingListItem;
 use App\Repositories\DayPlanRepository;
 use App\Repositories\GoodRepository;
@@ -107,6 +106,16 @@ class ShoppingListItemController extends Controller
 
         return new Response([
             'message' => sprintf('Shopping list "%1$s" successfully updated', $updatedItem),
+            'item' => new ShoppingListItemResource($updatedItem)
+        ]);
+    }
+
+    public function move(Request $request, ShoppingListItem $shoppingListItem): Response
+    {
+        $shoppingList = $this->shoppingListRepository->findById($request->input('shopping_list_id'));
+        $updatedItem = $this->shoppingListItemRepository->moveToShoppingList($shoppingListItem, $shoppingList);
+        return new Response([
+            'message' => sprintf('Shopping list "%1$s" successfully moved', $updatedItem),
             'item' => new ShoppingListItemResource($updatedItem)
         ]);
     }

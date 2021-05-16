@@ -85,7 +85,9 @@
                       <b-dropdown-item @click="onEditItem(item)">
                         <b-icon-pen />Bearbeiten
                       </b-dropdown-item>
-                      <b-dropdown-item><b-icon-arrows-move />Verschieben</b-dropdown-item>
+                      <b-dropdown-item @click="onMoveItem(item)">
+                        <b-icon-arrows-move />Verschieben
+                      </b-dropdown-item>
                       <b-dropdown-item @click="onDeleteItem(item)">
                         <b-icon-trash /> Löschen
                       </b-dropdown-item>
@@ -135,12 +137,26 @@
     >
       <p>Soll der Eintrag wirklich gelöscht werden?</p>
     </b-modal>
+
+    <b-modal
+      id="list-selector-modal"
+      ref="list-selector-modal"
+      title="Eintrag verschieben"
+      hide-footer
+    >
+      <ShoppingListSelector
+        :item="moveItem"
+        @abort="closeMoveModal"
+        @save="closeMoveModal"
+      />
+    </b-modal>
   </div>
 </template>
 
 <script>
 import {SHOPPING_LIST_SORTING, DUMMY_DATE, DUMMY_GOOD_GROUP} from "../../constants/shoppingListConstants";
 import ItemForm from "./ItemForm";
+import ShoppingListSelector from "./ShoppingListSelector";
 
 export default {
   name: "ShoppingListItems",
@@ -170,7 +186,8 @@ export default {
     }
   },
   components: {
-    ItemForm
+    ItemForm,
+    ShoppingListSelector
   },
   props: {
     shoppingList: {
@@ -188,7 +205,8 @@ export default {
       itemsPerGroup: 20,
       renderKey: 0,
       editItem: null,
-      deleteItem: null
+      deleteItem: null,
+      moveItem: null
     }
   },
   computed: {
@@ -218,13 +236,20 @@ export default {
       this.$refs['edit-item-modal'].show();
     },
     closeEditModal(){
-      this.editItem = null;
       this.$refs['edit-item-modal'].hide();
+      this.editItem = null;
     },
     onDeleteItem(item){
-      console.log('test');
       this.deleteItem = item;
       this.$refs['modal-confirm-delete'].show();
+    },
+    onMoveItem(item) {
+      this.moveItem = item;
+      this.$refs['list-selector-modal'].show();
+    },
+    closeMoveModal() {
+      this.$refs['list-selector-modal'].hide();
+      this.moveItem = null;
     },
     onDeleteConfirm() {
       const payload = {

@@ -58,6 +58,18 @@ export default {
             })
         })
      },
+    moveItem(state, payload) {
+        const item = payload.item;
+        const newShoppingListId = payload.shopping_list_id;
+        const oldShoppingListId = payload.old_shopping_list_id;
+        const newShoppingListIndex = state.shoppingLists.findIndex(el => el.id === newShoppingListId);
+        const oldShoppingListIndex = state.shoppingLists.findIndex(el => el.id === oldShoppingListId);
+        const itemIndex = state.items.findIndex(el => el.id === item.id);
+
+        state.items[itemIndex].shopping_list_id = newShoppingListId;
+        state.shoppingLists[newShoppingListIndex].items++;
+        state.shoppingLists[oldShoppingListIndex].items--;
+    },
     updateItem(state, payload){
         const shoppingListId = payload.shopping_list_id;
         const item = payload.item;
