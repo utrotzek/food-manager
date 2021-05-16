@@ -29,17 +29,25 @@
           role="tabpanel"
         >
           <b-card-body>
-            <b-row>
+            <b-row class="mb-1">
+              <b-col class="float-left">
+                <b-button class="mr-1">
+                  <b-icon-pen />
+                </b-button>
+                <b-button class="mr-1">
+                  <b-icon-trash />
+                </b-button>
+                <b-button>
+                  <b-icon-printer />
+                </b-button>
+              </b-col>
               <b-col>
-                <div class="float-right mb-2">
-                  <b-form class="form-inline">
-                    <b-button class="mr-2">
-                      <b-icon-printer />
-                    </b-button>
+                <div class="float-right">
+                  <b-form inline>
                     <label
                       class="mr-1"
                       for="group-by"
-                    >Sortierung</label>
+                    >Gruppierung</label>
                     <b-select
                       id="group-by"
                       v-model="form.sorted"
