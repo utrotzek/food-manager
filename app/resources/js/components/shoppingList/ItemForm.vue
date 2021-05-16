@@ -2,7 +2,6 @@
   <div class="shopping-list-item-form">
     <b-tabs
       content-class="mt-3"
-      pills
       justified
     >
       <b-tab
@@ -34,11 +33,13 @@
               <b-button-group>
                 <b-button
                   class="mr-2"
+                  variant="secondary"
                   @click="onAbort"
                 >
                   Abbrechen
                 </b-button>
                 <b-button
+                  v-if="editMode"
                   v-b-modal:modal-confirm-delete
                   class="mr-2"
                   variant="danger"
@@ -47,6 +48,7 @@
                 </b-button>
                 <b-button
                   type="submit"
+                  variant="primary"
                   @click="onSaveFreeText"
                 >
                   Speichern
@@ -75,11 +77,13 @@
             <b-button-group>
               <b-button
                 class="mr-2"
+                variant="secondary"
                 @click="onAbort"
               >
                 Abbrechen
               </b-button>
               <b-button
+                v-if="editMode"
                 v-b-modal:modal-confirm-delete
                 class="mr-2"
                 variant="danger"
@@ -88,6 +92,7 @@
               </b-button>
               <b-button
                 type="submit"
+                variant="primary"
                 @click="onSaveIngredient"
               >
                 Speichern
