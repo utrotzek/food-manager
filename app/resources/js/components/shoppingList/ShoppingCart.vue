@@ -33,10 +33,10 @@
               <b-row class="mb-1">
                 <b-col class="float-left">
                   <b-button class="mr-1">
-                    <b-icon-pen @click="onEditList(shoppingList)" />
+                    <b-icon-check @click="onDoneList(shoppingList)" />
                   </b-button>
                   <b-button class="mr-1">
-                    <b-icon-check @click="onDoneList(shoppingList)" />
+                    <b-icon-pen @click="onEditList(shoppingList)" />
                   </b-button>
                   <b-button>
                     <b-icon-printer @click="$emit('print', shoppingList)" />
@@ -128,7 +128,7 @@
     <b-modal
       id="shopping-list-modal"
       ref="shopping-list-modal"
-      title="Neuen Einkaufszettel anlegen"
+      :title="shoppingListModalTitle"
       hide-footer
     >
       <ShoppingListForm
@@ -177,6 +177,13 @@ export default {
   computed: {
     SHOPPING_LIST_SORTING() {
       return SHOPPING_LIST_SORTING;
+    },
+    shoppingListModalTitle() {
+      if (this.form.editShoppingList) {
+        return "Einkaufsliste bearbeiten";
+      }else{
+        return "Neue Einkaufsliste anlegen";
+      }
     }
   },
   mounted() {
@@ -218,6 +225,7 @@ export default {
       this.$refs['new-item-modal'].hide();
     },
     closeShoppingListForm() {
+      this.form.editShoppingList = null;
       this.$refs['shopping-list-modal'].hide();
     }
   }
