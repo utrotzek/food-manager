@@ -52,6 +52,11 @@ export default {
     }
   },
   mounted() {
+    this.form.options.push({
+      value: null,
+      text: "-- Liste auswählen --"
+    });
+
     this.$store.state.shoppingList.shoppingLists.forEach(el => {
       if (el.id !== this.item.shopping_list_id){
         this.form.options.push({
@@ -63,14 +68,16 @@ export default {
   },
   methods: {
     onSave() {
-      const shoppingList = this.$store.getters["shoppingList/shoppingListForId"](this.form.selectedList);
-      const data = {
-        item: this.item,
-        shoppingList: shoppingList
-      };
-      this.$store.dispatch('shoppingList/moveItem', data).then(() => {
-        this.$emit('save');
-      })
+      if (this.form.selectedList !== null) {
+        const shoppingList = this.$store.getters["shoppingList/shoppingListForId"](this.form.selectedList);
+        const data = {
+          item: this.item,
+          shoppingList: shoppingList
+        };
+        this.$store.dispatch('shoppingList/moveItem', data).then(() => {
+          this.$emit('save');
+        })
+      }
     },
     onAbort() {
       this.$emit('abort');
