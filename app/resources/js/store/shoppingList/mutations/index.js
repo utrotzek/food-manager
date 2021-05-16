@@ -22,7 +22,7 @@ export default {
     },
     deleteList(state, payload) {
         const index = state.shoppingLists.findIndex(el => el.id === payload.id);
-        state.shoppingLists.splice(index);
+        state.shoppingLists.splice(index, 1);
     },
     storeItemsForList(state, payload) {
         const shoppingListId = payload.shopping_list_id;
@@ -36,7 +36,7 @@ export default {
                     return el.shopping_list_id === shoppingListId
                 });
                 if (deleteIndex > -1){
-                    state.items.splice(deleteIndex);
+                    state.items.splice(deleteIndex, 1);
                 }
             }while (deleteIndex > -1)
             state.shoppingLists[shoppingListIndex].items = payload.items.length;

@@ -36,7 +36,7 @@
                     <b-icon-pen @click="onEditList(shoppingList)" />
                   </b-button>
                   <b-button class="mr-1">
-                    <b-icon-trash @click="onDeleteList(shoppingList)" />
+                    <b-icon-check @click="onDoneList(shoppingList)" />
                   </b-button>
                   <b-button>
                     <b-icon-printer />
@@ -139,20 +139,16 @@
     </b-modal>
 
     <b-modal
-      id="delete-shopping-list-modal"
-      ref="delete-shopping-list-modal"
-      title="Liste löschen?"
-      ok-title="Löschen"
+      id="done-shopping-list-modal"
+      ref="done-shopping-list-modal"
+      title="Liste abschließen?"
+      ok-title="Fertig"
       cancel-title="Abbrechen"
-      ok-variant="danger"
-      @ok="onDeleteListConfirm"
-      @cancel="closeDeleteListModal"
+      @ok="onDoneListConfirm"
+      @cancel="closeDoneListModal"
     >
-      <p v-if="form.deleteShoppingList">
-        Wollen Sie die Einkaufsliste <b>{{ form.deleteShoppingList.title }}</b> wirklich löschen?
-      </p>
-      <p v-if="form.deleteShoppingList && form.deleteShoppingList.items > 0">
-        Alle <b>{{ form.deleteShoppingList.items }}</b> vernüpften Einträge werden ebenfalls gelöscht und sind nicht wiederherstellbar.
+      <p v-if="form.doneShoppingList">
+        Wollen Sie die Einkaufsliste <b>{{ form.doneShoppingList.title }}</b> wirklich abschließen?
       </p>
     </b-modal>
   </div>
@@ -174,7 +170,7 @@ export default {
         sorted: null,
         newItemShoppingList: null,
         editShoppingList: null,
-        deleteShoppingList: null
+        doneShoppingList: null
       }
     }
   },
@@ -189,18 +185,18 @@ export default {
     this.$store.dispatch('recipe/fetchIngredientItems');
   },
   methods: {
-    onDeleteList(shoppingList) {
-      this.form.deleteShoppingList = shoppingList;
-      this.$refs['delete-shopping-list-modal'].show();
+    onDoneList(shoppingList) {
+      this.form.doneShoppingList = shoppingList;
+      this.$refs['done-shopping-list-modal'].show();
     },
-    onDeleteListConfirm() {
-      this.$store.dispatch('shoppingList/deleteList', {id: this.form.deleteShoppingList.id}).then(() => {
-        this.closeDeleteListModal();
+    onDoneListConfirm() {
+      this.$store.dispatch('shoppingList/listDone', {shoppingList: this.form.doneShoppingList}).then(() => {
+        this.closeDoneListModal();
       })
     },
-    closeDeleteListModal() {
-      this.form.deleteShoppingList = null;
-      this.$refs['delete-shopping-list-modal'].hide();
+    closeDoneListModal() {
+      this.form.doneShoppingList = null;
+      this.$refs['done-shopping-list-modal'].hide();
     },
     onEditList(shoppingList) {
       this.form.editShoppingList = shoppingList;

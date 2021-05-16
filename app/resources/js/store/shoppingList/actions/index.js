@@ -24,11 +24,15 @@ export default {
             })
         });
     },
-    deleteList({commit}, payload) {
+    listDone({commit}, payload) {
         return new Promise((resolve, reject) => {
-            const listId = payload.id;
-            axios.delete('/api/shopping-lists/' + listId).then(() => {
-                const commitData = {id: listId};
+            const id = payload.shoppingList.id;
+            const updateData = {
+                title: payload.shoppingList.title,
+                done: true
+            }
+            axios.put('/api/shopping-lists/' + id, updateData).then(() => {
+                const commitData = {id: id};
                 commit('deleteList', commitData);
                 resolve();
             });
