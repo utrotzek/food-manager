@@ -30,6 +30,12 @@
                   class="d-flex"
                 >
                   <td
+                    v-if="printView"
+                    class="col-2 col-lg-1 text-center"
+                  >
+                    <b-icon-square />
+                  </td>
+                  <td
                     v-if="item.good"
                     class="text-right col-2"
                   >
@@ -65,7 +71,10 @@
                   >
                     {{ item.description }}
                   </td>
-                  <td class="col-2 col-lg-1">
+                  <td
+                    v-if="!printView"
+                    class="col-2 col-lg-1"
+                  >
                     <b-button
                       variant="light"
                       class="light-icon-button"
@@ -147,6 +156,10 @@ export default {
     shoppingList: {
       type: Object,
       required: true
+    },
+    printView: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -176,6 +189,12 @@ export default {
   mounted() {
     this.$store.dispatch('shoppingList/fetchItems', {shopping_list_id: this.shoppingList.id}).then(res => {
       this.loaded = true;
+
+      if (this.printView) {
+        Vue.nextTick(() => {
+          window.print();
+        })
+      }
     })
   },
   methods: {
@@ -314,4 +333,15 @@ export default {
 .table th, .table td {
   padding: 0.3rem;
 }
+</style>
+
+<style media="print">
+  body {
+    color: black !important;
+    font-size: 14pt !important;
+  }
+
+  .card-columns {
+    column-count: 2 !important;
+  }
 </style>

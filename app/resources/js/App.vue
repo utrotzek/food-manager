@@ -1,6 +1,9 @@
 <template>
   <component :is="layout">
-    <router-view :layout.sync="layout" />
+    <router-view
+      v-if="loaded"
+      :layout.sync="layout"
+    />
   </component>
 </template>
 
@@ -12,7 +15,8 @@ export default {
   name: "App",
   data() {
       return {
-          layout: LayoutDefault,
+        layout: LayoutDefault,
+        loaded: false
       };
   },
   async mounted() {
@@ -23,7 +27,7 @@ export default {
     await rememberedHandle;
     await shoppingListHandle;
     await appStateHandle;
-    this.loading = false;
+    this.loaded = true;
   },
   methods: {
       start() {

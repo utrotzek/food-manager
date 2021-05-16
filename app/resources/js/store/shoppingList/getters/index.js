@@ -6,6 +6,9 @@ export default  {
         });
         return overallCount;
     },
+    shoppingListForId: (state) => (listId) => {
+        return state.shoppingLists.find(el => el.id === listId);
+    },
     itemsForShoppingList: (state) => (shoppingId) => {
         return state.items.filter(el => el.shopping_list_id === shoppingId);
     }

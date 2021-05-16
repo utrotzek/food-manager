@@ -85,7 +85,7 @@
         size="xl"
         hide-footer
       >
-        <ShoppingCart />
+        <ShoppingCart @print="onPrintShoppingList" />
       </b-modal>
     </div>
   </div>
@@ -111,6 +111,12 @@ export default {
     }
   },
   mounted() {
+  },
+  methods: {
+    onPrintShoppingList(shoppingList) {
+      this.$refs['modal-shopping-cart'].hide();
+      this.$router.push({name: 'print-shoppling-list', params: {id: shoppingList.id}})
+    }
   }
 }
 </script>

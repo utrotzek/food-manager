@@ -39,7 +39,7 @@
                     <b-icon-check @click="onDoneList(shoppingList)" />
                   </b-button>
                   <b-button>
-                    <b-icon-printer />
+                    <b-icon-printer @click="$emit('print', shoppingList)" />
                   </b-button>
                 </b-col>
                 <b-col>
