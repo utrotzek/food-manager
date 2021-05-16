@@ -93,6 +93,31 @@
         />
       </b-modal>
     </div>
+
+    <b-row class="mt-3">
+      <b-col class="text-center">
+        <b-button
+          v-b-modal:new-shopping-list-modal
+          class="light-icon-button"
+          variant="light"
+        >
+          <b-icon-plus-square />
+          Neuer Einkaufszettel
+        </b-button>
+      </b-col>
+    </b-row>
+
+    <b-modal
+      id="new-shopping-list-modal"
+      ref="new-shopping-list-modal"
+      title="Neuen Einkaufszettel anlegen"
+      hide-footer
+    >
+      <ShoppingListForm
+        @abort="closeShoppingListForm"
+        @save="closeShoppingListForm"
+      />
+    </b-modal>
   </div>
 </template>
 
@@ -100,10 +125,11 @@
 import Items from "./Items";
 import {SHOPPING_LIST_SORTING} from "../../constants/shoppingListConstants"
 import ItemForm from "./ItemForm";
+import ShoppingListForm from "./ShoppingListForm";
 
 export default {
   name: "ShoppingCart",
-  components: {Items, ItemForm},
+  components: {Items, ItemForm, ShoppingListForm},
   data() {
     return {
       loaded: false,
@@ -135,6 +161,9 @@ export default {
       this.form.newItemShoppingList = null;
       this.$refs['new-item-modal'].hide();
     },
+    closeShoppingListForm() {
+      this.$refs['new-shopping-list-modal'].hide();
+    }
   }
 }
 </script>

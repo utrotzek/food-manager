@@ -2,10 +2,27 @@ export default {
     fetchShoppingLists({commit}) {
         return new Promise((resolve, reject) => {
             axios.get('/api/shopping-lists', {params: {active: 1}}).then(res => {
-                commit('storeLists', {shoppingLists: res.data})
+                const commitData = {
+                    shoppingLists: res.data,
+                    clearExisting: true
+                }
+                commit('storeLists', commitData)
                 resolve();
             });
         })
+    },
+    addNewList({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            const data = {title: payload.title};
+            axios.post('/api/shopping-lists', data).then(res => {
+                const commitData = {
+                    shoppingLists: [res.data.item],
+                    clearExisting: false
+                }
+                commit('storeLists', commitData)
+                resolve();
+            })
+        });
     },
     fetchItems({commit}, payload) {
         return new Promise((resolve, reject) => {

@@ -3,7 +3,9 @@ import {DUMMY_DATE} from '../../../constants/shoppingListConstants';
 
 export default {
     storeLists(state, payload){
-        state.shoppingLists = [];
+        if (payload.clearExisting) {
+            state.shoppingLists = [];
+        }
         payload.shoppingLists.forEach(el => {
             state.shoppingLists.push({
                 id: el.id,

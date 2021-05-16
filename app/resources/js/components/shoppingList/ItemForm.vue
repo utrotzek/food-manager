@@ -49,7 +49,6 @@
                 <b-button
                   type="submit"
                   variant="primary"
-                  @click="onSaveFreeText"
                 >
                   Speichern
                 </b-button>
