@@ -76,7 +76,7 @@
                     class="col-2 col-lg-1"
                   >
                     <b-dropdown
-                      class="m-md-2 edit-dropdown"
+                      class="edit-dropdown"
                       variant="light"
                     >
                       <template #button-content>
