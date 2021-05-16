@@ -217,7 +217,8 @@ export default {
     },
     onDelete() {
       const payload = {
-        id: this.item.id
+        id: this.item.id,
+        shoppingListId: this.shoppingList.id
       };
       this.$store.dispatch('shoppingList/deleteItem', payload).then(() => {
         this.$emit('saved');

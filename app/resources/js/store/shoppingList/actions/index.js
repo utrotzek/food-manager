@@ -63,7 +63,11 @@ export default {
         return new Promise((resolve, reject) => {
             const itemId = payload.id;
             axios.delete('/api/shopping-list-items/' + itemId).then(res => {
-                commit('deleteItem', {id: itemId});
+                const commitData =  {
+                    id: itemId,
+                    shoppingListId: payload.shoppingListId
+                }
+                commit('deleteItem', commitData);
                 resolve();
             });
         })
