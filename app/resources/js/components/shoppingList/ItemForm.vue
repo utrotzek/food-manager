@@ -39,14 +39,6 @@
                   Abbrechen
                 </b-button>
                 <b-button
-                  v-if="editMode"
-                  v-b-modal:modal-confirm-delete
-                  class="mr-2"
-                  variant="danger"
-                >
-                  Löschen
-                </b-button>
-                <b-button
                   type="submit"
                   variant="primary"
                 >
@@ -82,14 +74,6 @@
                 Abbrechen
               </b-button>
               <b-button
-                v-if="editMode"
-                v-b-modal:modal-confirm-delete
-                class="mr-2"
-                variant="danger"
-              >
-                Löschen
-              </b-button>
-              <b-button
                 type="submit"
                 variant="primary"
                 @click="onSaveIngredient"
@@ -101,17 +85,6 @@
         </b-row>
       </b-tab>
     </b-tabs>
-    <b-modal
-      id="modal-confirm-delete"
-      ref="modal-confirm-delete"
-      ok-title="Löschen"
-      cancel-title="Abbrechen"
-      ok-variant="danger"
-      title="Bestätigung"
-      @ok="onDelete"
-    >
-      <p>Soll der Eintrag wirklich gelöscht werden?</p>
-    </b-modal>
   </div>
 </template>
 
@@ -214,15 +187,6 @@ export default {
     },
     onAbort() {
       this.$emit('aborted');
-    },
-    onDelete() {
-      const payload = {
-        id: this.item.id,
-        shoppingListId: this.shoppingList.id
-      };
-      this.$store.dispatch('shoppingList/deleteItem', payload).then(() => {
-        this.$emit('saved');
-      });
     }
   }
 }

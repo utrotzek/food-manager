@@ -75,13 +75,21 @@
                     v-if="!printView"
                     class="col-2 col-lg-1"
                   >
-                    <b-button
+                    <b-dropdown
+                      class="m-md-2 edit-dropdown"
                       variant="light"
-                      class="light-icon-button"
-                      @click="onEditItem(item)"
                     >
-                      <b-icon-pen />
-                    </b-button>
+                      <template #button-content>
+                        <b-icon-three-dots />
+                      </template>
+                      <b-dropdown-item @click="onEditItem(item)">
+                        <b-icon-pen />Bearbeiten
+                      </b-dropdown-item>
+                      <b-dropdown-item><b-icon-arrows-move />Verschieben</b-dropdown-item>
+                      <b-dropdown-item @click="onDeleteItem(item)">
+                        <b-icon-trash /> Löschen
+                      </b-dropdown-item>
+                    </b-dropdown>
                   </td>
                 </tr>
               </tbody>
@@ -114,6 +122,18 @@
         @saved="closeEditModal"
         @aborted="closeEditModal"
       />
+    </b-modal>
+
+    <b-modal
+      id="modal-confirm-delete"
+      ref="modal-confirm-delete"
+      ok-title="Löschen"
+      cancel-title="Abbrechen"
+      ok-variant="danger"
+      title="Bestätigung"
+      @ok="onDeleteConfirm"
+    >
+      <p>Soll der Eintrag wirklich gelöscht werden?</p>
     </b-modal>
   </div>
 </template>
@@ -167,7 +187,8 @@ export default {
       loaded: false,
       itemsPerGroup: 20,
       renderKey: 0,
-      editItem: null
+      editItem: null,
+      deleteItem: null
     }
   },
   computed: {
@@ -199,6 +220,21 @@ export default {
     closeEditModal(){
       this.editItem = null;
       this.$refs['edit-item-modal'].hide();
+    },
+    onDeleteItem(item){
+      console.log('test');
+      this.deleteItem = item;
+      this.$refs['modal-confirm-delete'].show();
+    },
+    onDeleteConfirm() {
+      const payload = {
+        id: this.deleteItem.id,
+        shoppingListId: this.shoppingList.id
+      };
+      this.$store.dispatch('shoppingList/deleteItem', payload).then(() => {
+        this.deleteItem = null;
+        this.$refs['modal-confirm-delete'].hide();
+      });
     },
     itemsForGroup(group) {
       let items = [];
@@ -330,6 +366,10 @@ export default {
 </style>
 
 <style>
+  .edit-dropdown .dropdown-toggle::after {
+    content: none !important;
+  }
+
   @media print {
     body {
       color: black !important;
