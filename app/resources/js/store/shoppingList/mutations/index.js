@@ -16,6 +16,10 @@ export default {
             })
         })
     },
+    updateList(state, payload) {
+        const index = state.shoppingLists.findIndex(el => el.id === payload.item.id);
+        state.shoppingLists[index].title = payload.item.title;
+    },
     storeItemsForList(state, payload) {
         const shoppingListId = payload.shopping_list_id;
         const shoppingListIndex = state.shoppingLists.findIndex(el => el.id === shoppingListId);

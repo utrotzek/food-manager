@@ -32,7 +32,7 @@
             <b-row class="mb-1">
               <b-col class="float-left">
                 <b-button class="mr-1">
-                  <b-icon-pen />
+                  <b-icon-pen @click="onEditList(shoppingList)" />
                 </b-button>
                 <b-button class="mr-1">
                   <b-icon-trash />
@@ -105,7 +105,7 @@
     <b-row class="mt-3">
       <b-col class="text-center">
         <b-button
-          v-b-modal:new-shopping-list-modal
+          v-b-modal:shopping-list-modal
           class="light-icon-button"
           variant="light"
         >
@@ -116,12 +116,13 @@
     </b-row>
 
     <b-modal
-      id="new-shopping-list-modal"
-      ref="new-shopping-list-modal"
+      id="shopping-list-modal"
+      ref="shopping-list-modal"
       title="Neuen Einkaufszettel anlegen"
       hide-footer
     >
       <ShoppingListForm
+        :shopping-list="form.editShoppingList"
         @abort="closeShoppingListForm"
         @save="closeShoppingListForm"
       />
@@ -143,7 +144,8 @@ export default {
       loaded: false,
       form: {
         sorted: null,
-        newItemShoppingList: null
+        newItemShoppingList: null,
+        editShoppingList: null
       }
     }
   },
@@ -158,6 +160,14 @@ export default {
     this.$store.dispatch('recipe/fetchIngredientItems');
   },
   methods: {
+    onEditList(shoppingList) {
+      this.form.editShoppingList = shoppingList;
+      this.$refs['shopping-list-modal'].show();
+    },
+    onCloseEditList() {
+      this.form.editShoppingList = null;
+      this.$refs['shopping-list-modal'].hide();
+    },
     onSortingChange() {
       this.$store.dispatch('app/updateShoppingListSorting', {sorting: this.form.sorted});
     },
@@ -170,7 +180,7 @@ export default {
       this.$refs['new-item-modal'].hide();
     },
     closeShoppingListForm() {
-      this.$refs['new-shopping-list-modal'].hide();
+      this.$refs['shopping-list-modal'].hide();
     }
   }
 }

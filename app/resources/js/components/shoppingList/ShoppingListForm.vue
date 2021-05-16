@@ -37,18 +37,43 @@
 <script>
 export default {
   name: "ShoppingListForm",
+  props: {
+    shoppingList: {
+      type: Object,
+      default() {
+        return null;
+      }
+    }
+  },
   data() {
     return {
       form: {
         title: null
-      }
+      },
+      editMode: false
+    }
+  },
+  created() {
+    if (this.shoppingList !== null) {
+      this.form.title = this.shoppingList.title;
+      this.editMode = true;
     }
   },
   methods: {
     onSave() {
-      this.$store.dispatch('shoppingList/addNewList', {title: this.form.title}).then(() => {
-        this.$emit('save');
-      })
+      if (!this.editMode) {
+        this.$store.dispatch('shoppingList/addNewList', {title: this.form.title}).then(() => {
+          this.$emit('save');
+        })
+      }else{
+        const editData =  {
+          title: this.form.title,
+          id: this.shoppingList.id
+        }
+        this.$store.dispatch('shoppingList/editList', editData).then(() => {
+          this.$emit('save', );
+        })
+      }
     }
   }
 }

@@ -24,6 +24,18 @@ export default {
             })
         });
     },
+    editList({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            const data = {title: payload.title};
+            axios.put('/api/shopping-lists/' + payload.id, data).then(res => {
+                const commitData = {
+                    item: res.data.item
+                }
+                commit('updateList', commitData)
+                resolve();
+            })
+        });
+    },
     fetchItems({commit}, payload) {
         return new Promise((resolve, reject) => {
             axios.get('/api/shopping-list-items', {params: {shopping_list_id: payload.shopping_list_id}}).then(res => {
