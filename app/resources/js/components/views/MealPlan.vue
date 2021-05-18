@@ -33,6 +33,20 @@
           </b-row>
         </b-col>
       </b-row>
+      <b-row
+        v-if="pastDays.length > 0"
+        class="mt-1 mb-1 text-right"
+      >
+        <b-col>
+          <toggle-button
+            v-model="showPastDays"
+            :width="150"
+            :font-size="15"
+            :labels="{checked: 'Vergangene Tage', unchecked: 'Vergangene Tage'}"
+            sync
+          />
+        </b-col>
+      </b-row>
       <b-row no-gutters>
         <b-col
           cols="12"
@@ -44,7 +58,7 @@
           >
             <b-row>
               <b-col
-                v-for="day in $store.state.meal.days"
+                v-for="day in activeDays"
                 :key="day.id"
                 cols="12"
               >
@@ -101,10 +115,22 @@ export default {
     return {
       loaded: false,
       recipes: null,
-      mounted: false
+      mounted: false,
+      showPastDays: false
     }
   },
   computed: {
+    pastDays() {
+      return this.$store.state.meal.days.filter(el => this.dayIsPast(el));
+    },
+    activeDays(){
+      const activeDays = this.$store.state.meal.days.filter(el => !this.dayIsPast(el));
+      if (this.showPastDays) {
+        return this.pastDays.concat(activeDays);
+      }
+
+      return activeDays;
+    },
     rememberTop() {
       if (this.$refs.remember){
         return this.$refs.remember.getBoundingClientRect().top;
@@ -164,6 +190,9 @@ export default {
     },
     onAssign(recipe){
       this.$store.commit('meal/enableRecipeAssignMode', {recipe: recipe});
+    },
+    dayIsPast(day) {
+      return day.date.isBefore(this.$dayjs(), 'day');
     }
   }
 }
