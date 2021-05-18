@@ -30,29 +30,60 @@
             role="tabpanel"
           >
             <b-card-body>
-              <b-row class="mb-1">
-                <b-col class="float-left">
-                  <b-button class="mr-1">
-                    <b-icon-check @click="onDoneList(shoppingList)" />
-                  </b-button>
-                  <b-button class="mr-1">
-                    <b-icon-pen @click="onEditList(shoppingList)" />
-                  </b-button>
-                  <b-button>
-                    <b-icon-printer @click="$emit('print', shoppingList)" />
-                  </b-button>
+              <b-row
+                class="mb-1"
+                no-gutters
+              >
+                <b-col
+                  class="float-left"
+                  cols="3"
+                  md="6"
+                >
+                  <div class="d-none d-md-block">
+                    <b-button class="mr-1">
+                      <b-icon-check @click="onDoneList(shoppingList)" />
+                    </b-button>
+                    <b-button class="mr-1">
+                      <b-icon-pen @click="onEditList(shoppingList)" />
+                    </b-button>
+                    <b-button>
+                      <b-icon-printer @click="$emit('print', shoppingList)" />
+                    </b-button>
+                  </div>
+                  <div class="d-block d-md-none">
+                    <b-button variant="primary">
+                      <b-icon-plus-circle /> Neu
+                    </b-button>
+                  </div>
                 </b-col>
-                <b-col>
+                <b-col
+                  cols="9"
+                  md="6"
+                >
                   <div class="float-right">
                     <b-form inline>
+                      <b-dropdown
+                        text="Menü"
+                        class="m-md-2 mr-2 d-inline d-md-none"
+                        variant="outline-dark"
+                      >
+                        <b-dropdown-item-button @click="onDoneList(shoppingList)">
+                          <b-icon-check /> Abschließen
+                        </b-dropdown-item-button>
+                        <b-dropdown-item-button @click="onEditList(shoppingList)">
+                          <b-icon-pen /> Bearbeiten
+                        </b-dropdown-item-button>
+                        <b-dropdown-item-button @click="$emit('print', shoppingList)">
+                          <b-icon-printer /> Drucken
+                        </b-dropdown-item-button>
+                      </b-dropdown>
+
                       <label
-                        class="mr-1"
-                        for="group-by"
+                        class="mr-1 d-none d-md-inline"
                       >Gruppierung</label>
                       <b-select
-                        id="group-by"
                         v-model="form.sorted"
-                        class="mr-1"
+                        class="mr-1 group-by"
                         @change="onSortingChange"
                       >
                         <b-select-option :value="SHOPPING_LIST_SORTING.TITLE">
@@ -70,11 +101,11 @@
                 </b-col>
               </b-row>
             </b-card-body>
-            <b-card-body class="p-0 pb-2">
+            <b-card-body class="p-0 pb-2 d-none d-md-block">
               <b-row>
                 <b-col class="text-center">
                   <b-button
-                    variant="primary"
+                    variant="light"
                     class="mr-2 add-button"
                     @click="onNewItem(shoppingList)"
                   >
@@ -233,5 +264,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .group-by {
+    width: 10em;
+  }
 </style>
