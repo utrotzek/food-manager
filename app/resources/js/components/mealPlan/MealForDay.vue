@@ -2,7 +2,7 @@
   <div class="meal">
     <b-row>
       <b-col>
-        <h4 class="card-title">
+        <h4 class="card-title meal-title">
           {{ meal.title }}
         </h4>
       </b-col>
@@ -21,10 +21,7 @@
         </div>
       </b-col>
     </b-row>
-    <b-row
-      v-if="!day.done"
-      class="mt-3 mb-3"
-    >
+    <b-row v-if="!day.done">
       <b-col class="text-center">
         <b-button
           v-if="!$store.state.meal.assign.enabled && !$store.state.meal.movePlan.enabled && !isPast"
@@ -293,5 +290,10 @@ export default {
     border-radius: 25px;
     width: 15em;
     height: 3em;
+  }
+
+  .meal-title {
+    font-size: 1.2rem;
+    font-weight: 400;
   }
 </style>

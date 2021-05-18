@@ -163,7 +163,6 @@ export default {
       this.save(payload);
     },
     onSaveFreeText() {
-      console.log('Test');
       let payload = {
         freeText: {
           description: this.form.description,

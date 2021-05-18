@@ -27,7 +27,7 @@
           {{ plan.portion }} Portionen
         </div>
       </div>
-      <div class="card-footer">
+      <div class="card-footer plan-menu">
         <b-button-group
           v-if="day.done"
           class="button-group-full-width"
@@ -157,10 +157,6 @@ export default {
     font-size:1.2em;
   }
 
-  .plan-item .card {
-    height: 9em;
-  }
-
   .plan-item .card .card-footer,
   .plan-item .card .card-footer .btn {
     border: 0;
@@ -175,5 +171,9 @@ export default {
   .card {
     background-color: $recipe-warning;
     color: $black;
+  }
+
+  .plan-menu {
+    padding: 0 0 0.4rem 0;
   }
 </style>

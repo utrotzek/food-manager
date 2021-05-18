@@ -82,15 +82,15 @@
                       <template #button-content>
                         <b-icon-three-dots />
                       </template>
-                      <b-dropdown-item @click="onEditItem(item)">
-                        <b-icon-pen />Bearbeiten
-                      </b-dropdown-item>
-                      <b-dropdown-item @click="onMoveItem(item)">
-                        <b-icon-arrows-move />Verschieben
-                      </b-dropdown-item>
-                      <b-dropdown-item @click="onDeleteItem(item)">
+                      <b-dropdown-item-button @click="onEditItem(item)">
+                        <b-icon-pen /> Bearbeiten
+                      </b-dropdown-item-button>
+                      <b-dropdown-item-button @click="onMoveItem(item)">
+                        <b-icon-arrows-move /> Verschieben
+                      </b-dropdown-item-button>
+                      <b-dropdown-item-button @click="onDeleteItem(item)">
                         <b-icon-trash /> Löschen
-                      </b-dropdown-item>
+                      </b-dropdown-item-button>
                     </b-dropdown>
                   </td>
                 </tr>
@@ -346,7 +346,6 @@ export default {
           }
         }else{
           const foundIndex = dates.findIndex(elFind => elFind.date.isSame(DUMMY_DATE, 'day'));
-          console.log(foundIndex);
           if (foundIndex === -1){
             dates.push({
               id:  DUMMY_DATE.format('DDMMYYYY'),

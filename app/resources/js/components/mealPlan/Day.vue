@@ -1,10 +1,10 @@
 <template>
   <div class="day">
-    <b-row>
+    <b-row no-gutters>
       <b-col
         cols="12"
         md="2"
-        class="d-none d-md-block"
+        class="d-none d-md-block pr-md-2"
       >
         <div class="card bg-light">
           <div class="card-header">
