@@ -1,5 +1,7 @@
 <template>
   <div class="LayoutDefault">
+    <Breakpoints v-model="breakpoints" />
+
     <div class="container-fluid h-100">
       <b-navbar toggleable="lg">
         <b-navbar-brand
@@ -94,12 +96,20 @@
 <script>
 import RememberList from "../recipe/RememberList";
 import ShoppingCart from "../shoppingList/ShoppingCart";
+import Breakpoints from "../tools/Breakpoints";
 export default {
   name: "LayoutDefault",
-  components: {RememberList, ShoppingCart},
+  components: {RememberList, ShoppingCart, Breakpoints},
   data() {
     return {
-      loading: true
+      loading: true,
+      breakpoints: {
+        isXs: false,
+        isSm: false,
+        isMd: false,
+        isLg: false,
+        isXl: false,
+      }
     }
   },
   computed: {
@@ -108,6 +118,14 @@ export default {
     },
     shoppingCartItems() {
       return this.$store.getters['shoppingList/allItemCount'];
+    }
+  },
+  watch: {
+    breakpoints: {
+      deep: true,
+      handler(newBreakpoints) {
+        this.$store.commit('app/updateBreakpoints', newBreakpoints)
+      }
     }
   },
   mounted() {
