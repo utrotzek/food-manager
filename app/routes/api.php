@@ -10,6 +10,8 @@ use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\MealConfigController;
 use App\Http\Controllers\MealController;
 use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\ShoppingListController;
+use App\Http\Controllers\ShoppingListItemController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\UnitController;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +36,8 @@ Route::post('/recipes/validate/{recipe?}', [RecipeController::class, 'validateRe
 Route::put('/recipes/flags/{recipe}', [RecipeController::class, 'flags']);
 Route::get('/recipes/remembered', [RecipeController::class, 'remembered']);
 
+Route::put('/shopping-list-items/move/{shopping_list_item}', [ShoppingListItemController::class, 'move']);
+
 Route::apiResources([
     'app-states' => AppStateController::class,
     'days' => DayController::class,
@@ -45,6 +49,8 @@ Route::apiResources([
     'meals' => MealController::class,
     'meal-config' => MealConfigController::class,
     'recipes' => RecipeController::class,
+    'shopping-lists' => ShoppingListController::class,
+    'shopping-list-items' => ShoppingListItemController::class,
     'tags' => TagController::class,
     'units' => UnitController::class,
 ]);

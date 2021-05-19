@@ -2,7 +2,7 @@
   <div class="meal">
     <b-row>
       <b-col>
-        <h4 class="card-title">
+        <h4 class="card-title meal-title">
           {{ meal.title }}
         </h4>
       </b-col>
@@ -21,10 +21,7 @@
         </div>
       </b-col>
     </b-row>
-    <b-row
-      v-if="!day.done"
-      class="mt-3 mb-3"
-    >
+    <b-row v-if="!day.done">
       <b-col class="text-center">
         <b-button
           v-if="!$store.state.meal.assign.enabled && !$store.state.meal.movePlan.enabled && !isPast"
@@ -133,16 +130,30 @@
         </b-collapse>
       </b-card>
     </b-modal>
+
+    <b-modal
+      id="portion-selector-modal"
+      ref="portion-selector-modal"
+      :title="portionSelectorTitle"
+      @ok="onPortionSelectorSubmit"
+    >
+      <PortionSelector
+        v-if="planToAdd.recipe"
+        v-model="planToAdd.portion"
+        :recipe="planToAdd.recipe"
+      />
+    </b-modal>
   </div>
 </template>
 
 <script>
 import DayPlan from "./DayPlan";
 import RecipeSearch from "../recipe/RecipeSearch";
+import PortionSelector from "./PortionSelector";
 
 export default {
   name: "Meal",
-  components: {DayPlan, RecipeSearch},
+  components: {DayPlan, RecipeSearch, PortionSelector},
   props: {
     meal: {
       type: Object,
@@ -165,8 +176,14 @@ export default {
     return {
       planToAdd: {
         description: null,
-        recipe: null
+        recipe: null,
+        portion: null
       }
+    }
+  },
+  computed: {
+    portionSelectorTitle() {
+      return (this.planToAdd.recipe) ? "Portionen für Rezept " + this.planToAdd.recipe.title + " anpassen" : "";
     }
   },
   mounted() {
@@ -178,13 +195,13 @@ export default {
       });
     },
     onAssignConfirmed(){
-      if (this.$store.state.meal.assign.enabled){
-        const data = {
-          meal: this.meal,
-          day: this.day,
-          recipe: this.$store.state.meal.assign.recipe
-        };
-        this.$store.dispatch('meal/planRecipeForDay', data);
+      if (this.$store.state.meal.assign.enabled) {
+        this.planToAdd = {
+          recipe: this.$store.state.meal.assign.recipe,
+          description: null,
+          portion: this.$store.state.meal.assign.recipe.portion
+        }
+        this.$refs['portion-selector-modal'].show();
       }
 
       if (this.$store.state.meal.movePlan.enabled){
@@ -194,7 +211,13 @@ export default {
           day: this.day,
           recipe: this.$store.state.meal.movePlan.plan.recipe,
         };
-        this.$store.dispatch('meal/movePlanToDay', data);
+
+        const oldDayId = this.$store.state.meal.movePlan.plan.day.id;
+        const newDayId = this.day.id;
+        this.$store.dispatch('meal/movePlanToDay', data).then(res => {
+          this.$store.dispatch('meal/refreshDay', {id: oldDayId})
+          this.$store.dispatch('meal/refreshDay', {id: newDayId})
+        });
       }
     },
     onAddPlan() {
@@ -213,19 +236,28 @@ export default {
       this.$refs['assign-plan-modal'].hide();
     },
     onAddRecipeSubmit(recipe){
+      this.planToAdd.recipe = recipe;
+      this.planToAdd.portion = recipe.portion;
+      this.$refs['assign-plan-modal'].hide();
+      this.$refs['portion-selector-modal'].show();
+    },
+    onPortionSelectorSubmit(){
       const data = {
         meal: this.meal,
         day: this.day,
-        recipe: recipe
+        recipe: this.planToAdd.recipe,
+        portion: this.planToAdd.portion
       }
-      this.$store.dispatch('meal/planRecipeForDay', data);
+      this.$store.dispatch('meal/planRecipeForDay', data).then(res => {
+        this.$store.dispatch('meal/refreshDay', {id: data.day.id})
+      });
       this.clearPlanToAdd();
-      this.$refs['assign-plan-modal'].hide();
     },
     clearPlanToAdd() {
       this.planToAdd = {
         description: null,
-        recipe: null
+        recipe: null,
+        portion: null
       };
     }
   }
@@ -258,5 +290,10 @@ export default {
     border-radius: 25px;
     width: 15em;
     height: 3em;
+  }
+
+  .meal-title {
+    font-size: 1.2rem;
+    font-weight: 400;
   }
 </style>

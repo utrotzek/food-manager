@@ -46,11 +46,12 @@ class DayPlanSeeder extends Seeder
         $recipe = $this->recipeRepository->findByIdOrSlug($recipeSlug);
         $meal = $this->mealRepository->findById($mealId);
 
+        $portion = $recipe['portion'];
         $this->dayPlanRepository->createForDay(
             $today,
             $recipe,
             $meal,
-            ['done' => $done]
+            ['done' => $done, 'added_to_cart' => false, 'portion' => $portion]
         );
     }
 }

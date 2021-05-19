@@ -1,0 +1,9 @@
+@media (min-width: 992px) {
+    .modal-lg, .modal-xl {
+        max-width: 900px !important;
+    }
+}
+
+.card .card-body {
+    padding: 0.5rem;
+}

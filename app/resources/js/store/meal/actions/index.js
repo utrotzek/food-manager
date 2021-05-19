@@ -45,6 +45,14 @@ export default {
             })
         })
     },
+    refreshDay({commit, state}, payload){
+        return new Promise((resolve, reject) => {
+            axios.get('/api/days/' + payload.id).then(res => {
+                commit('updateDay', {day: res.data});
+                resolve();
+            })
+        })
+    },
     updateDayPlan({commit, state}, payload) {
         return new Promise((resolve, reject) => {
             let data = {
@@ -77,6 +85,7 @@ export default {
 
             if (payload.recipe){
                 data['recipe_id'] = payload.recipe.id;
+                data['portion'] = payload.portion;
             }
 
             if (payload.description) {
@@ -120,7 +129,7 @@ export default {
     initializeMealPlanRange({commit, state, rootState}) {
         return new Promise((resolve, reject) => {
             if (!state.mealPlan.range.to || !state.mealPlan.range.from) {
-                switch (rootState.app.state.mealPlanDisplayRange){
+                switch (rootState.app.mealPlanDisplayRange){
                     case "week":
                         commit('updateMealPlanRange', {
                             from: dayjs().startOf('week'),
@@ -147,7 +156,7 @@ export default {
     changeMealPlanRange({commit, state, rootState}, payload){
         return new Promise((resolve, reject) => {
             let changeInterval = 0;
-            switch (rootState.app.state.mealPlanDisplayRange){
+            switch (rootState.app.mealPlanDisplayRange){
                 case "week":
                     changeInterval = 7;
                     break;

@@ -30,6 +30,14 @@ export default {
     allChecked: {
       type: Boolean,
       default: false
+    },
+    portionOriginal: {
+      type: Number,
+      default: null
+    },
+    portionOverride: {
+      type: Number,
+      default: null
     }
   },
   data() {
@@ -42,7 +50,12 @@ export default {
       return (this.checked ? 'success' : 'secondary');
     },
     amount() {
-      return this.ingredient.unit_amount.toString().replace('.', ',');
+      let actualAmount = Number(this.ingredient.unit_amount);
+
+      if (this.portionOverride && this.portionOriginal){
+        actualAmount = actualAmount  / this.portionOriginal * this.portionOverride;
+      }
+      return actualAmount.toString().replace('.', ',');
     }
   },
   watch: {

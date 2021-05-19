@@ -1,6 +1,9 @@
 <template>
   <component :is="layout">
-    <router-view :layout.sync="layout" />
+    <router-view
+      v-if="loaded"
+      :layout.sync="layout"
+    />
   </component>
 </template>
 
@@ -12,8 +15,19 @@ export default {
   name: "App",
   data() {
       return {
-          layout: LayoutDefault,
+        layout: LayoutDefault,
+        loaded: false
       };
+  },
+  async mounted() {
+    const rememberedHandle = this.$store.dispatch('recipe/fetchRemembered')
+    const shoppingListHandle = this.$store.dispatch('shoppingList/fetchShoppingLists');
+    const appStateHandle = this.$store.dispatch('app/initializeAppState');
+
+    await rememberedHandle;
+    await shoppingListHandle;
+    await appStateHandle;
+    this.loaded = true;
   },
   methods: {
       start() {

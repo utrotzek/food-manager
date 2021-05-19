@@ -19,8 +19,15 @@
             {{ planTitle }}
           </span>
         </h4>
+        <div
+          v-if="plan.recipe"
+          class="card-subtitle text-muted"
+        >
+          <b-icon-cart v-if="!plan.addedToCart" />
+          {{ plan.portion }} Portionen
+        </div>
       </div>
-      <div class="card-footer">
+      <div class="card-footer plan-menu">
         <b-button-group
           v-if="day.done"
           class="button-group-full-width"
@@ -48,13 +55,11 @@
           size="sm"
         >
           <b-button
-            v-if="!day.done && !plan.done"
             variant="light"
           >
             <b-icon-arrows-move @click="onMove" />
           </b-button>
           <b-button
-            v-if="!day.done && !plan.done"
             variant="light"
           >
             <b-icon-trash @click="onDelete" />
@@ -71,6 +76,7 @@
     >
       <Recipe
         :recipe-id="plan.recipe.id"
+        :portion-override="plan.portion"
       />
     </b-modal>
   </div>
@@ -80,7 +86,7 @@
 import Recipe from '../views/Recipe';
 
 export default {
-  name: "PlanItem",
+  name: "DayPlan",
   components: {Recipe},
   props: {
     plan: {
@@ -115,7 +121,9 @@ export default {
   },
   methods: {
     onDelete(){
-      this.$store.dispatch('meal/deletePlanItem', {dayPlanId: this.plan.id});
+      this.$store.dispatch('meal/deletePlanItem', {dayPlanId: this.plan.id}).then(res => {
+        this.$store.dispatch('meal/refreshDay', {id: this.plan.day.id})
+      });
     },
     onMove() {
       this.$store.commit('meal/enableRecipeMoveMode', {plan: this.plan});
@@ -129,7 +137,7 @@ export default {
       this.$refs['recipe-details-modal'].show();
     },
     onCookingClick(){
-      this.$router.push({name: 'recipe', params: {id: this.plan.recipe.id, cooking: true}});
+      this.$router.push({name: 'recipe', params: {id: this.plan.recipe.id, cooking: true, portion: this.plan.portion}});
     }
   }
 }
@@ -149,10 +157,6 @@ export default {
     font-size:1.2em;
   }
 
-  .plan-item .card {
-    height: 8em;
-  }
-
   .plan-item .card .card-footer,
   .plan-item .card .card-footer .btn {
     border: 0;
@@ -167,5 +171,9 @@ export default {
   .card {
     background-color: $recipe-warning;
     color: $black;
+  }
+
+  .plan-menu {
+    padding: 0 0 0.4rem 0;
   }
 </style>

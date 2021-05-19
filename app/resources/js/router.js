@@ -4,6 +4,7 @@ import Recipes from "./components/views/Recipes";
 import Recipe from "./components/views/Recipe";
 import RecipeForm from "./components/views/RecipeForm";
 import MealPlan from "./components/views/MealPlan";
+import ShoppingListPrint from "./components/views/ShoppingListPrint";
 
 const router = new VueRouter({
     mode: "history",
@@ -21,7 +22,7 @@ const router = new VueRouter({
             component: Recipes
         },
         {
-            path: "/recipe/:id/:cooking?",
+            path: "/recipe/:id/:cooking?/:portion?",
             name: "recipe",
             component: Recipe
         },
@@ -34,6 +35,11 @@ const router = new VueRouter({
             path: "/meal-plan",
             name: "meal-plan",
             component: MealPlan
+        },
+        {
+            path: "/print-shopping-list/:id",
+            name: "print-shoppling-list",
+            component: ShoppingListPrint
         }
     ],
     scrollBehavior (to, from, savedPosition) {

@@ -1,5 +1,7 @@
 <template>
   <div class="LayoutDefault">
+    <Breakpoints v-model="breakpoints" />
+
     <div class="container-fluid h-100">
       <b-navbar toggleable="lg">
         <b-navbar-brand
@@ -46,12 +48,13 @@
                 </b-badge>
               </b-button>
               <b-button
+                v-b-modal:modal-shopping-cart
                 variant="link"
                 class="icon-button"
                 size="lg"
               >
                 <b-icon-cart />
-                <b-badge>9</b-badge>
+                <b-badge>{{ shoppingCartItems }}</b-badge>
               </b-button>
             </b-button-group>
           </b-nav-item>
@@ -78,29 +81,60 @@
           assign-disabled
         />
       </b-modal>
+      <b-modal
+        id="modal-shopping-cart"
+        ref="modal-shopping-cart"
+        size="xl"
+        hide-footer
+      >
+        <ShoppingCart @print="onPrintShoppingList" />
+      </b-modal>
     </div>
   </div>
 </template>
 
 <script>
 import RememberList from "../recipe/RememberList";
+import ShoppingCart from "../shoppingList/ShoppingCart";
+import Breakpoints from "../tools/Breakpoints";
 export default {
   name: "LayoutDefault",
-  components: {RememberList},
+  components: {RememberList, ShoppingCart, Breakpoints},
   data() {
     return {
-      loading: true
+      loading: true,
+      breakpoints: {
+        isXs: false,
+        isSm: false,
+        isMd: false,
+        isLg: false,
+        isXl: false,
+      }
     }
   },
   computed: {
     rememberList() {
       return this.$store.state.recipe.recipeRemembered;
+    },
+    shoppingCartItems() {
+      return this.$store.getters['shoppingList/allItemCount'];
+    }
+  },
+  watch: {
+    breakpoints: {
+      deep: true,
+      handler(newBreakpoints) {
+        this.$store.commit('app/updateBreakpoints', newBreakpoints)
+      }
     }
   },
   mounted() {
-    this.$store.dispatch('recipe/fetchRemembered').finally(() => {
-      this.loading = false;
-    })
+  },
+  methods: {
+    onPrintShoppingList(shoppingList) {
+      this.$refs['modal-shopping-cart'].hide();
+      this.$router.push({name: 'print-shoppling-list', params: {id: shoppingList.id}})
+    }
   }
 }
 </script>

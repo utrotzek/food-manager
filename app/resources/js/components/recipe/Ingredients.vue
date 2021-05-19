@@ -25,6 +25,8 @@
             :enable-checklist="enableChecklist"
             :ingredient="ingredient"
             :all-checked="allChecked"
+            :portion-original="portionOriginal"
+            :portion-override="portionOverride"
           />
         </div>
 
@@ -43,6 +45,8 @@
               :enable-checklist="enableChecklist"
               :ingredient="ingredient"
               :all-checked="allChecked"
+              :portion-original="portionOriginal"
+              :portion-override="portionOverride"
             />
           </div>
         </div>
@@ -69,6 +73,14 @@ export default {
     enableChecklist: {
       type: Boolean,
       default: false
+    },
+    portionOriginal: {
+      type: Number,
+      default: null
+    },
+    portionOverride: {
+      type: Number,
+      default: null
     }
   },
   data() {

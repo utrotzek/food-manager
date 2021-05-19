@@ -24,7 +24,7 @@
               placeholder="Anzahl"
               :state="getValidationState(validationContext)"
               :autofocus="!goodId"
-              @change="amountUpdated"
+              @change="onChanged"
             />
             <b-form-invalid-feedback id="amount-feedback">
               {{ validationContext.errors[0] }}
@@ -129,7 +129,7 @@ export default {
   components: {AutoCompleter},
   props: {
     amount: {
-      type: String,
+      type: [String,Number],
       default: null
     },
     unitId: {
@@ -200,7 +200,7 @@ export default {
       this.emitChanged();
       this.$refs.unit.validate(this.form.unitId);
     },
-    amountUpdated(){
+    onChanged(){
       this.emitChanged();
     },
     emitChanged(){
@@ -209,7 +209,7 @@ export default {
         data: {
           id: this.id,
           unitId: parseInt(this.form.unitId),
-          amount: parseFloat(this.form.amount.replace(',', '.')),
+          amount: parseFloat(this.form.amount.toString().replace(',', '.')),
           goodId: parseInt(this.form.goodId),
           category: this.category
         }

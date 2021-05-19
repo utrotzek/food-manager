@@ -20,7 +20,9 @@ class DayPlanResource extends JsonResource
             'meal' => new MealResource($this->meal),
             'day' => new DayResource($this->day),
             'description' => $this->description,
-            'done' => $this->done
+            'done' => $this->done,
+            'portion' => $this->portion,
+            'added_to_cart' => $this->added_to_cart
         ];
     }
 }

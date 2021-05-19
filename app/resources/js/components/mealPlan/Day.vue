@@ -1,10 +1,10 @@
 <template>
   <div class="day">
-    <b-row>
+    <b-row no-gutters>
       <b-col
         cols="12"
         md="2"
-        class="d-none d-md-block"
+        class="d-none d-md-block pr-md-2"
       >
         <div class="card bg-light">
           <div class="card-header">
@@ -33,53 +33,83 @@
           :class="todayClass"
         >
           <div class="card-header">
-            <b-row>
+            <b-row no-gutters>
               <b-col
-                cols="8"
+                cols="2"
+                class="d-md-none"
+              >
+                <b-button
+                  class="icon-button small"
+                  variant="light"
+                  @click="toggleVisibility"
+                >
+                  <b-icon-caret-right v-if="!visible" />
+                  <b-icon-caret-down v-else />
+                </b-button>
+              </b-col>
+              <b-col
+                cols="6"
+                md="6"
                 class="title"
+                @click="toggleVisibility"
               >
                 {{ title }}
               </b-col>
               <b-col
                 cols="4"
+                md="6"
                 class="text-right"
               >
-                <div v-if="!day.done">
+                <span v-if="day.pendingCount > 0">
+                  <b-button
+                    variant="light"
+                    disabled
+                  >
+                    <b-icon-cart />
+                    <b-badge>{{ day.pendingCount }}</b-badge>
+                  </b-button>
+                </span>
+                <span v-if="!day.done">
                   <b-button
                     variant="light"
                     @click="toggleDone"
                   >
                     <b-icon-unlock-fill />
                   </b-button>
-                </div>
-                <div v-else>
+                </span>
+                <span v-else>
                   <b-button
                     variant="light"
                     @click="toggleDone"
                   >
                     <b-icon-lock-fill />
                   </b-button>
-                </div>
+                </span>
               </b-col>
             </b-row>
           </div>
-          <div class="card-body">
-            <b-row>
-              <b-col
-                v-for="meal in meals"
-                :key="meal.id"
-                cols="12"
-                lg="4"
-              >
-                <MealForDay
-                  :meal="meal"
-                  :day="day"
-                  :is-past="isPast"
-                  :day-plans="$store.getters['meal/getDayPlansByDayAndMeal'](day, meal)"
-                />
-              </b-col>
-            </b-row>
-          </div>
+          <b-collapse
+            :id="'collapse-' + day.id"
+            v-model="visible"
+          >
+            <div class="card-body">
+              <b-row>
+                <b-col
+                  v-for="meal in meals"
+                  :key="meal.id"
+                  cols="12"
+                  lg="4"
+                >
+                  <MealForDay
+                    :meal="meal"
+                    :day="day"
+                    :is-past="isPast"
+                    :day-plans="$store.getters['meal/getDayPlansByDayAndMeal'](day, meal)"
+                  />
+                </b-col>
+              </b-row>
+            </div>
+          </b-collapse>
         </div>
       </b-col>
     </b-row>
@@ -111,7 +141,15 @@ export default {
       default: false
     }
   },
+  data() {
+    return {
+      visible: false
+    }
+  },
   computed: {
+    isVisible() {
+      return !(this.$store.state.app.breakpoints.isSm || this.$store.state.app.breakpoints.isXs);
+    },
     isPast() {
       return this.day.date.isBefore(this.$dayjs(), 'day');
     },
@@ -125,9 +163,22 @@ export default {
       }
     },
   },
+  watch: {
+    isVisible(newVal) {
+      this.visible = newVal;
+    }
+  },
+  mounted() {
+    this.visible = this.isVisible;
+  },
   methods: {
     toggleDone(){
       this.$store.dispatch('meal/dayChangeDone', {day: this.day});
+    },
+    toggleVisibility() {
+      if (!this.isVisible) {
+        this.visible=!this.visible;
+      }
     }
   }
 }
@@ -159,5 +210,9 @@ export default {
 
   .appointment-list {
     padding: 0 0 0 1em;
+  }
+
+  .day .card .card-header {
+    padding:0.5rem;
   }
 </style>

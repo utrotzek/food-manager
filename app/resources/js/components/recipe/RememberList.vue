@@ -21,8 +21,8 @@
           <b-col
             v-for="recipe in remembered"
             :key="recipe.id"
-            :offset="offset"
-            :cols="cols"
+            :cols="cols.cols"
+            :md="cols.md"
           >
             <Recipe
               :recipe="recipe"
@@ -93,18 +93,11 @@ export default {
     assignMode() {
       return this.$store.state.meal.assign.enabled;
     },
-    offset(){
-      if (!this.bigList){
-        return 0;
-      }else{
-        return 0;
-      }
-    },
     cols(){
-      if (!this.bigList){
-        return 12;
-      }else{
-        return 4;
+      let md = (!this.bigList) ? 12: 4;
+      return {
+        cols: 12,
+        md: md
       }
     }
   },

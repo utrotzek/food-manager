@@ -11,6 +11,11 @@
     color: $black !important;
 }
 
+.light-icon-button {
+    cursor: pointer;
+    color: $gray-500 !important;
+}
+
 .icon-button-default-color {
     cursor: pointer;
 }
@@ -23,4 +28,8 @@
 
 .button-group-full-width  {
     width: 100%;
+}
+
+.icon-button.small {
+    padding: 0 !important;
 }

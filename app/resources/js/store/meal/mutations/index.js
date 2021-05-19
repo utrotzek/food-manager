@@ -7,10 +7,20 @@ export default {
         payload.days.forEach(el => {
             state.days.push({
                 done: Boolean(el.done),
+                pendingCount: Number(el.pendingCount),
                 date: dayjs(el.date),
                 id: el.id
             });
         })
+    },
+    updateDay(state, payload){
+        let day = state.days.find(el => {return el.id  === payload.day.id})
+        if (day){
+            day.done = Boolean(payload.day.done);
+            day.pendingCount = Number(payload.day.pendingCount);
+            day.date = dayjs(payload.day.date);
+            day.id = payload.day.id;
+        }
     },
     updateDayPlan(state, payload) {
         const updatedIndex = state.dayPlans.findIndex(el => {return el.id === payload.dayPlan.id});
@@ -32,7 +42,9 @@ export default {
                 description: el.description,
                 done: Boolean(el.done),
                 meal: el.meal,
-                recipe: el.recipe
+                recipe: el.recipe,
+                addedToCart: Boolean(el.added_to_cart),
+                portion: Number(el.portion)
             });
         })
     },
