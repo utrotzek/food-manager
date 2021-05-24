@@ -30,7 +30,7 @@
       >
         <div
           class="card bg-light"
-          :class="todayClass"
+          :class="dayClass"
         >
           <div class="card-header">
             <b-row no-gutters>
@@ -197,9 +197,9 @@ export default {
     isToday() {
       return this.day.date.isSame(this.$dayjs(), 'day');
     },
-    todayClass() {
+    dayClass() {
       return {
-        'border-warning': this.isToday,
+        'is-today': this.isToday,
         'disabled': this.isPast
       }
     },
@@ -275,6 +275,7 @@ export default {
     margin-bottom: 2em;
   }
 
+
   .day .header .title,
   .day .meal .inner {
     padding: 1em;
@@ -282,6 +283,10 @@ export default {
 
   .day .meal.odd {
     background-color: green;
+  }
+
+  .day .card.is-today {
+    background-color: #faeed3 !important;
   }
 
   .title {
