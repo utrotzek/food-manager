@@ -221,13 +221,18 @@ export default {
     },
     lockDay() {
       this.dayPlansForCart = this.$store.getters['meal/getDayPlansForCart'](this.day);
-      if (this.$store.state.shoppingList.shoppingLists.length === 1){
-        this.shoppingListForCart = this.$store.state.shoppingList.shoppingLists[0];
-        this.showAddToCartModal();
-      }else if(this.$store.state.shoppingList.shoppingLists.length > 1){
-        this.showShoppingListSelectorModal();
+
+      if (this.dayPlansForCart.length > 0) {
+        if (this.$store.state.shoppingList.shoppingLists.length === 1){
+          this.shoppingListForCart = this.$store.state.shoppingList.shoppingLists[0];
+          this.showAddToCartModal();
+        }else if(this.$store.state.shoppingList.shoppingLists.length > 1){
+          this.showShoppingListSelectorModal();
+        }else{
+          this.showCreateShoppingListModal();
+        }
       }else{
-        this.showCreateShoppingListModal();
+        this.$store.dispatch('meal/daySetDone', {day: this.day, done: true});
       }
     },
     showShoppingListSelectorModal() {

@@ -20,6 +20,11 @@ class DayPlanRepository extends BaseRepository implements DayPlanRepositoryInter
         } else {
             $dayPlan->recipe()->disassociate();
         }
+
+        if (!empty($attributes['description']) && !$recipe) {
+            $dayPlan['added_to_cart'] = true;
+        }
+
         $dayPlan->day()->associate($day);
         $dayPlan->meal()->associate($meal);
         $dayPlan->save();
