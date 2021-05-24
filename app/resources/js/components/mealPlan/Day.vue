@@ -10,18 +10,20 @@
           <div class="card-header">
             Termine
           </div>
-          <div class="card-body">
-            <ul class="appointment-list">
-              <li>Termin 1</li>
-              <li>Termin 2</li>
-              <li>Termin 3</li>
-              <li>Termin 3</li>
-              <li>Termin 3</li>
-              <li>Termin 3</li>
-              <li>Termin 3</li>
-              <li>Termin 3</li>
-            </ul>
-          </div>
+          <b-collapse :visible="visible">
+            <div class="card-body">
+              <ul class="appointment-list">
+                <li>Termin 1</li>
+                <li>Termin 2</li>
+                <li>Termin 3</li>
+                <li>Termin 3</li>
+                <li>Termin 3</li>
+                <li>Termin 3</li>
+                <li>Termin 3</li>
+                <li>Termin 3</li>
+              </ul>
+            </div>
+          </b-collapse>
         </div>
       </b-col>
       <b-col
@@ -36,7 +38,7 @@
             <b-row no-gutters>
               <b-col
                 cols="2"
-                class="d-md-none"
+                md="1"
               >
                 <b-button
                   class="icon-button small"
@@ -49,7 +51,7 @@
               </b-col>
               <b-col
                 cols="6"
-                md="6"
+                md="5"
                 class="title"
                 @click="toggleVisibility"
               >
@@ -260,9 +262,7 @@ export default {
       this.$refs['recipe-to-cart-modal'].hide();
     },
     toggleVisibility() {
-      if (!this.isVisible) {
-        this.visible=!this.visible;
-      }
+      this.visible=!this.visible;
     }
   }
 }
@@ -291,6 +291,7 @@ export default {
 
   .title {
     line-height: 2em;
+    cursor: pointer;
   }
 
   .day .card.disabled {
@@ -303,5 +304,6 @@ export default {
 
   .day .card .card-header {
     padding:0.5rem;
+    height: 3rem;
   }
 </style>
