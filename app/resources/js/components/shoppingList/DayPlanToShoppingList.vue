@@ -64,7 +64,7 @@
 import IngredientsEdit from "../recipe/IngredientsEdit";
 
 export default {
-  name: "RecipeToCart",
+  name: "DayPlanToShoppingList",
   components: {
     IngredientsEdit
   },

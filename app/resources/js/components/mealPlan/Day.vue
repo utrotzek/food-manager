@@ -127,7 +127,7 @@
       title="Zutaten auf den Einkauszettel übertragen"
       hide-footer
     >
-      <RecipeToCart
+      <DayPlanToShoppingList
         :day-plans="dayPlansForCart"
         :shopping-list="shoppingListForCart"
         @save="lockDayConfirm"
@@ -155,13 +155,13 @@
 <script>
 
 import MealForDay from "./MealForDay";
-import RecipeToCart from "../shoppingList/RecipeToCart";
+import DayPlanToShoppingList from "../shoppingList/DayPlanToShoppingList";
 import ShoppingListSelector from "../shoppingList/ShoppingListSelector";
 import ShoppingListForm from "../shoppingList/ShoppingListForm";
 
 export default {
   name: "Day",
-  components: {MealForDay, RecipeToCart, ShoppingListSelector, ShoppingListForm},
+  components: {MealForDay, DayPlanToShoppingList, ShoppingListSelector, ShoppingListForm},
   props: {
     title: {
       type: String,
