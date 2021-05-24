@@ -46,7 +46,6 @@
       id="assign-plan-modal"
       ref="assign-plan-modal"
       title="Planung hinzufügen"
-      centered
       hide-footer
     >
       <b-card

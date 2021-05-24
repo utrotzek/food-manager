@@ -8,6 +8,7 @@ export default {
             state.days.push({
                 done: Boolean(el.done),
                 pendingCount: Number(el.pendingCount),
+                shoppingDay: Boolean(el.shoppingDay),
                 date: dayjs(el.date),
                 id: el.id
             });
@@ -18,6 +19,7 @@ export default {
         if (day){
             day.done = Boolean(payload.day.done);
             day.pendingCount = Number(payload.day.pendingCount);
+            day.shoppingDay = Boolean(payload.day.shoppingDay);
             day.date = dayjs(payload.day.date);
             day.id = payload.day.id;
         }
@@ -37,6 +39,8 @@ export default {
                 day: {
                     done: Boolean(el.day.done),
                     date: dayjs(el.day.date),
+                    pendingCount: Number(el.day.pendingCount),
+                    shoppingDay: Boolean(el.day.shoppingDay),
                     id: el.day.id
                 },
                 description: el.description,
@@ -70,6 +74,10 @@ export default {
     updateDayDone(state, payload){
         let day = state.days.find(el => {return el.date.isSame(payload.day.date, 'day')})
         day.done = payload.done;
+    },
+    updateShoppingDay(state, payload){
+        let day = state.days.find(el => {return el.date.isSame(payload.day.date, 'day')})
+        day.shoppingDay = payload.isShoppingDay;
     },
     enableRecipeMoveMode(state, payload){
         state.movePlan.enabled = true;

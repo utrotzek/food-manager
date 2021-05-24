@@ -37,7 +37,7 @@
           <div class="card-header">
             <b-row no-gutters>
               <b-col
-                cols="2"
+                cols="1"
                 md="1"
               >
                 <b-button
@@ -55,24 +55,57 @@
                 class="title"
                 @click="toggleVisibility"
               >
+                <span
+                  v-if="day.done && day.shoppingDay"
+                  class="shoppingDayFlag"
+                  title="Einkaufstag"
+                >
+                  <b-icon-flag-fill />
+                </span>
                 {{ title }}
               </b-col>
               <b-col
-                cols="4"
+                cols="5"
                 md="6"
                 class="text-right"
               >
                 <span v-if="day.pendingCount > 0">
                   <b-button
                     variant="light"
+                    class="medium"
                     disabled
                   >
                     <b-icon-cart />
                     <b-badge>{{ day.pendingCount }}</b-badge>
                   </b-button>
                 </span>
+                <span v-if="!day.done && !day.shoppingDay">
+                  <b-button
+                    class="medium"
+                    variant="light"
+                    title="Tag als Einkaufstag markieren"
+                    @click="toggleShoppingDay"
+                  >
+                    <b-icon-flag />
+                  </b-button>
+                </span>
+                <span
+                  v-if="!day.done && day.shoppingDay"
+                  class="shoppingDayFlag"
+                >
+                  <b-button
+                    v-if="!day.done"
+                    class="medium"
+                    variant="light"
+                    title="Tag nicht mehr als Einkaufstag markieren"
+                    @click="toggleShoppingDay"
+                  >
+                    <b-icon-flag-fill />
+                  </b-button>
+                </span>
                 <span v-if="!day.done">
                   <b-button
+                    class="medium"
                     variant="light"
                     @click="lockDay"
                   >
@@ -81,6 +114,7 @@
                 </span>
                 <span v-else>
                   <b-button
+                    class="medium"
                     variant="light"
                     @click="unlockDay"
                   >
@@ -263,6 +297,10 @@ export default {
     },
     toggleVisibility() {
       this.visible=!this.visible;
+    },
+    toggleShoppingDay() {
+      const isShoppingDay = !this.day.shoppingDay;
+      this.$store.dispatch('meal/daySetShoppingDay', {day: this.day, isShoppingDay: isShoppingDay});
     }
   }
 }
@@ -305,5 +343,10 @@ export default {
   .day .card .card-header {
     padding:0.5rem;
     height: 3rem;
+  }
+
+  .shoppingDayFlag .btn,
+  .shoppingDayFlag {
+    color: $red !important;
   }
 </style>

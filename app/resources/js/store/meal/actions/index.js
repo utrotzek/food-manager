@@ -45,6 +45,16 @@ export default {
             })
         })
     },
+    daySetShoppingDay({commit, state}, payload) {
+        return new Promise((resolve, reject) => {
+            const day = payload.day;
+            const isShoppingDay = payload.isShoppingDay;
+            axios.put('/api/days/' + day.id + '/shopping-day', {isShoppingDay: isShoppingDay}).then(res => {
+                commit('updateShoppingDay', {day: day, isShoppingDay: isShoppingDay});
+                resolve();
+            })
+        })
+    },
     refreshDay({commit, state}, payload){
         return new Promise((resolve, reject) => {
             axios.get('/api/days/' + payload.id).then(res => {

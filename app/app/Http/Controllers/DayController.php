@@ -83,6 +83,23 @@ class DayController extends Controller
         ]);
     }
 
+    public function shoppingDay(Request $request, Day $day): Response
+    {
+        $isShoppingDay = $request->input('isShoppingDay');
+        $updatedItem = $this->dayRepository->update(['shopping_day' => $isShoppingDay], $day);
+
+        if ($isShoppingDay) {
+            $message = 'Day %1$s has successfully marked as shopping day';
+        } else {
+            $message = 'Day %1$s has successfully unmarked as shopping day';
+        }
+
+        return new Response([
+            'message' => sprintf($message, $day['date']->format('Y-m-d')),
+            'item' => new DayResource($updatedItem)
+        ]);
+    }
+
     /**
      * Remove the specified resource from storage.
      *

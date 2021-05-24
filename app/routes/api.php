@@ -28,6 +28,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/days/range', [DayController::class, 'range']);
+Route::put('/days/{day}/shopping-day', [DayController::class, 'shoppingDay']);
 Route::get('/day-plans/range', [DayPlanController::class, 'range']);
 Route::put('/day-plans/{day_plan}/added-to-cart', [DayPlanController::class, 'addedToCart']);
 
