@@ -14,11 +14,9 @@
           <b-form-group
             id="amount-group"
             label="Anzahl"
-            label-for="amount"
             label-sr-only
           >
             <b-form-input
-              id="amount"
               v-model="form.amount"
               name="amount"
               placeholder="Anzahl"

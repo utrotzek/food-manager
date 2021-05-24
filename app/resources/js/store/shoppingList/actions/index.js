@@ -158,5 +158,30 @@ export default {
                 resolve();
             });
         })
+    },
+    addMultipleItemsForDay({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            let items = [];
+            payload.ingredients.forEach(el => {
+                items.push({
+                    good_id: el.goodId,
+                    unit_id: el.unitId,
+                    unit_amount: el.amount,
+                    shopping_list_id: payload.shoppingListId,
+                    day_plan_id: payload.dayPlanId
+                });
+            });
+
+            const data = {items: items};
+            axios.post('/api/shopping-list-items/store-multiple', data).then(res => {
+                const commitData = {
+                    shopping_list_id: payload.shoppingListId,
+                    items: res.data.items,
+                    clearExisting: false
+                }
+                commit('storeItemsForList', commitData)
+                resolve();
+            });
+        })
     }
 }

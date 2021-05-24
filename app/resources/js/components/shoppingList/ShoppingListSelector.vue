@@ -38,9 +38,10 @@
 export default {
   name: "ShoppingListSelector",
   props: {
-    item: {
-      type: Object,
-      required: true
+    exludedShoppingListId: {
+      type: Number,
+      required: false,
+      default: null
     }
   },
   data() {
@@ -58,7 +59,7 @@ export default {
     });
 
     this.$store.state.shoppingList.shoppingLists.forEach(el => {
-      if (el.id !== this.item.shopping_list_id){
+      if (el.id !== this.exludedShoppingListId){
         this.form.options.push({
           value: el.id,
           text: el.title
@@ -70,13 +71,7 @@ export default {
     onSave() {
       if (this.form.selectedList !== null) {
         const shoppingList = this.$store.getters["shoppingList/shoppingListForId"](this.form.selectedList);
-        const data = {
-          item: this.item,
-          shoppingList: shoppingList
-        };
-        this.$store.dispatch('shoppingList/moveItem', data).then(() => {
-          this.$emit('save');
-        })
+        this.$emit('save', shoppingList);
       }
     },
     onAbort() {

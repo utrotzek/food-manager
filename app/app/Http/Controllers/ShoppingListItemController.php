@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ShoppingListItemStoreMultipleRequest;
 use App\Http\Requests\ShoppingListItemStoreRequest;
 use App\Http\Resources\ShoppingListItemResource;
 use App\Models\ShoppingListItem;
@@ -73,6 +74,39 @@ class ShoppingListItemController extends Controller
         return new Response([
             'message' => sprintf('Shopping list item "%1$s" successfully created', $newItem),
             'item' => new ShoppingListItemResource($newItem)
+        ]);
+    }
+
+    public function storeMultiple(ShoppingListItemStoreMultipleRequest $request): Response
+    {
+        $items = $request->input('items');
+        $storedItems = [];
+
+        foreach ($items as $item) {
+            $good = !empty($item['good_id']) ? $this->goodRepository->findByIdOrSlug($item['good_id']) : null;
+            $dayPlan = !empty($item['day_plan_id']) ? $this->dayPlanRepository->findById($item['day_plan_id']) : null;
+
+            $unit = $item['unit_id'] ? $this->unitRepository->findByIdOrSlug($item['unit_id']) : null;
+            $shoppingList = $this->shoppingListRepository->findById($item['shopping_list_id']);
+
+            $attributes = [
+                'descriptionAmount' => $item['descriptionAmount'] ?? null,
+                'description' => $item['description'] ?? null,
+                'unit_amount' => $item['unit_amount'] ?? null
+            ];
+
+            $storedItems[] = $this->shoppingListItemRepository->createForShoppingList(
+                $shoppingList,
+                $good,
+                $unit,
+                $dayPlan,
+                $attributes
+            );
+        }
+
+        return new Response([
+            'message' => sprintf('%1$u shopping list items successfully created', count($items)),
+            'items' => ShoppingListItemResource::collection($storedItems)
         ]);
     }
 

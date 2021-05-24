@@ -37,6 +37,7 @@ Route::put('/recipes/flags/{recipe}', [RecipeController::class, 'flags']);
 Route::get('/recipes/remembered', [RecipeController::class, 'remembered']);
 
 Route::put('/shopping-list-items/move/{shopping_list_item}', [ShoppingListItemController::class, 'move']);
+Route::post('/shopping-list-items/store-multiple', [ShoppingListItemController::class, 'storeMultiple']);
 
 Route::apiResources([
     'app-states' => AppStateController::class,

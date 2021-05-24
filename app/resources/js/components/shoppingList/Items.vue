@@ -145,9 +145,9 @@
       hide-footer
     >
       <ShoppingListSelector
-        :item="moveItem"
+        :exluded-shopping-list-id="moveItem ? moveItem.shopping_list_id : null"
         @abort="closeMoveModal"
-        @save="closeMoveModal"
+        @save="onMoveItemConfirm"
       />
     </b-modal>
   </div>
@@ -246,6 +246,15 @@ export default {
     onMoveItem(item) {
       this.moveItem = item;
       this.$refs['list-selector-modal'].show();
+    },
+    onMoveItemConfirm(shoppingList) {
+      const data = {
+        item: this.moveItem,
+        shoppingList: shoppingList
+      };
+      this.$store.dispatch('shoppingList/moveItem', data).then(() => {
+        this.closeMoveModal();
+      })
     },
     closeMoveModal() {
       this.$refs['list-selector-modal'].hide();

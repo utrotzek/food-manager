@@ -36,9 +36,9 @@ export default {
             .catch(err => reject(err))
         });
     },
-    dayChangeDone({commit, state}, payload) {
+    daySetDone({commit, state}, payload) {
         return new Promise((resolve, reject) => {
-            const done = !payload.day.done;
+            const done = payload.done;
             axios.put('/api/days/' + payload.day.id, {done: done}).then(res => {
                 commit('updateDayDone', {day: payload.day, done: done});
                 resolve();

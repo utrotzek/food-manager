@@ -15,6 +15,7 @@
     />
     <div class="text-center mt-4 mb-4">
       <b-button
+        v-if="!createDisabled"
         class="add-button"
         @click="addIngredient(null)"
       >
@@ -34,6 +35,7 @@
           <h4 class="label">
             {{ category.title }}
             <b-button
+              v-if="!createDisabled"
               variant="link"
               class="icon-button"
               size="sm"
@@ -97,7 +99,7 @@
           />
         </b-col>
       </b-row>
-      <b-row v-if="!category.editMode">
+      <b-row v-if="!category.editMode && !createDisabled">
         <b-col>
           <div class="text-center mt-4 mb-4">
             <b-button
@@ -110,7 +112,7 @@
         </b-col>
       </b-row>
     </div>
-    <b-row>
+    <b-row v-if="!createDisabled">
       <b-col>
         <div class="new-cat">
           <b-button
@@ -124,6 +126,7 @@
       </b-col>
     </b-row>
     <b-alert
+      v-if="!createDisabled"
       variant="info"
       :show="form.ingredients.length === 0"
       class="mt-3"
@@ -168,6 +171,10 @@ export default {
       default(){
         return [];
       }
+    },
+    createDisabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

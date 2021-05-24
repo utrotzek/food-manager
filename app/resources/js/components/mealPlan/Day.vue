@@ -72,7 +72,7 @@
                 <span v-if="!day.done">
                   <b-button
                     variant="light"
-                    @click="toggleDone"
+                    @click="lockDay"
                   >
                     <b-icon-unlock-fill />
                   </b-button>
@@ -80,7 +80,7 @@
                 <span v-else>
                   <b-button
                     variant="light"
-                    @click="toggleDone"
+                    @click="unlockDay"
                   >
                     <b-icon-lock-fill />
                   </b-button>
@@ -113,16 +113,39 @@
         </div>
       </b-col>
     </b-row>
+    <b-modal
+      id="shopping-list-selector-modal"
+      ref="shopping-list-selector-modal"
+      title="Einkauszettel auswählen"
+      hide-footer
+    >
+      <ShoppingListSelector @save="onShoppingListSelected" />
+    </b-modal>
+    <b-modal
+      id="recipe-to-cart-modal"
+      ref="recipe-to-cart-modal"
+      title="Zutaten auf den Einkauszettel übertragen"
+      hide-footer
+    >
+      <RecipeToCart
+        :day-plans="dayPlansForCart"
+        :shopping-list="shoppingListForCart"
+        @save="lockDayConfirm"
+        @abort="hideDayToCartModal"
+      />
+    </b-modal>
   </div>
 </template>
 
 <script>
 
 import MealForDay from "./MealForDay";
+import RecipeToCart from "../shoppingList/RecipeToCart";
+import ShoppingListSelector from "../shoppingList/ShoppingListSelector";
 
 export default {
   name: "Day",
-  components: {MealForDay},
+  components: {MealForDay, RecipeToCart, ShoppingListSelector},
   props: {
     title: {
       type: String,
@@ -143,7 +166,9 @@ export default {
   },
   data() {
     return {
-      visible: false
+      visible: false,
+      dayPlansForCart: [],
+      shoppingListForCart: null
     }
   },
   computed: {
@@ -172,8 +197,39 @@ export default {
     this.visible = this.isVisible;
   },
   methods: {
-    toggleDone(){
-      this.$store.dispatch('meal/dayChangeDone', {day: this.day});
+    unlockDay() {
+      this.$store.dispatch('meal/daySetDone', {day: this.day, done: false});
+    },
+    hideDayToCartModal() {
+      this.$refs['recipe-to-cart-modal'].hide();
+    },
+    lockDay() {
+      this.dayPlansForCart = this.$store.getters['meal/getDayPlansForCart'](this.day);
+
+
+      if (this.$store.state.shoppingList.shoppingLists.length === 1){
+        this.shoppingListForCart = this.$store.state.shoppingList.shoppingLists[0];
+        this.showAddToCartModal();
+      }else if(this.$store.state.shoppingList.shoppingLists.length > 1){
+        this.showShoppingListSelectorModal();
+      }else{
+        console.log('create shopping list');
+      }
+    },
+    showShoppingListSelectorModal() {
+      this.$refs['shopping-list-selector-modal'].show();
+    },
+    onShoppingListSelected(shoppingList) {
+      this.shoppingListForCart = shoppingList;
+      this.$refs['shopping-list-selector-modal'].hide();
+      this.showAddToCartModal();
+    },
+    showAddToCartModal() {
+      this.$refs['recipe-to-cart-modal'].show();
+    },
+    lockDayConfirm(){
+      this.$refs['recipe-to-cart-modal'].hide();
+      this.$store.dispatch('meal/daySetDone', {day: this.day, done: true});
     },
     toggleVisibility() {
       if (!this.isVisible) {
