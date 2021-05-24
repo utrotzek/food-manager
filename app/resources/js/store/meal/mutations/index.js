@@ -48,6 +48,10 @@ export default {
             });
         })
     },
+    dayPlanAddedToCart(state, payload){
+        const dayPlanIndex = state.dayPlans.findIndex(el => el.id === payload.dayPlanId);
+        state.dayPlans[dayPlanIndex].addedToCart = true;
+    },
     addMeals(state, payload){
         state.meals = [];
         payload.meals.forEach(el => {

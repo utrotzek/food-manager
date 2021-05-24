@@ -53,6 +53,19 @@ export default {
             })
         })
     },
+    dayPlanAddedToCart({commit, state}, payload) {
+        return new Promise((resolve, reject) => {
+            const id = payload.dayPlanId;
+            axios.put('/api/day-plans/' + id + '/added-to-cart').then(res => {
+                commit('dayPlanAddedToCart', {dayPlanId: id});
+
+                if (res.data.wholeDayAddedToCart){
+                    commit('updateDay', {day: res.data.item.day});
+                }
+                resolve();
+            });
+        });
+    },
     updateDayPlan({commit, state}, payload) {
         return new Promise((resolve, reject) => {
             let data = {

@@ -32,6 +32,17 @@ class DayPlan extends Model
         return $this->belongsTo(Day::class);
     }
 
+    public function wholeDayAddedToCart(): bool
+    {
+        $wholeDayAdded = true;
+        foreach ($this->day->dayPlans()->get() as $dayPlan) {
+            if (!$dayPlan['added_to_cart']) {
+                $wholeDayAdded = false;
+            }
+        }
+        return $wholeDayAdded;
+    }
+
     public function __toString()
     {
         if ($this->recipe) {

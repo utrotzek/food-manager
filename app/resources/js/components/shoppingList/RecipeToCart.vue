@@ -6,7 +6,12 @@
     >
       <b-row>
         <b-col>
-          <h4>{{ currentRecipe.title }} ({{ currentIndex + 1 }} von {{ dayPlans.length }})</h4>
+          <h4 v-if="dayPlans.length > 1">
+            {{ currentRecipe.title }} ({{ currentIndex + 1 }} von {{ dayPlans.length }})
+          </h4>
+          <h4 v-else>
+            {{ currentRecipe.title }}
+          </h4>
           <h5>{{ currentRecipe.ingredients.length }} Zutaten</h5>
           <p>
             Folgende Zutaten werden auf dem Einkaufszettel hinzugefügt. Du kannst einzelne Zutaten, die z.B. noch im Haus vorhanden sind, löschen. Diese werden dann auf den Einkaufszettel übertragen.
@@ -122,14 +127,9 @@ export default {
         shoppingListId: this.shoppingList.id,
         dayPlanId: this.currentDayPlan.id
       }
-      this.$store.dispatch('shoppingList/addMultipleItemsForDay', data).then(() => {
-        if (this.isLast){
-          this.$emit('save');
-        }else{
-          this.currentIndex++;
-          this.loadIngredientsForPlanIndex(this.currentIndex);
-        }
-      });
+      this.$store.dispatch('shoppingList/addMultipleItemsForDay', data)
+        .then(() => this.$store.dispatch('meal/dayPlanAddedToCart', {dayPlanId: this.currentDayPlan.id}))
+        .then(() => this.saveAndLoadNext());
     },
     onAbort() {
       this.$emit('abort');
@@ -137,6 +137,18 @@ export default {
     onDeleted(id) {
       const ingredientIndex = this.currentRecipe.ingredients.findIndex(el => el.id === id);
       this.currentRecipe.ingredients.splice(ingredientIndex, 1);
+    },
+    onSkip(){
+      this.$store.dispatch('meal/dayPlanAddedToCart', {dayPlanId: this.currentDayPlan.id})
+        .then(() => this.saveAndLoadNext());
+    },
+    saveAndLoadNext() {
+      if (this.isLast){
+        this.$emit('save');
+      }else{
+        this.currentIndex++;
+        this.loadIngredientsForPlanIndex(this.currentIndex);
+      }
     }
   }
 }

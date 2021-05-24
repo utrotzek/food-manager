@@ -41,6 +41,13 @@ class DayPlanRepository extends BaseRepository implements DayPlanRepositoryInter
         return $dayPlan->fresh();
     }
 
+    public function setAddedToCart(DayPlan $dayPlan): DayPlan
+    {
+        $dayPlan['added_to_cart'] = true;
+        $dayPlan->save();
+        return $dayPlan->fresh();
+    }
+
     public function findByRange(Carbon $from, Carbon $to): Collection
     {
         return DayPlan::whereHas('day', function (Builder $query) use ($from, $to) {

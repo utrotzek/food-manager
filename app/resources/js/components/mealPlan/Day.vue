@@ -134,6 +134,21 @@
         @abort="hideDayToCartModal"
       />
     </b-modal>
+
+    <b-modal
+      id="shopping-list-modal"
+      ref="shopping-list-modal"
+      title="Neuen Einkaufszettel erstellen"
+      hide-footer
+    >
+      <p>
+        Sie müssen zuerst einen Einkaufszettel erstellen, bevor Sie Zutaten hinzufügen können.
+      </p>
+      <ShoppingListForm
+        @abort="hideShoppingListModal"
+        @save="onSaveShoppingList"
+      />
+    </b-modal>
   </div>
 </template>
 
@@ -142,10 +157,11 @@
 import MealForDay from "./MealForDay";
 import RecipeToCart from "../shoppingList/RecipeToCart";
 import ShoppingListSelector from "../shoppingList/ShoppingListSelector";
+import ShoppingListForm from "../shoppingList/ShoppingListForm";
 
 export default {
   name: "Day",
-  components: {MealForDay, RecipeToCart, ShoppingListSelector},
+  components: {MealForDay, RecipeToCart, ShoppingListSelector, ShoppingListForm},
   props: {
     title: {
       type: String,
@@ -205,19 +221,27 @@ export default {
     },
     lockDay() {
       this.dayPlansForCart = this.$store.getters['meal/getDayPlansForCart'](this.day);
-
-
       if (this.$store.state.shoppingList.shoppingLists.length === 1){
         this.shoppingListForCart = this.$store.state.shoppingList.shoppingLists[0];
         this.showAddToCartModal();
       }else if(this.$store.state.shoppingList.shoppingLists.length > 1){
         this.showShoppingListSelectorModal();
       }else{
-        console.log('create shopping list');
+        this.showCreateShoppingListModal();
       }
     },
     showShoppingListSelectorModal() {
       this.$refs['shopping-list-selector-modal'].show();
+    },
+    onSaveShoppingList() {
+      this.hideShoppingListModal();
+      this.lockDay();
+    },
+    showCreateShoppingListModal() {
+      this.$refs['shopping-list-modal'].show();
+    },
+    hideShoppingListModal() {
+      this.$refs['shopping-list-modal'].hide();
     },
     onShoppingListSelected(shoppingList) {
       this.shoppingListForCart = shoppingList;
@@ -229,7 +253,6 @@ export default {
     },
     lockDayConfirm(){
       this.$refs['recipe-to-cart-modal'].hide();
-      this.$store.dispatch('meal/daySetDone', {day: this.day, done: true});
     },
     toggleVisibility() {
       if (!this.isVisible) {

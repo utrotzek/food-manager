@@ -6,7 +6,7 @@ export default  {
     },
     getDayPlansForCart: (state) => (day) => {
         return state.dayPlans.filter(el => {
-            return el.day.id === day.id && !day.addedToCart
+            return el.day.id === day.id && !el.addedToCart
         }) ?? [];
     },
     getDayByDate: (state) => (date) => {
