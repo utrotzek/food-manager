@@ -12,7 +12,7 @@
           <h4 v-else>
             {{ currentRecipe.title }}
           </h4>
-          <h5>{{ currentRecipe.ingredients.length }} Zutaten</h5>
+          <h5>{{ currentRecipe.ingredients.length }} Zutaten für {{ currentDayPlan.portion }} Portionen</h5>
           <p>
             Folgende Zutaten werden auf dem Einkaufszettel hinzugefügt. Du kannst einzelne Zutaten, die z.B. noch im Haus vorhanden sind, löschen. Diese werden dann auf den Einkaufszettel übertragen.
           </p>
@@ -24,6 +24,8 @@
             :key="currentIndex"
             v-model="currentIngredients"
             :categories="currentRecipe.ingredientCategories"
+            :portion-original="currentRecipe.portion"
+            :portion-override="currentDayPlan.portion"
             create-disabled
           />
         </b-col>
@@ -43,13 +45,13 @@
               variant="warning"
               @click="onSkip"
             >
-              <b-icon-skip-forward /> Nicht auf den Einkaufszettel
+              <b-icon-trash-fill /> Nicht hinzufügen
             </b-button>
             <b-button
               variant="primary"
               @click="onSave"
             >
-              <b-icon-cart-plus /> Auf den Einkaufszettel
+              <b-icon-cart-plus /> Hinzufügen
             </b-button>
           </b-button-group>
         </b-col>

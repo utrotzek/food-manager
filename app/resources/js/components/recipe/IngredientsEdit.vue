@@ -8,6 +8,8 @@
       :unit-id="item.unitId"
       :good-id="item.goodId"
       :category="item.category"
+      :portion-override="portionOverride"
+      :portion-original="portionOriginal"
       @changed="onChange"
       @deleted="onDeleted"
       @createGood="onCreateGood(item, $event)"
@@ -93,6 +95,8 @@
             :unit-id="item.unitId"
             :good-id="item.goodId"
             :category="item.category"
+            :portion-override="portionOverride"
+            :portion-original="portionOriginal"
             @changed="onChange"
             @deleted="onDeleted"
             @createGood="onCreateGood(item, $event)"
@@ -175,6 +179,14 @@ export default {
     createDisabled: {
       type: Boolean,
       default: false
+    },
+    portionOriginal: {
+      type: Number,
+      default: null
+    },
+    portionOverride: {
+      type: Number,
+      default: null
     }
   },
   data() {

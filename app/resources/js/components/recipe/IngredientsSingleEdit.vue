@@ -145,6 +145,14 @@ export default {
     category: {
       type: Number,
       default: null
+    },
+    portionOriginal: {
+      type: Number,
+      default: null
+    },
+    portionOverride: {
+      type: Number,
+      default: null
     }
   },
   data() {
@@ -174,6 +182,12 @@ export default {
     }
   },
   mounted() {
+    let actualAmount = Number(this.form.amount);
+    if (this.portionOverride && this.portionOriginal){
+      actualAmount = actualAmount  / this.portionOriginal * this.portionOverride;
+    }
+    this.form.amount = actualAmount.toString().replace('.', ',');
+    
     this.$refs.amount.validate(this.form.amount);
     this.$refs.unit.validate(this.form.unitId);
     this.$refs.good.validate(this.form.goodId);
