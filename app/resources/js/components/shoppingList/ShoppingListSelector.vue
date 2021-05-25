@@ -17,6 +17,7 @@
           <b-button-group>
             <b-button
               variant="secondary"
+              class="mr-1"
               @click="onAbort"
             >
               Abbrechen
@@ -60,6 +61,9 @@ export default {
 
     this.$store.state.shoppingList.shoppingLists.forEach(el => {
       if (el.id !== this.exludedShoppingListId){
+        if (!this.form.selectedList) {
+          this.form.selectedList = el.id;
+        }
         this.form.options.push({
           value: el.id,
           text: el.title
