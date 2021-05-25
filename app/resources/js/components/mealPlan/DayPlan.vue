@@ -35,17 +35,24 @@
         >
           <b-button
             variant="light"
+            class="small"
             @click="onDayPlanDone"
           >
             <b-icon-check-square-fill v-if="plan.done" />
-            <b-icon-check-square v-else />
+            <b-icon-square v-else />
           </b-button>
           <b-button
             v-if="!plan.done && plan.recipe"
             variant="light"
+            class="small"
             @click="onCookingClick"
           >
-            <b-icon-basket3 />
+            <inline-svg
+              name="chef-hat"
+              class="svg-icon"
+              width="29px"
+              height="25px"
+            />
           </b-button>
         </b-button-group>
 
@@ -56,11 +63,13 @@
         >
           <b-button
             variant="light"
+            class="small"
           >
             <b-icon-arrows-move @click="onMove" />
           </b-button>
           <b-button
             variant="light"
+            class="small"
           >
             <b-icon-trash @click="onDelete" />
           </b-button>

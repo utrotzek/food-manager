@@ -42,6 +42,7 @@ Vue.use(InfiniteLoading);
 Vue.component('ToggleButton', ToggleButton)
 Vue.component('ValidationProvider', ValidationProvider);
 Vue.component('ValidationObserver', ValidationObserver);
+Vue.component('InlineSvg', require('./components/InlineSvg.js').default);
 
 import dayjs from "dayjs";
 require('dayjs/locale/de')
