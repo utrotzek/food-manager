@@ -75,23 +75,29 @@
                     v-if="!printView"
                     class="col-2 col-lg-1"
                   >
-                    <b-dropdown
-                      class="edit-dropdown"
-                      variant="light"
-                    >
-                      <template #button-content>
-                        <b-icon-three-dots />
-                      </template>
-                      <b-dropdown-item-button @click="onEditItem(item)">
-                        <b-icon-pen /> Bearbeiten
-                      </b-dropdown-item-button>
-                      <b-dropdown-item-button @click="onMoveItem(item)">
-                        <b-icon-arrows-move /> Verschieben
-                      </b-dropdown-item-button>
-                      <b-dropdown-item-button @click="onDeleteItem(item)">
-                        <b-icon-trash /> Löschen
-                      </b-dropdown-item-button>
-                    </b-dropdown>
+                    <b-button-group>
+                      <b-button
+                        class="small mr-1"
+                        variant="light"
+                        @click="onEditItem(item)"
+                      >
+                        <b-icon-pen />
+                      </b-button>
+                      <b-button
+                        class="small mr-1"
+                        variant="light"
+                        @click="onMoveItem(item)"
+                      >
+                        <b-icon-arrows-move />
+                      </b-button>
+                      <b-button
+                        class="small"
+                        variant="light"
+                        @click="onDeleteItem(item)"
+                      >
+                        <b-icon-trash />
+                      </b-button>
+                    </b-button-group>
                   </td>
                 </tr>
               </tbody>
