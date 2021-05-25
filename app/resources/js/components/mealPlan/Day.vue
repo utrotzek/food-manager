@@ -152,7 +152,7 @@
     <b-modal
       id="shopping-list-selector-modal"
       ref="shopping-list-selector-modal"
-      title="Einkauszettel auswählen"
+      title="Einkaufszettel auswählen"
       hide-footer
     >
       <ShoppingListSelector @save="onShoppingListSelected" />

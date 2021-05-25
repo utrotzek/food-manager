@@ -1,6 +1,6 @@
 <template>
   <div class="shopping-list">
-    <h1>Einkauszettel</h1>
+    <h1>Einkaufszettel</h1>
     <div v-if="loaded">
       <div v-if="$store.state.shoppingList.shoppingLists.length > 0">
         <b-card
