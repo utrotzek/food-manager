@@ -155,7 +155,10 @@
       title="Einkaufszettel auswählen"
       hide-footer
     >
-      <ShoppingListSelector @save="onShoppingListSelected" />
+      <ShoppingListSelector
+        @save="onShoppingListSelected"
+        @abort="onShoppingListAbort"
+      />
     </b-modal>
     <b-modal
       id="recipe-to-cart-modal"
@@ -288,6 +291,10 @@ export default {
       this.shoppingListForCart = shoppingList;
       this.$refs['shopping-list-selector-modal'].hide();
       this.showAddToCartModal();
+    },
+    onShoppingListAbort() {
+      this.shoppingListForCart = null;
+      this.$refs['shopping-list-selector-modal'].hide();
     },
     showAddToCartModal() {
       this.$refs['recipe-to-cart-modal'].show();
