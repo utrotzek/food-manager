@@ -22,6 +22,7 @@
               placeholder="Anzahl"
               :state="getValidationState(validationContext)"
               :autofocus="!goodId"
+              type="number"
               @change="onChanged"
             />
             <b-form-invalid-feedback id="amount-feedback">
@@ -182,12 +183,13 @@ export default {
     }
   },
   mounted() {
-    let actualAmount = Number(this.form.amount);
+    let actualAmount = this.form.amount;
     if (this.portionOverride && this.portionOriginal){
+      actualAmount = Number(actualAmount);
       actualAmount = actualAmount  / this.portionOriginal * this.portionOverride;
     }
     this.form.amount = actualAmount.toString().replace('.', ',');
-    
+
     this.$refs.amount.validate(this.form.amount);
     this.$refs.unit.validate(this.form.unitId);
     this.$refs.good.validate(this.form.goodId);

@@ -21,6 +21,7 @@
                 :min="1"
                 :max="99"
                 number
+                type="number"
               />
               <b-input-group-append>
                 <b-button

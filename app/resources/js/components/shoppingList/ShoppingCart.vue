@@ -146,9 +146,9 @@
     <b-row class="mt-3">
       <b-col class="text-center">
         <b-button
-          v-b-modal:shopping-list-modal
           class="light-icon-button"
           variant="light"
+          @click="$refs['shopping-list-modal'].show()"
         >
           <b-icon-plus-square />
           Neuer Einkaufszettel
@@ -268,3 +268,4 @@ export default {
     width: 10em;
   }
 </style>
+
