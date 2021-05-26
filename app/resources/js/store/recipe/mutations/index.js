@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export default {
     updateTags(state, payload) {
         state.tags = payload;
@@ -24,12 +26,37 @@ export default {
         state.goodGroups.push(payload);
     },
     addRecipes(state, payload){
-        state.recipeSearchResult = state.recipeSearchResult.concat(payload);
+        payload.forEach(el => {
+            state.recipeSearchResult.push({
+                id: el.id,
+                title: el.title,
+                image: el.image,
+                rating: Number(el.rating),
+                portion: Number(el.portion),
+                comments: el.comments,
+                favorite: Boolean(el.favorite),
+                remember: Boolean(el.remember),
+                tags: el.tags,
+                queryTime: dayjs().unix()
+            })
+        });
     },
     updateRecipe(state, payload){
         const foundIndex = state.recipeSearchResult.findIndex(el => el.id === payload.id);
         if (foundIndex){
-            state.recipeSearchResult[foundIndex] = payload.recipe;
+            const recipe = {
+                id: payload.recipe.id,
+                title: payload.recipe.title,
+                image: payload.recipe.image,
+                rating: Number(payload.recipe.rating),
+                portion: Number(payload.recipe.portion),
+                comments: payload.recipe.comments,
+                favorite: Boolean(payload.recipe.favorite),
+                remember: Boolean(payload.recipe.remember),
+                tags: payload.recipe.tags,
+                queryTime: dayjs().unix()
+            };
+            state.recipeSearchResult.splice(foundIndex, 1, recipe);
         }
     },
     removeRecipe(state, payload){
