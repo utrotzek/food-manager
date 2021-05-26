@@ -2,7 +2,7 @@
   <div class="search-wrapper">
     <!-- Search form -->
     <b-form
-      class="search-form form-inline md-form form-sm mt-0"
+      class="search-form md-form form-sm mt-0"
       @submit="onSubmit"
     >
       <b-icon-search class="search-icon" />
@@ -12,10 +12,9 @@
         type="text"
         placeholder="Suche"
         aria-label="Search"
-        @keyup="triggerSearch"
       />
       <span
-        v-if="displayDelete"
+        v-if="displayDeleted"
         class="search-clear"
         @click="clearQuery"
       >
@@ -28,24 +27,39 @@
 <script>
 export default {
     name: "SearchVue",
+    props: {
+      value: {
+        type: String,
+        default: ""
+      }
+    },
     data() {
         return {
-            query: "",
-            displayDelete: false
+            query: this.value
         };
+    },
+    computed: {
+      displayDeleted() {
+        if (this.value){
+          return this.value.length > 0;
+        }else{
+          return false;
+        }
+      }
+    },
+    watch: {
+      query(newVal) {
+        this.displayDelete = newVal.length > 0;
+        this.$emit("input", newVal);
+      }
     },
     methods: {
         onSubmit(e) {
             /* istanbul ignore next */
             e.preventDefault();
         },
-        triggerSearch() {
-            this.displayDelete = this.query.length > 0;
-            this.$emit("searched", this.query);
-        },
         clearQuery() {
             this.query = "";
-            this.triggerSearch();
         }
     }
 };
@@ -56,6 +70,7 @@ export default {
 
 .search-wrapper {
     position: relative;
+    width: 100%;
 }
 .search-control {
     padding: 0 30px 0 30px;

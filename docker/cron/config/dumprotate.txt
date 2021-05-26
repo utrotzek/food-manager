@@ -1,0 +1,10 @@
+/backups/*.sql {
+    daily
+    rotate 7
+    compress
+    delaycrompress
+    create 640 root root
+    postrotate
+        /mysql-backup.sh
+    endscript
+}

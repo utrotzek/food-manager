@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-docker-compose exec -T app composer "$@"
+docker exec -e XDEBUG_MODE="" $(docker-compose ps -q app) composer "$@"

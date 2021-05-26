@@ -23,7 +23,7 @@ $purple:  #613d7c !default;
 $pink:    #e83e8c !default;
 $red:     #ff0039 !default;
 $orange:  #f0ad4e !default;
-$yellow:  #ff7518 !default;
+$yellow:  #fff400 !default;
 $green:   #3fb618 !default;
 $teal:    #20c997 !default;
 $cyan:    #9954bb !default;
@@ -32,10 +32,14 @@ $primary:       $blue !default;
 $secondary:     $gray-800 !default;
 $success:       $green !default;
 $info:          $cyan !default;
-$warning:       $yellow !default;
+$warning:       #ecb30a !default;
 $danger:        $red !default;
 $light:         $gray-100 !default;
 $dark:          $gray-800 !default;
+
+
+$recipe-light: lighten($success, 55%);
+$recipe-warning: lighten($warning, 50%);
 
 // Options
 
@@ -65,3 +69,8 @@ $alert-border-width:            0 !default;
 // Progress bars
 
 $progress-height:               .5rem !default;
+
+// images
+
+$image-height:      20em;
+$image-width:       25em;

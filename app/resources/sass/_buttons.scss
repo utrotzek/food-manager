@@ -1,0 +1,52 @@
+.icon-button:active,
+.icon-button:focus,
+.icon-button-default-color:active,
+.icon-button-default-color:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.icon-button {
+    cursor: pointer;
+    color: $black !important;
+}
+
+.light-icon-button {
+    cursor: pointer;
+    color: $gray-500 !important;
+}
+
+.icon-button-default-color {
+    cursor: pointer;
+}
+
+.add-button {
+    width: 18em;
+    height: 3em;
+    border-radius: 16px !important;
+}
+
+.button-group-full-width  {
+    width: 100%;
+}
+
+.icon-button.small {
+    padding: 0 !important;
+}
+
+.btn.medium {
+    padding: 3px !important;
+}
+
+.btn.small {
+    padding: 0 !important;
+}
+
+.btn.btn-light,
+.btn.btn-light:active,
+.btn.btn-light:focus {
+    background-color: unset !important;
+    border: solid 0 transparent;
+    outline: none !important;
+    box-shadow: none !important;
+}

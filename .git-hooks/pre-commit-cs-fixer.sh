@@ -8,27 +8,29 @@ NC='\033[0m'
 
 echo -e "${BLUE}php-cs-fixer pre commit hook start${NC}"
 
-COMPOSER_PATH="$GIT_DIR/../bin/composer.sh"
 ESLINT="$GIT_DIR/../bin/yarn.sh lint"
+PROJECT_PATH=$(git rev-parse --show-toplevel)
+COMPOSER_PATH="$PROJECT_PATH/bin/composer.sh"
 
-
-echo -e "${BLUE}executing cs fixer${NC}"
 #identify staged php files and execute cs linter
-PHP_FILES=$(git status --porcelain | egrep -i '^\s*[AM]\s*app/.*.(php)$' | cut -c 3- | cut -d'/' -f2- | tr '\n' ' ')
-
-if [[ $PHP_FILES != "" ]]; then
-    $COMPOSER_PATH run-script csFixer $PHP_FILES
-    for dir in $PHP_FILES; do
-        git add "app/$dir"
+CHANGED_PHP_FILES=$(git diff --cached --name-only --diff-filter=ACM -- '*.php')
+if [ -n "$CHANGED_PHP_FILES" ]; then
+    echo -e "${BLUE}executing cs fixer${NC}"
+    $COMPOSER_PATH run-script csFixer
+    for dir in $CHANGED_PHP_FILES; do
+        git add "$PROJECT_PATH/$dir"
     done
 fi
 
+CHANGED_JS_FILES=$(git diff --cached --name-only --diff-filter=ACM -- '*.vue' '*.js')
 echo -e "${BLUE}executing eslint${NC}"
 #identify staged vue and js files and execute eslint (correct the path by suppressing /app/resources/js)
-JS_FILES=$(git status --porcelain | egrep -i '^\s*[AM]\s*app/resources/js/.*.(vue|js)' | cut -c 3- | tr '\n' ' ' | sed -e 's#app/resources/js/##g')
 
-if [[ $JS_FILES != "" ]]; then
+if [ -n "$CHANGED_JS_FILES" ]; then
     $ESLINT
+    for dir in $CHANGED_JS_FILES; do
+        git add "$PROJECT_PATH/$dir"
+    done
 fi
 
 echo -e "${GREEN}Linting passed. Committing files..${NC}"

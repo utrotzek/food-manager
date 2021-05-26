@@ -13,8 +13,10 @@
 </head>
 <body>
     <div id="app">
-        <div>
-            <app></app>
+        <app></app>
+        <div class="mb-1">
+            <!-- bottom spacer -->
+            &nbsp;
         </div>
     </div>
 
