@@ -36,11 +36,21 @@ export default {
             .catch(err => reject(err))
         });
     },
-    dayChangeDone({commit, state}, payload) {
+    daySetDone({commit, state}, payload) {
         return new Promise((resolve, reject) => {
-            const done = !payload.day.done;
+            const done = payload.done;
             axios.put('/api/days/' + payload.day.id, {done: done}).then(res => {
                 commit('updateDayDone', {day: payload.day, done: done});
+                resolve();
+            })
+        })
+    },
+    daySetShoppingDay({commit, state}, payload) {
+        return new Promise((resolve, reject) => {
+            const day = payload.day;
+            const isShoppingDay = payload.isShoppingDay;
+            axios.put('/api/days/' + day.id + '/shopping-day', {isShoppingDay: isShoppingDay}).then(res => {
+                commit('updateShoppingDay', {day: day, isShoppingDay: isShoppingDay});
                 resolve();
             })
         })
@@ -52,6 +62,19 @@ export default {
                 resolve();
             })
         })
+    },
+    dayPlanAddedToCart({commit, state}, payload) {
+        return new Promise((resolve, reject) => {
+            const id = payload.dayPlanId;
+            axios.put('/api/day-plans/' + id + '/added-to-cart').then(res => {
+                commit('dayPlanAddedToCart', {dayPlanId: id});
+
+                if (res.data.wholeDayAddedToCart){
+                    commit('updateDay', {day: res.data.item.day});
+                }
+                resolve();
+            });
+        });
     },
     updateDayPlan({commit, state}, payload) {
         return new Promise((resolve, reject) => {

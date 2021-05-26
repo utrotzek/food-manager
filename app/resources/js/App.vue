@@ -11,6 +11,21 @@
 <script>
 import LayoutDefault from "./components/layouts/LayoutDefault";
 
+//prevent pinchzoom: https://stackoverflow.com/a/51710577
+document.addEventListener('touchmove', function (event) {
+  if (event.scale !== 1) { event.preventDefault(); }
+}, { passive: false });
+
+//Disable double tap zoom on document: https://community.esri.com/t5/arcgis-api-for-javascript/ios-10-user-scalable-no/td-p/382460
+var lastTouchEnd = 0;
+document.documentElement.addEventListener('touchend', function (event) {
+  var now = (new Date()).getTime();
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault();
+  }
+  lastTouchEnd = now;
+}, false);
+
 export default {
   name: "App",
   data() {

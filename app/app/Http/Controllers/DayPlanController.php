@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Http\Requests\RangeRequest;
 use App\Http\Requests\DayPlanStoreRequest;
 use App\Http\Resources\DayPlanResource;
+use App\Models\Day;
 use App\Models\DayPlan;
 use App\Repositories\DayPlanRepository;
 use App\Repositories\DayRepository;
 use App\Repositories\MealRepository;
 use App\Repositories\RecipeRepository;
 use Carbon\Carbon;
+use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Http\Response;
 
 class DayPlanController extends Controller
@@ -122,6 +124,27 @@ class DayPlanController extends Controller
                 $day
             ),
             'item' => new DayPlanResource($dayPlan)
+        ]);
+    }
+
+    public function addedToCart(DayPlan $dayPlan): Response
+    {
+        $updatedDayPlan = $this->dayPlanRepository->setAddedToCart($dayPlan);
+        $wholeDayAddedToCart = $updatedDayPlan->wholeDayAddedToCart();
+
+        if ($wholeDayAddedToCart) {
+            /** @var Day $day */
+            $day = $dayPlan->day()->first();
+            $this->dayRepository->setDone($day);
+        }
+
+        return new Response([
+            'message' => sprintf(
+                'Plan "%1$s" successfully marked as "added to cart"',
+                $dayPlan
+            ),
+            'item' => new DayPlanResource($dayPlan),
+            'wholeDayAddedToCart' => $wholeDayAddedToCart
         ]);
     }
 

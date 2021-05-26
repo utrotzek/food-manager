@@ -18,7 +18,8 @@ class DayResource extends JsonResource
             'id' => $this->id,
             'date' => $this->date->format('Y-m-d'),
             'done' => $this->done,
-            'pendingCount' => $this->getPendingDayPlansCount()
+            'pendingCount' => $this->getPendingDayPlansCount(),
+            'shoppingDay' => $this->shopping_day
         ];
     }
 }

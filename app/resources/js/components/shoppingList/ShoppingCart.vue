@@ -1,6 +1,6 @@
 <template>
   <div class="shopping-list">
-    <h1>Einkauszettel</h1>
+    <h1>Einkaufszettel</h1>
     <div v-if="loaded">
       <div v-if="$store.state.shoppingList.shoppingLists.length > 0">
         <b-card
@@ -125,7 +125,7 @@
           variant="info"
           show
         >
-          Es keine Einkaufslisten vorhanden. Bitte legen Sie zuerst eine Liste an.
+          Es sind keine Einkaufslisten vorhanden. Bitte legen Sie zuerst eine Liste an.
         </b-alert>
       </div>
 
@@ -146,9 +146,9 @@
     <b-row class="mt-3">
       <b-col class="text-center">
         <b-button
-          v-b-modal:shopping-list-modal
           class="light-icon-button"
           variant="light"
+          @click="$refs['shopping-list-modal'].show()"
         >
           <b-icon-plus-square />
           Neuer Einkaufszettel
@@ -268,3 +268,4 @@ export default {
     width: 10em;
   }
 </style>
+

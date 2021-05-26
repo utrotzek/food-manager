@@ -75,23 +75,30 @@
                     v-if="!printView"
                     class="col-2 col-lg-1"
                   >
-                    <b-dropdown
-                      class="edit-dropdown"
-                      variant="light"
-                    >
-                      <template #button-content>
-                        <b-icon-three-dots />
-                      </template>
-                      <b-dropdown-item-button @click="onEditItem(item)">
-                        <b-icon-pen /> Bearbeiten
-                      </b-dropdown-item-button>
-                      <b-dropdown-item-button @click="onMoveItem(item)">
-                        <b-icon-arrows-move /> Verschieben
-                      </b-dropdown-item-button>
-                      <b-dropdown-item-button @click="onDeleteItem(item)">
-                        <b-icon-trash /> Löschen
-                      </b-dropdown-item-button>
-                    </b-dropdown>
+                    <b-button-group>
+                      <b-button
+                        class="small mr-1"
+                        variant="light"
+                        @click="onEditItem(item)"
+                      >
+                        <b-icon-pen />
+                      </b-button>
+                      <b-button
+                        v-if="$store.state.shoppingList.shoppingLists.length > 1"
+                        class="small mr-1"
+                        variant="light"
+                        @click="onMoveItem(item)"
+                      >
+                        <b-icon-arrows-move />
+                      </b-button>
+                      <b-button
+                        class="small"
+                        variant="light"
+                        @click="onDeleteItem(item)"
+                      >
+                        <b-icon-trash />
+                      </b-button>
+                    </b-button-group>
                   </td>
                 </tr>
               </tbody>
@@ -145,9 +152,9 @@
       hide-footer
     >
       <ShoppingListSelector
-        :item="moveItem"
+        :exluded-shopping-list-id="moveItem ? moveItem.shopping_list_id : null"
         @abort="closeMoveModal"
-        @save="closeMoveModal"
+        @save="onMoveItemConfirm"
       />
     </b-modal>
   </div>
@@ -246,6 +253,15 @@ export default {
     onMoveItem(item) {
       this.moveItem = item;
       this.$refs['list-selector-modal'].show();
+    },
+    onMoveItemConfirm(shoppingList) {
+      const data = {
+        item: this.moveItem,
+        shoppingList: shoppingList
+      };
+      this.$store.dispatch('shoppingList/moveItem', data).then(() => {
+        this.closeMoveModal();
+      })
     },
     closeMoveModal() {
       this.$refs['list-selector-modal'].hide();

@@ -38,6 +38,13 @@ class DayRepository implements DayRepositoryInterface
         return $day->fresh();
     }
 
+    public function setDone(Day $day)
+    {
+        $day['done'] = true;
+        $day->save();
+        return $day->fresh();
+    }
+
     public function findByIdOrDate(string $idOrDate): ?Day
     {
         $date = null;

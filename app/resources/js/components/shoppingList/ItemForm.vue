@@ -16,6 +16,7 @@
                   v-model="form.descriptionAmount"
                   autofocus
                   placeholder="Anzahl"
+                  type="number"
                 />
               </b-form-group>
             </b-col>

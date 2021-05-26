@@ -178,7 +178,7 @@ export default {
         },
         imagePath() {
           const time = Date.now();
-          return '/storage/recipe-images/' + this.recipe.image + "?" + time;
+          return '/storage/recipe-images/' + this.recipe.image + "?" + this.recipe.queryTime;
         },
         truncatedTitle() {
           if (this.recipe.title.length > this.maxTitleLength){

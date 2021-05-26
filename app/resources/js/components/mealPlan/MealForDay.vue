@@ -46,7 +46,6 @@
       id="assign-plan-modal"
       ref="assign-plan-modal"
       title="Planung hinzufügen"
-      centered
       hide-footer
     >
       <b-card
@@ -238,6 +237,8 @@ export default {
     onAddRecipeSubmit(recipe){
       this.planToAdd.recipe = recipe;
       this.planToAdd.portion = recipe.portion;
+
+      this.$store.dispatch('recipe/unsetSearch');
       this.$refs['assign-plan-modal'].hide();
       this.$refs['portion-selector-modal'].show();
     },

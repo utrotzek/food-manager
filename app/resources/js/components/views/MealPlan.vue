@@ -1,7 +1,7 @@
 <template>
   <layout-default-dynamic>
     <div class="meal-plan">
-      <h1>Essenplan</h1>
+      <h1>Essensplan</h1>
       <b-row class="mb-3">
         <b-col
           class="text-center"

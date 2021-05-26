@@ -10,7 +10,7 @@ class Day extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['date', 'done'];
+    protected $fillable = ['date', 'done', 'shopping_day'];
     protected $dates = ['date'];
 
     public function __toString()

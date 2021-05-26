@@ -114,6 +114,10 @@ export default {
             });
         }
     },
+    unsetSearch({commit}, state){
+        commit('unsetSearchTerm');
+        commit('unsetRecipes');
+    },
     fetchRemembered({commit, state}){
         return new Promise((resolve, reject) => {
             axios.get('/api/recipes/remembered').then(res => {
