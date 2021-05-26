@@ -59,6 +59,9 @@ export default {
             state.recipeSearchResult.splice(foundIndex, 1, recipe);
         }
     },
+    unsetRecipes(state){
+        state.recipeSearchResult = [];
+    },
     removeRecipe(state, payload){
         const foundIndex = state.recipeSearchResult.findIndex(el => el.id === payload.id);
         state.recipeSearchResult.splice(foundIndex, 1);
@@ -78,6 +81,9 @@ export default {
     },
     saveSearchTerm(state, payload){
         state.searchTerm = payload;
+    },
+    unsetSearchTerm(state){
+        state.searchTerm = "";
     },
     setRememberedRecipes(state, payload){
         state.recipeRemembered = payload;
