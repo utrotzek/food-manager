@@ -84,6 +84,7 @@
                         <b-icon-pen />
                       </b-button>
                       <b-button
+                        v-if="$store.state.shoppingList.shoppingLists.length > 1"
                         class="small mr-1"
                         variant="light"
                         @click="onMoveItem(item)"
