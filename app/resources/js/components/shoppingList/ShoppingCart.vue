@@ -125,7 +125,7 @@
           variant="info"
           show
         >
-          Es keine Einkaufslisten vorhanden. Bitte legen Sie zuerst eine Liste an.
+          Es sind keine Einkaufslisten vorhanden. Bitte legen Sie zuerst eine Liste an.
         </b-alert>
       </div>
 
