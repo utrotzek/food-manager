@@ -84,7 +84,7 @@
               <b-col>
                 <b-card>
                   <template #header>
-                    <b-icon-bookmark-fill /> <b>Merkliste</b>
+                    <b-icon-bookmark-fill /> <b>Merkliste</b> <b-badge>{{ $store.state.recipe.recipeRemembered.length }}</b-badge>
                   </template>
                   <b-card-body>
                     <RememberList
