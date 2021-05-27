@@ -63,7 +63,7 @@
                 cols="12"
               >
                 <Day
-                  :title="day.date.format('dddd - DD.MM.YYYY')"
+                  :title="dayTitle(day)"
                   :day="day"
                   :meals="$store.state.meal.meals"
                 />
@@ -162,6 +162,13 @@ export default {
     this.loaded = true;
   },
   methods: {
+    dayTitle(day) {
+      if (this.$store.state.app.breakpoints.isXs || this.$store.state.app.breakpoints.isSm) {
+        return day.date.format('ddd - DD.MM.YYYY')
+      } else {
+        return day.date.format('dddd - DD.MM.YYYY')
+      }
+    },
     fetchMealPlan() {
       return this.$store.dispatch('meal/loadMealPlanRange', {from: this.from, to: this.to});
     },
