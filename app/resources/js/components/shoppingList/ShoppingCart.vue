@@ -117,7 +117,7 @@
                 </b-col>
               </b-row>
             </b-card-body>
-            <b-card-body>
+            <b-card-body class="mb-5">
               <Items :shopping-list="shoppingList" />
             </b-card-body>
           </b-collapse>
