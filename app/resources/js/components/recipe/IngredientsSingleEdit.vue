@@ -175,6 +175,9 @@ export default {
     }
   },
   watch: {
+    amount: function (newVal) {
+      this.form.amount = newVal;
+    },
     goodId: function (newVal) {
       this.form.goodId = newVal;
     },

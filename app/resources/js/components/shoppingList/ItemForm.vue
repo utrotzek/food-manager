@@ -16,7 +16,8 @@
                   v-model="form.descriptionAmount"
                   autofocus
                   placeholder="Anzahl"
-                  type="number"
+                  type="text"
+                  pattern="*"
                 />
               </b-form-group>
             </b-col>
@@ -129,22 +130,33 @@ export default {
       return this.form.ingredient.goodId !== null;
     }
   },
-  created() {
-    if (this.item) {
-      if (this.item.good){
-        this.form.ingredient = {
-          goodId: this.item.good.id,
-          unitId: this.item.unit.id,
-          amount: this.item.unitAmount
-        }
-      } else {
-        this.form.description = this.item.description;
-        this.form.descriptionAmount = this.item.descriptionAmount;
+  watch: {
+    item: {
+      deep: true,
+      handler: function() {
+        this.initializeFormData();
       }
-      this.editMode =  true;
     }
   },
+  mounted() {
+    this.initializeFormData();
+  },
   methods: {
+    initializeFormData() {
+      if (this.item) {
+        if (this.item.good){
+          this.form.ingredient = {
+            goodId: this.item.good.id,
+            unitId: this.item.unit.id,
+            amount: this.item.unitAmount
+          }
+        } else {
+          this.form.description = this.item.description;
+          this.form.descriptionAmount = this.item.descriptionAmount;
+        }
+        this.editMode =  true;
+      }
+    },
     onItemChange(changeData) {
       this.form.ingredient = {
         goodId: changeData.data.goodId,
