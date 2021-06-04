@@ -36,7 +36,7 @@
               >
                 <b-col
                   class="float-left"
-                  cols="3"
+                  cols="2"
                   md="6"
                 >
                   <div class="d-none d-md-block">
@@ -51,13 +51,16 @@
                     </b-button>
                   </div>
                   <div class="d-block d-md-none">
-                    <b-button variant="primary">
-                      <b-icon-plus-circle /> Neu
+                    <b-button
+                      variant="primary"
+                      @click="onNewItem(shoppingList)"
+                    >
+                      <b-icon-plus-circle />
                     </b-button>
                   </div>
                 </b-col>
                 <b-col
-                  cols="9"
+                  cols="10"
                   md="6"
                 >
                   <div class="float-right">
