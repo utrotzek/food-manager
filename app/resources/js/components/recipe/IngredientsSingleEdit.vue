@@ -193,6 +193,9 @@ export default {
     this.$refs.amount.validate(this.form.amount);
     this.$refs.unit.validate(this.form.unitId);
     this.$refs.good.validate(this.form.goodId);
+    Vue.nextTick(() => {
+      this.emitChanged();
+    });
   },
   methods: {
     getValidationState({ dirty, validated, valid = null }) {
