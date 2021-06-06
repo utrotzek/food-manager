@@ -41,7 +41,10 @@
                 >
                   <div class="d-none d-md-block">
                     <b-button class="mr-1">
-                      <b-icon-check @click="onDoneList(shoppingList)" />
+                      <b-icon-trash @click="onDoneList(shoppingList)" />
+                    </b-button>
+                    <b-button class="mr-1">
+                      <b-icon-cart-x @click="onClearList(shoppingList)" />
                     </b-button>
                     <b-button class="mr-1">
                       <b-icon-pen @click="onEditList(shoppingList)" />
@@ -71,7 +74,10 @@
                         variant="outline-dark"
                       >
                         <b-dropdown-item-button @click="onDoneList(shoppingList)">
-                          <b-icon-check /> Abschließen
+                          <b-icon-trash /> Löschen
+                        </b-dropdown-item-button>
+                        <b-dropdown-item-button @click="onClearList(shoppingList)">
+                          <b-icon-cart-x /> Einkausliste leeren
                         </b-dropdown-item-button>
                         <b-dropdown-item-button @click="onEditList(shoppingList)">
                           <b-icon-pen /> Bearbeiten
@@ -175,15 +181,30 @@
     <b-modal
       id="done-shopping-list-modal"
       ref="done-shopping-list-modal"
-      title="Liste abschließen?"
-      ok-title="Fertig"
+      title="Einkaufsliste löschen?"
+      ok-title="Löschen"
+      ok-variant="danger"
       cancel-title="Abbrechen"
       @ok="onDoneListConfirm"
       @cancel="closeDoneListModal"
     >
       <p v-if="form.doneShoppingList">
-        Wollen Sie die Einkaufsliste <b>{{ form.doneShoppingList.title }}</b> wirklich abschließen?
+        Möchtest Du die Einkaufsliste <b>{{ form.doneShoppingList.title }}</b> samt allen Einträgen wirklich löschen?
       </p>
+    </b-modal>
+    <b-modal
+      id="clear-shopping-list-modal"
+      ref="clear-shopping-list-modal"
+      title="Liste leeren"
+      ok-title="Leeren"
+      ok-variant="danger"
+      cancel-title="Abbrechen"
+      @ok="onClearListConfirm"
+      @cancel="closeClearShoppingListModal"
+    >
+      <div v-if="form.clearShoppingList">
+        <p>Möchtest Du alle Einträge auf der Einkaufsliste <b>{{ form.clearShoppingList.title }}</b> wirklich löschen?</p>
+      </div>
     </b-modal>
   </div>
 </template>
@@ -204,7 +225,8 @@ export default {
         sorted: null,
         newItemShoppingList: null,
         editShoppingList: null,
-        doneShoppingList: null
+        doneShoppingList: null,
+        clearShoppingList: null
       }
     }
   },
@@ -226,6 +248,19 @@ export default {
     this.$store.dispatch('recipe/fetchIngredientItems');
   },
   methods: {
+    onClearList(shoppingList) {
+      this.form.clearShoppingList = shoppingList;
+      this.$refs['clear-shopping-list-modal'].show();
+    },
+    onClearListConfirm() {
+      this.$store.dispatch('shoppingList/clearItems', {shoppingList: this.form.clearShoppingList}).then(() => {
+        this.closeClearShoppingListModal();
+      })
+    },
+    closeClearShoppingListModal() {
+      this.form.clearShoppingList = null;
+      this.$refs['clear-shopping-list-modal'].hide();
+    },
     onDoneList(shoppingList) {
       this.form.doneShoppingList = shoppingList;
       this.$refs['done-shopping-list-modal'].show();

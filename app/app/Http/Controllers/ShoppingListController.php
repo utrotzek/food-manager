@@ -81,4 +81,12 @@ class ShoppingListController extends Controller
             sprintf('Shopping list %1$s sucessfully deleted', $shoppingList)
         );
     }
+
+    public function clearAll(Request $request, ShoppingList $shoppingList)
+    {
+        $this->shoppingListRepository->clearAllItems($shoppingList);
+        return new Response(
+            sprintf('Items of list "%1$s" successfully deleted', $shoppingList)
+        );
+    }
 }

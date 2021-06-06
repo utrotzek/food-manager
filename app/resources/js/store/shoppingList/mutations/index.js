@@ -92,5 +92,19 @@ export default {
         const shoppingListIndex = state.shoppingLists.findIndex(el => el.id === shoppingListId);
         state.items.splice(index,1);
         state.shoppingLists[shoppingListIndex].items--;
+    },
+    deleteAllItemsOfList(state, payload) {
+        const shoppingListId = payload.shoppingListId;
+        const shoppingListIndex = state.shoppingLists.findIndex(el => el.id === shoppingListId);
+        let deleteIndex = null;
+        do {
+            deleteIndex = state.items.findIndex(el => {
+                return el.shopping_list_id === shoppingListId
+            });
+            if (deleteIndex > -1){
+                state.items.splice(deleteIndex, 1);
+            }
+        }while (deleteIndex > -1)
+        state.shoppingLists[shoppingListIndex].items = 0;
     }
 }
