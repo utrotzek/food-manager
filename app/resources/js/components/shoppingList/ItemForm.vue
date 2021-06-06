@@ -15,6 +15,7 @@
               :amount="form.ingredient.amount"
               :good-id="form.ingredient.goodId"
               :unit-id="form.ingredient.unitId"
+              :recipe-mode="false"
               @changed="onItemChange"
               @createGood="onCreateGood"
             />
@@ -99,6 +100,7 @@
     >
       <GoodForm
         v-model="newGood.title"
+        default-recipe-not-enabled
         @abort="abortCreateGood"
         @save="onSaveGood"
       />
@@ -178,11 +180,9 @@ export default {
       }
     },
     onItemChange(changeData) {
-      this.form.ingredient = {
-        goodId: changeData.data.goodId,
-        unitId: changeData.data.unitId,
-        amount: changeData.data.amount,
-      }
+      this.form.ingredient.goodId = changeData.data.goodId;
+      this.form.ingredient.unitId = changeData.data.unitId;
+      this.form.ingredient.amount = changeData.data.amount;
     },
     onSaveIngredient() {
       let payload = {

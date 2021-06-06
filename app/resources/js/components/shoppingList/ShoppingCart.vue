@@ -156,11 +156,13 @@
         title="Neuer Eintrag für den Einkaufszettel"
         hide-footer
       >
-        <ItemForm
-          :shopping-list="form.newItemShoppingList"
-          @saved="closeModal"
-          @aborted="closeModal"
-        />
+        <div v-if="form.newItemShoppingList">
+          <ItemForm
+            :shopping-list="form.newItemShoppingList"
+            @saved="closeModal"
+            @aborted="closeModal"
+          />
+        </div>
       </b-modal>
     </div>
 

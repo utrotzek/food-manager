@@ -154,6 +154,10 @@ export default {
     portionOverride: {
       type: Number,
       default: null
+    },
+    recipeMode: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -171,7 +175,11 @@ export default {
       return this.$store.state.recipe.units;
     },
     goods() {
-      return this.$store.state.recipe.goods;
+      if (this.recipeMode) {
+        return this.$store.getters['recipe/goodsForRecipes'];
+      } else {
+        return this.$store.state.recipe.goods;
+      }
     }
   },
   watch: {
@@ -191,7 +199,7 @@ export default {
       actualAmount = Number(actualAmount);
       actualAmount = actualAmount  / this.portionOriginal * this.portionOverride;
     }
-    this.form.amount = actualAmount.toString().replace('.', ',');
+    this.form.amount = actualAmount ? actualAmount.toString().replace('.', ',') : null;
 
     this.$refs.amount.validate(this.form.amount);
     this.$refs.unit.validate(this.form.unitId);
@@ -224,12 +232,13 @@ export default {
       this.emitChanged();
     },
     emitChanged(){
+      const amount = this.form.amount ? this.form.amount.toString().replace(',', '.') : null;
       this.$emit('changed', {
         id: this.id,
         data: {
           id: this.id,
           unitId: parseInt(this.form.unitId),
-          amount: parseFloat(this.form.amount.toString().replace(',', '.')),
+          amount: parseFloat(amount),
           goodId: parseInt(this.form.goodId),
           category: this.category
         }
