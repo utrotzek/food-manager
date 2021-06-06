@@ -52,6 +52,7 @@ export default {
                 unitAmount: el.unitAmount,
                 good: el.good,
                 recipe_id: el.recipe_id,
+                recipe_title: el.recipe_title,
                 descriptionAmount: el.descriptionAmount,
                 description: el.description,
                 shopping_list_id: shoppingListId
@@ -81,6 +82,7 @@ export default {
         state.items[index].unitAmount = item.unitAmount;
         state.items[index].good = item.good;
         state.items[index].recipe_id = item.recipe_id;
+        state.items[index].recipe_title = item.recipe_title;
         state.items[index].descriptionAmount = item.descriptionAmount;
         state.items[index].description = item.description;
         state.items[index].shopping_list_id = shoppingListId;

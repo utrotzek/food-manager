@@ -49,6 +49,12 @@
                     <b-button class="mr-1">
                       <b-icon-pen @click="onEditList(shoppingList)" />
                     </b-button>
+                    <b-button
+                      v-if="hasMergeableItems(shoppingList)"
+                      class="mr-1"
+                    >
+                      <b-icon-chevron-bar-contract @click="onMergeItems(shoppingList)" />
+                    </b-button>
                     <b-button>
                       <b-icon-printer @click="$emit('print', shoppingList)" />
                     </b-button>
@@ -81,6 +87,12 @@
                         </b-dropdown-item-button>
                         <b-dropdown-item-button @click="onEditList(shoppingList)">
                           <b-icon-pen /> Bearbeiten
+                        </b-dropdown-item-button>
+                        <b-dropdown-item-button
+                          v-if="hasMergeableItems(shoppingList)"
+                          @click="onMergeItems(shoppingList)"
+                        >
+                          <b-icon-chevron-bar-contract /> Einträge zusammenfassen
                         </b-dropdown-item-button>
                         <b-dropdown-item-button @click="$emit('print', shoppingList)">
                           <b-icon-printer /> Drucken
@@ -206,6 +218,20 @@
         <p>Möchtest Du alle Einträge auf der Einkaufsliste <b>{{ form.clearShoppingList.title }}</b> wirklich löschen?</p>
       </div>
     </b-modal>
+
+    <b-modal
+      id="merge-duplicates-modal"
+      ref="merge-duplicates-modal"
+      title="Duplikate zusammenfassen"
+      hide-footer
+      @ok="stopMergeMode"
+    >
+      <ItemMerger
+        :mergeable-goods="form.mergeItemsMode.mergeableGoods"
+        :shopping-list="form.mergeItemsMode.shoppingList"
+        @cancel="stopMergeMode"
+      />
+    </b-modal>
   </div>
 </template>
 
@@ -214,10 +240,11 @@ import Items from "./Items";
 import {SHOPPING_LIST_SORTING} from "../../constants/shoppingListConstants"
 import ItemForm from "./ItemForm";
 import ShoppingListForm from "./ShoppingListForm";
+import ItemMerger from "./ItemMerger";
 
 export default {
   name: "ShoppingCart",
-  components: {Items, ItemForm, ShoppingListForm},
+  components: {Items, ItemForm, ShoppingListForm, ItemMerger},
   data() {
     return {
       loaded: false,
@@ -226,7 +253,11 @@ export default {
         newItemShoppingList: null,
         editShoppingList: null,
         doneShoppingList: null,
-        clearShoppingList: null
+        clearShoppingList: null,
+        mergeItemsMode: {
+          shoppingList: null,
+          mergeableGoods: []
+        }
       }
     }
   },
@@ -248,6 +279,21 @@ export default {
     this.$store.dispatch('recipe/fetchIngredientItems');
   },
   methods: {
+    hasMergeableItems(shoppingList) {
+      return this.$store.getters['shoppingList/mergeableItemsOfShoppingList'](shoppingList.id).length > 0;
+    },
+    onMergeItems(shoppingList) {
+      this.form.mergeItemsMode.mergeableGoods = this.$store.getters['shoppingList/mergeableItemsOfShoppingList'](shoppingList.id);
+      this.form.mergeItemsMode.shoppingList = shoppingList;
+      this.$refs['merge-duplicates-modal'].show();
+    },
+    stopMergeMode() {
+      this.form.mergeItemsMode = {
+        shoppingList: null,
+        mergeableGoods: []
+      }
+      this.$refs['merge-duplicates-modal'].hide();
+    },
     onClearList(shoppingList) {
       this.form.clearShoppingList = shoppingList;
       this.$refs['clear-shopping-list-modal'].show();
