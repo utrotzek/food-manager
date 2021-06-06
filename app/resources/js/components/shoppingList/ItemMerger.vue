@@ -34,9 +34,12 @@
           <h4>Neuer Eintrag</h4>
           <p>Dieser Eintrag wird anstelle der oben aufgeführen Einträge erstellt.</p>
           <IngredientsSingleEdit
+            :key="currentIndex"
             :good-id="newItem.goodId"
             :unit-id="newItem.unitId"
             :amount="newItem.amount"
+            :enable-inline-creation="false"
+            hide-delete-button
             @changed="onNewItemChange"
           />
         </b-col>

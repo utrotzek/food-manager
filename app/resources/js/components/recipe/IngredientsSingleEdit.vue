@@ -54,7 +54,7 @@
               :items="units"
               :show-all-items-on-empty-query="true"
               :preselected-value="form.unitId"
-              :enable-inline-creation="true"
+              :enable-inline-creation="enableInlineCreation"
               @selected="unitUpdated"
               @create="$emit('createUnit', $event)"
             />
@@ -89,7 +89,7 @@
               value-key="id"
               :items="goods"
               :show-all-items-on-empty-query="false"
-              :enable-inline-creation="true"
+              :enable-inline-creation="enableInlineCreation"
               :preselected-value="form.goodId"
               @selected="goodUpdated"
               @create="$emit('createGood', $event)"
@@ -104,6 +104,7 @@
         </validation-provider>
       </b-col>
       <b-col
+        v-if="!hideDeleteButton"
         cols="1"
         md="1"
         class="text-right"
@@ -158,6 +159,14 @@ export default {
     recipeMode: {
       type: Boolean,
       default: true
+    },
+    enableInlineCreation: {
+      type: Boolean,
+      default: true
+    },
+    hideDeleteButton: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -200,10 +209,6 @@ export default {
       actualAmount = actualAmount  / this.portionOriginal * this.portionOverride;
     }
     this.form.amount = actualAmount ? actualAmount.toString().replace('.', ',') : null;
-
-    this.$refs.amount.validate(this.form.amount);
-    this.$refs.unit.validate(this.form.unitId);
-    this.$refs.good.validate(this.form.goodId);
     Vue.nextTick(() => {
       this.emitChanged();
     });
