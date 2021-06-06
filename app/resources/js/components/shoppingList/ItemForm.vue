@@ -62,6 +62,7 @@
               :good-id="form.ingredient.goodId"
               :unit-id="form.ingredient.unitId"
               @changed="onItemChange"
+              @createGood="onCreateGood"
             />
           </b-col>
         </b-row>
@@ -87,15 +88,29 @@
         </b-row>
       </b-tab>
     </b-tabs>
+    <b-modal
+      id="add-good-modal"
+      ref="add-good-modal"
+      centered
+      title="Zutat hinzufügen"
+      hide-footer
+    >
+      <GoodForm
+        v-model="newGood.title"
+        @abort="abortCreateGood"
+        @save="onSaveGood"
+      />
+    </b-modal>
   </div>
 </template>
 
 <script>
 import IngredientsSingleEdit from "../recipe/IngredientsSingleEdit";
+import GoodForm from "../good/GoodForm";
 
 export default {
   name: "ItemForm",
-  components: {IngredientsSingleEdit},
+  components: {IngredientsSingleEdit, GoodForm},
   props: {
     shoppingList: {
       type: Object,
@@ -118,6 +133,9 @@ export default {
         },
         description: null,
         descriptionAmount: null
+      },
+      newGood: {
+        title: null,
       },
       editMode: false
     }
@@ -144,7 +162,7 @@ export default {
   methods: {
     initializeFormData() {
       if (this.item) {
-        if (this.item.good){
+        if (this.item.good) {
           this.form.ingredient = {
             goodId: this.item.good.id,
             unitId: this.item.unit.id,
@@ -199,7 +217,23 @@ export default {
     },
     onAbort() {
       this.$emit('aborted');
-    }
+    },
+    onCreateGood(newGoodTitle){
+      this.newGood.title = newGoodTitle;
+      this.$refs['add-good-modal'].show();
+    },
+    abortCreateGood() {
+      this.$refs['add-good-modal'].hide();
+      this.newGood.title = null;
+    },
+    onSaveGood(data) {
+      this.$store.dispatch('recipe/saveNewGood', data).then(res => {
+        this.form.ingredient.goodId = res.id;
+        this.abortCreateGood();
+      }).catch(err => {
+        console.log(err);
+      })
+    },
   }
 }
 </script>
