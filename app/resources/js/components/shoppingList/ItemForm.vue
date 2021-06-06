@@ -5,6 +5,44 @@
       justified
     >
       <b-tab
+        v-if="!editMode || modeIngredient"
+        title="Ware"
+        :active="modeIngredient"
+      >
+        <b-row>
+          <b-col>
+            <IngredientsSingleEdit
+              :amount="form.ingredient.amount"
+              :good-id="form.ingredient.goodId"
+              :unit-id="form.ingredient.unitId"
+              @changed="onItemChange"
+              @createGood="onCreateGood"
+            />
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col class="text-right">
+            <b-button-group>
+              <b-button
+                class="mr-2"
+                variant="secondary"
+                @click="onAbort"
+              >
+                Abbrechen
+              </b-button>
+              <b-button
+                type="submit"
+                variant="primary"
+                @click="onSaveIngredient"
+              >
+                Speichern
+              </b-button>
+            </b-button-group>
+          </b-col>
+        </b-row>
+      </b-tab>
+      <b-tab
+        v-if="!editMode || modeFreeText"
         title="Freitext"
         :active="modeFreeText"
       >
@@ -50,42 +88,6 @@
             </b-col>
           </b-row>
         </b-form>
-      </b-tab>
-      <b-tab
-        title="Lebensmittel"
-        :active="modeIngredient"
-      >
-        <b-row>
-          <b-col>
-            <IngredientsSingleEdit
-              :amount="form.ingredient.amount"
-              :good-id="form.ingredient.goodId"
-              :unit-id="form.ingredient.unitId"
-              @changed="onItemChange"
-              @createGood="onCreateGood"
-            />
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col class="text-right">
-            <b-button-group>
-              <b-button
-                class="mr-2"
-                variant="secondary"
-                @click="onAbort"
-              >
-                Abbrechen
-              </b-button>
-              <b-button
-                type="submit"
-                variant="primary"
-                @click="onSaveIngredient"
-              >
-                Speichern
-              </b-button>
-            </b-button-group>
-          </b-col>
-        </b-row>
       </b-tab>
     </b-tabs>
     <b-modal
