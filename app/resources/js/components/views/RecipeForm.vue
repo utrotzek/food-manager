@@ -277,15 +277,14 @@ export default {
     this.$store.dispatch('recipe/updateTags')
       .then(res => this.$store.dispatch('recipe/fetchIngredientItems'))
       .then(res => {
-        axios.get('/api/recipes/' + this.$route.params.id).then(res => {
-          const recipeData = res.data;
-          this.loadRecipeData(recipeData);
-          document.title = this.form.title + ' bearbeiten';
-          this.loading = false;
-        });
-
         if (this.editMode){
-          setTimeout(() => this.$refs.observer.validate(), 1000);
+          axios.get('/api/recipes/' + this.$route.params.id).then(res => {
+            const recipeData = res.data;
+            this.loadRecipeData(recipeData);
+            document.title = this.form.title + ' bearbeiten';
+            this.loading = false;
+            setTimeout(() => this.$refs.observer.validate(), 1000);
+          });
         }
       })
   },

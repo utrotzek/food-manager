@@ -28,6 +28,7 @@ class GoodResource extends JsonResource
             'protein' => $this->protein,
             'kcal' => $this->kcal,
             'piece_in_gramm' => $this->piece_in_gramm,
+            'allow_in_recipes' => $this->allow_in_recipes,
             'group' => new GoodGroupResource($this->goodGroup()->first())
         ];
     }

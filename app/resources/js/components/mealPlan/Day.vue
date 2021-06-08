@@ -227,9 +227,6 @@ export default {
     }
   },
   computed: {
-    isVisible() {
-      return !(this.$store.state.app.breakpoints.isSm || this.$store.state.app.breakpoints.isXs);
-    },
     isPast() {
       return this.day.date.isBefore(this.$dayjs(), 'day');
     },
@@ -243,13 +240,8 @@ export default {
       }
     },
   },
-  watch: {
-    isVisible(newVal) {
-      this.visible = newVal;
-    }
-  },
   mounted() {
-    this.visible = this.isVisible;
+    this.visible = this.$store.state.meal.dayStates[this.day.id].visible;
   },
   methods: {
     unlockDay() {
@@ -304,6 +296,7 @@ export default {
     },
     toggleVisibility() {
       this.visible=!this.visible;
+      this.$store.commit('meal/updateDayState', {id: this.day.id, visible: this.visible});
     },
     toggleShoppingDay() {
       const isShoppingDay = !this.day.shoppingDay;

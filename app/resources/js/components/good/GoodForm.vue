@@ -25,6 +25,13 @@
           </b-form-group>
         </validation-provider>
         <b-form-group
+          id="allow-in-recipes"
+          label="In Rezepten anzeigen"
+          label-for="allow-in-recipes"
+        >
+          <b-checkbox v-model="allowInRecipes" />
+        </b-form-group>
+        <b-form-group
           id="good-group"
           label="Warengruppe auswählen"
           label-for="good-group"
@@ -74,12 +81,17 @@ export default {
     value: {
       type: String,
       required: true
+    },
+    defaultInRecipeAllowed: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       goodTitle: this.value,
-      goodGroupId: null
+      goodGroupId: null,
+      allowInRecipes: this.defaultInRecipeAllowed
     }
   },
   computed: {
@@ -97,7 +109,8 @@ export default {
     onSave() {
       const data = {
         goodGroupId: this.goodGroupId,
-        title: this.goodTitle
+        title: this.goodTitle,
+        allowInRecipes: this.allowInRecipes
       };
       this.$emit('save', data);
     },

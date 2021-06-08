@@ -54,7 +54,7 @@
               :items="units"
               :show-all-items-on-empty-query="true"
               :preselected-value="form.unitId"
-              :enable-inline-creation="true"
+              :enable-inline-creation="enableInlineCreation"
               @selected="unitUpdated"
               @create="$emit('createUnit', $event)"
             />
@@ -88,8 +88,8 @@
               search-key="title"
               value-key="id"
               :items="goods"
-              :show-all-items-on-empty-query="false"
-              :enable-inline-creation="true"
+              :show-all-items-on-empty-query="true"
+              :enable-inline-creation="enableInlineCreation"
               :preselected-value="form.goodId"
               @selected="goodUpdated"
               @create="$emit('createGood', $event)"
@@ -104,6 +104,7 @@
         </validation-provider>
       </b-col>
       <b-col
+        v-if="!hideDeleteButton"
         cols="1"
         md="1"
         class="text-right"
@@ -154,6 +155,18 @@ export default {
     portionOverride: {
       type: Number,
       default: null
+    },
+    recipeMode: {
+      type: Boolean,
+      default: true
+    },
+    enableInlineCreation: {
+      type: Boolean,
+      default: true
+    },
+    hideDeleteButton: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -168,13 +181,20 @@ export default {
   },
   computed: {
     units() {
-      return this.$store.state.recipe.units;
+      return this.$store.getters['recipe/unitsSorted'];
     },
     goods() {
-      return this.$store.state.recipe.goods;
+      if (this.recipeMode) {
+        return this.$store.getters['recipe/goodsForRecipes'];
+      } else {
+        return this.$store.getters['recipe/goodsSorted'];
+      }
     }
   },
   watch: {
+    amount: function (newVal) {
+      this.form.amount = newVal;
+    },
     goodId: function (newVal) {
       this.form.goodId = newVal;
     },
@@ -188,11 +208,10 @@ export default {
       actualAmount = Number(actualAmount);
       actualAmount = actualAmount  / this.portionOriginal * this.portionOverride;
     }
-    this.form.amount = actualAmount.toString().replace('.', ',');
-
-    this.$refs.amount.validate(this.form.amount);
-    this.$refs.unit.validate(this.form.unitId);
-    this.$refs.good.validate(this.form.goodId);
+    this.form.amount = actualAmount ? actualAmount.toString().replace('.', ',') : null;
+    Vue.nextTick(() => {
+      this.emitChanged();
+    });
   },
   methods: {
     getValidationState({ dirty, validated, valid = null }) {
@@ -218,12 +237,13 @@ export default {
       this.emitChanged();
     },
     emitChanged(){
+      const amount = this.form.amount ? this.form.amount.toString().replace(',', '.') : null;
       this.$emit('changed', {
         id: this.id,
         data: {
           id: this.id,
           unitId: parseInt(this.form.unitId),
-          amount: parseFloat(this.form.amount.toString().replace(',', '.')),
+          amount: parseFloat(amount),
           goodId: parseInt(this.form.goodId),
           category: this.category
         }

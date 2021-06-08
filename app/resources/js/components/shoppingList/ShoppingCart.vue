@@ -36,28 +36,40 @@
               >
                 <b-col
                   class="float-left"
-                  cols="3"
+                  cols="2"
                   md="6"
                 >
                   <div class="d-none d-md-block">
                     <b-button class="mr-1">
-                      <b-icon-check @click="onDoneList(shoppingList)" />
+                      <b-icon-trash @click="onDoneList(shoppingList)" />
+                    </b-button>
+                    <b-button class="mr-1">
+                      <b-icon-cart-x @click="onClearList(shoppingList)" />
                     </b-button>
                     <b-button class="mr-1">
                       <b-icon-pen @click="onEditList(shoppingList)" />
+                    </b-button>
+                    <b-button
+                      v-if="hasMergeableItems(shoppingList)"
+                      class="mr-1"
+                    >
+                      <b-icon-chevron-bar-contract @click="onMergeItems(shoppingList)" />
                     </b-button>
                     <b-button>
                       <b-icon-printer @click="$emit('print', shoppingList)" />
                     </b-button>
                   </div>
                   <div class="d-block d-md-none">
-                    <b-button variant="primary">
-                      <b-icon-plus-circle /> Neu
+                    <b-button
+                      variant="primary"
+                      @click="onNewItem(shoppingList)"
+                    >
+                      <b-icon-plus-circle />
                     </b-button>
                   </div>
                 </b-col>
                 <b-col
-                  cols="9"
+                  cols="10"
                   md="6"
                 >
                   <div class="float-right">
@@ -68,10 +80,19 @@
                         variant="outline-dark"
                       >
                         <b-dropdown-item-button @click="onDoneList(shoppingList)">
-                          <b-icon-check /> Abschließen
+                          <b-icon-trash /> Löschen
+                        </b-dropdown-item-button>
+                        <b-dropdown-item-button @click="onClearList(shoppingList)">
+                          <b-icon-cart-x /> Einkausliste leeren
                         </b-dropdown-item-button>
                         <b-dropdown-item-button @click="onEditList(shoppingList)">
                           <b-icon-pen /> Bearbeiten
+                        </b-dropdown-item-button>
+                        <b-dropdown-item-button
+                          v-if="hasMergeableItems(shoppingList)"
+                          @click="onMergeItems(shoppingList)"
+                        >
+                          <b-icon-chevron-bar-contract /> Einträge zusammenfassen
                         </b-dropdown-item-button>
                         <b-dropdown-item-button @click="$emit('print', shoppingList)">
                           <b-icon-printer /> Drucken
@@ -114,7 +135,7 @@
                 </b-col>
               </b-row>
             </b-card-body>
-            <b-card-body>
+            <b-card-body class="mb-5">
               <Items :shopping-list="shoppingList" />
             </b-card-body>
           </b-collapse>
@@ -135,11 +156,13 @@
         title="Neuer Eintrag für den Einkaufszettel"
         hide-footer
       >
-        <ItemForm
-          :shopping-list="form.newItemShoppingList"
-          @saved="closeModal"
-          @aborted="closeModal"
-        />
+        <div v-if="form.newItemShoppingList">
+          <ItemForm
+            :shopping-list="form.newItemShoppingList"
+            @saved="closeModal"
+            @aborted="closeModal"
+          />
+        </div>
       </b-modal>
     </div>
 
@@ -172,15 +195,44 @@
     <b-modal
       id="done-shopping-list-modal"
       ref="done-shopping-list-modal"
-      title="Liste abschließen?"
-      ok-title="Fertig"
+      title="Einkaufsliste löschen?"
+      ok-title="Löschen"
+      ok-variant="danger"
       cancel-title="Abbrechen"
       @ok="onDoneListConfirm"
       @cancel="closeDoneListModal"
     >
       <p v-if="form.doneShoppingList">
-        Wollen Sie die Einkaufsliste <b>{{ form.doneShoppingList.title }}</b> wirklich abschließen?
+        Möchtest Du die Einkaufsliste <b>{{ form.doneShoppingList.title }}</b> samt allen Einträgen wirklich löschen?
       </p>
+    </b-modal>
+    <b-modal
+      id="clear-shopping-list-modal"
+      ref="clear-shopping-list-modal"
+      title="Liste leeren"
+      ok-title="Leeren"
+      ok-variant="danger"
+      cancel-title="Abbrechen"
+      @ok="onClearListConfirm"
+      @cancel="closeClearShoppingListModal"
+    >
+      <div v-if="form.clearShoppingList">
+        <p>Möchtest Du alle Einträge auf der Einkaufsliste <b>{{ form.clearShoppingList.title }}</b> wirklich löschen?</p>
+      </div>
+    </b-modal>
+
+    <b-modal
+      id="merge-duplicates-modal"
+      ref="merge-duplicates-modal"
+      title="Duplikate zusammenfassen"
+      hide-footer
+      @ok="stopMergeMode"
+    >
+      <ItemMerger
+        :mergeable-goods="form.mergeItemsMode.mergeableGoods"
+        :shopping-list="form.mergeItemsMode.shoppingList"
+        @cancel="stopMergeMode"
+      />
     </b-modal>
   </div>
 </template>
@@ -190,10 +242,11 @@ import Items from "./Items";
 import {SHOPPING_LIST_SORTING} from "../../constants/shoppingListConstants"
 import ItemForm from "./ItemForm";
 import ShoppingListForm from "./ShoppingListForm";
+import ItemMerger from "./ItemMerger";
 
 export default {
   name: "ShoppingCart",
-  components: {Items, ItemForm, ShoppingListForm},
+  components: {Items, ItemForm, ShoppingListForm, ItemMerger},
   data() {
     return {
       loaded: false,
@@ -201,7 +254,12 @@ export default {
         sorted: null,
         newItemShoppingList: null,
         editShoppingList: null,
-        doneShoppingList: null
+        doneShoppingList: null,
+        clearShoppingList: null,
+        mergeItemsMode: {
+          shoppingList: null,
+          mergeableGoods: []
+        }
       }
     }
   },
@@ -223,6 +281,34 @@ export default {
     this.$store.dispatch('recipe/fetchIngredientItems');
   },
   methods: {
+    hasMergeableItems(shoppingList) {
+      return this.$store.getters['shoppingList/mergeableItemsOfShoppingList'](shoppingList.id).length > 0;
+    },
+    onMergeItems(shoppingList) {
+      this.form.mergeItemsMode.mergeableGoods = this.$store.getters['shoppingList/mergeableItemsOfShoppingList'](shoppingList.id);
+      this.form.mergeItemsMode.shoppingList = shoppingList;
+      this.$refs['merge-duplicates-modal'].show();
+    },
+    stopMergeMode() {
+      this.form.mergeItemsMode = {
+        shoppingList: null,
+        mergeableGoods: []
+      }
+      this.$refs['merge-duplicates-modal'].hide();
+    },
+    onClearList(shoppingList) {
+      this.form.clearShoppingList = shoppingList;
+      this.$refs['clear-shopping-list-modal'].show();
+    },
+    onClearListConfirm() {
+      this.$store.dispatch('shoppingList/clearItems', {shoppingList: this.form.clearShoppingList}).then(() => {
+        this.closeClearShoppingListModal();
+      })
+    },
+    closeClearShoppingListModal() {
+      this.form.clearShoppingList = null;
+      this.$refs['clear-shopping-list-modal'].hide();
+    },
     onDoneList(shoppingList) {
       this.form.doneShoppingList = shoppingList;
       this.$refs['done-shopping-list-modal'].show();
