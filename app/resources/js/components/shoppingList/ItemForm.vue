@@ -18,6 +18,7 @@
               :recipe-mode="false"
               @changed="onItemChange"
               @createGood="onCreateGood"
+              @createUnit="onCreateUnit"
             />
           </b-col>
         </b-row>
@@ -232,6 +233,13 @@ export default {
       this.$store.dispatch('recipe/saveNewGood', data).then(res => {
         this.form.ingredient.goodId = res.id;
         this.abortCreateGood();
+      }).catch(err => {
+        console.log(err);
+      })
+    },
+    onCreateUnit(newUnitTitle){
+      this.$store.dispatch('recipe/saveUnit', {title: newUnitTitle}).then(res => {
+        this.form.ingredient.unitId = res.id;
       }).catch(err => {
         console.log(err);
       })
