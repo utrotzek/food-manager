@@ -9,7 +9,7 @@ export default {
             .catch(err => reject(err));
         })
     },
-    loadMealPlanRange({commit, state}, payload) {
+    loadMealPlanRange({commit, state, rootState}, payload) {
         return new Promise((resolve, reject) => {
             const from = payload.from.format('YYYY-MM-DD');
             const to = payload.to.format('YYYY-MM-DD');
@@ -19,7 +19,10 @@ export default {
                 axios.get('/api/day-plans/range', {params: {from: from, to: to}})
             ])
             .then(axios.spread((daysResponse, dayPlansResponse) => {
-                commit('setDays', {days: daysResponse.data});
+                //determine default day visibilty depending on the current breakpoint
+                const defaultVisibility = !(rootState.app.breakpoints.isSm || rootState.app.breakpoints.isXs);
+
+                commit('setDays', {days: daysResponse.data, defaultVisibility: defaultVisibility});
                 commit('addDayPlans', {dayPlans: dayPlansResponse.data, override: true});
                 resolve();
             }))

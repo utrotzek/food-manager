@@ -1,6 +1,10 @@
 import dayjs from "dayjs";
 
 export default {
+    updateDayState(state, payload){
+        const id = payload.id;
+        state.dayStates[id].visible = payload.visible;
+    },
     setDays(state, payload){
         state.days = [];
 
@@ -12,6 +16,12 @@ export default {
                 date: dayjs(el.date),
                 id: el.id
             });
+
+            if (!state.dayStates.hasOwnProperty(el.id)){
+                state.dayStates[el.id] = {
+                    visible: payload.defaultVisibility
+                };
+            }
         })
     },
     updateDay(state, payload){
