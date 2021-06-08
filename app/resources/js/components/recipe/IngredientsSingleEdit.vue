@@ -88,7 +88,7 @@
               search-key="title"
               value-key="id"
               :items="goods"
-              :show-all-items-on-empty-query="false"
+              :show-all-items-on-empty-query="true"
               :enable-inline-creation="enableInlineCreation"
               :preselected-value="form.goodId"
               @selected="goodUpdated"
@@ -181,13 +181,13 @@ export default {
   },
   computed: {
     units() {
-      return this.$store.state.recipe.units;
+      return this.$store.getters['recipe/unitsSorted'];
     },
     goods() {
       if (this.recipeMode) {
         return this.$store.getters['recipe/goodsForRecipes'];
       } else {
-        return this.$store.state.recipe.goods;
+        return this.$store.getters['recipe/goodsSorted'];
       }
     }
   },
