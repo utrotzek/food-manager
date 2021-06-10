@@ -3,8 +3,8 @@
     <b-row no-gutters>
       <b-col
         cols="12"
-        md="2"
-        class="d-none d-md-block pr-md-2"
+        lg="2"
+        class="d-none d-lg-block pr-lg-2"
       >
         <div class="card bg-light">
           <div class="card-header">
@@ -28,7 +28,7 @@
       </b-col>
       <b-col
         cols="12"
-        md="10"
+        lg="10"
       >
         <div
           class="card bg-light"
@@ -134,7 +134,7 @@
                   v-for="meal in meals"
                   :key="meal.id"
                   cols="12"
-                  lg="4"
+                  md="4"
                 >
                   <MealForDay
                     :meal="meal"
@@ -173,7 +173,6 @@
         @abort="hideDayToCartModal"
       />
     </b-modal>
-
     <b-modal
       id="shopping-list-modal"
       ref="shopping-list-modal"
