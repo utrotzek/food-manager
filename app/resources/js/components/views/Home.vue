@@ -5,7 +5,7 @@
         <b-col class="text-center">
           <p>
             Herzlich willkommen im Food Manager <br>
-            <small>- dem tool, das Dein Leben vereinfacht - </small>
+            <small>- so einfach plant man sein Essen - </small>
           </p>
         </b-col>
       </b-row>
