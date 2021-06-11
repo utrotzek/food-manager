@@ -38,6 +38,15 @@ export default {
             });
         });
     },
+    clearItems({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            const id = payload.shoppingList.id;
+            axios.delete('/api/shopping-lists/' + id + '/clearAll').then(() => {
+                commit('deleteAllItemsOfList', {shoppingListId: id});
+                resolve();
+            });
+        });
+    },
     editList({commit}, payload) {
         return new Promise((resolve, reject) => {
             const data = {title: payload.title};

@@ -39,7 +39,7 @@
                     v-if="item.good"
                     class="text-right col-2"
                   >
-                    {{ item.unitAmount.toLocaleString('de-DE', {minimumFractionDigits: 0, maximumFractionDigits: 1}) }}
+                    {{ item.unitAmount.toLocaleString('de-DE', {minimumFractionDigits: 0, maximumFractionDigits: 1, useGrouping: false}) }}
                   </td>
                   <td
                     v-if="item.good"
@@ -75,30 +75,29 @@
                     v-if="!printView"
                     class="col-2 col-lg-1"
                   >
-                    <b-button-group>
-                      <b-button
-                        class="small mr-1"
+                    <div class="position-relative">
+                      <b-dropdown
                         variant="light"
-                        @click="onEditItem(item)"
+                        dropright
                       >
-                        <b-icon-pen />
-                      </b-button>
-                      <b-button
-                        v-if="$store.state.shoppingList.shoppingLists.length > 1"
-                        class="small mr-1"
-                        variant="light"
-                        @click="onMoveItem(item)"
-                      >
-                        <b-icon-arrows-move />
-                      </b-button>
-                      <b-button
-                        class="small"
-                        variant="light"
-                        @click="onDeleteItem(item)"
-                      >
-                        <b-icon-trash />
-                      </b-button>
-                    </b-button-group>
+                        <b-dropdown-item
+                          @click="onEditItem(item)"
+                        >
+                          <b-icon-pen /> Bearbeiten
+                        </b-dropdown-item>
+                        <b-dropdown-item
+                          v-if="$store.state.shoppingList.shoppingLists.length > 1"
+                          @click="onMoveItem(item)"
+                        >
+                          <b-icon-arrows-move /> Verschieben
+                        </b-dropdown-item>
+                        <b-dropdown-item
+                          @click="onDeleteItem(item)"
+                        >
+                          <b-icon-trash /> Löschen
+                        </b-dropdown-item>
+                      </b-dropdown>
+                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -142,7 +141,9 @@
       title="Bestätigung"
       @ok="onDeleteConfirm"
     >
-      <p>Soll der Eintrag wirklich gelöscht werden?</p>
+      <div v-if="deleteItem">
+        <p>Soll der Eintrag '<b>{{ deleteItem | itemTitle }}</b>' wirklich gelöscht werden?</p>
+      </div>
     </b-modal>
 
     <b-modal
@@ -151,11 +152,14 @@
       title="Eintrag verschieben"
       hide-footer
     >
-      <ShoppingListSelector
-        :exluded-shopping-list-id="moveItem ? moveItem.shopping_list_id : null"
-        @abort="closeMoveModal"
-        @save="onMoveItemConfirm"
-      />
+      <div v-if="moveItem">
+        <ShoppingListSelector
+          :exluded-shopping-list-id="moveItem ? moveItem.shopping_list_id : null"
+          :description="shoppingSelectorDescription"
+          @abort="closeMoveModal"
+          @save="onMoveItemConfirm"
+        />
+      </div>
     </b-modal>
   </div>
 </template>
@@ -168,6 +172,9 @@ import ShoppingListSelector from "./ShoppingListSelector";
 export default {
   name: "ShoppingListItems",
   filters: {
+    itemTitle: function (value){
+      return value.description ?? value.good.title;
+    },
     unitFreeText: function (value, mode){
       if (!value) return '';
       value = value.toString().trim();
@@ -217,6 +224,10 @@ export default {
     }
   },
   computed: {
+    shoppingSelectorDescription() {
+      const itemName = this.moveItem.description ?? this.moveItem.good.title;
+      return "Den Eintrag '" + itemName + "' auf eine andere Einkaufsliste verschieben";
+    },
     allItems(){
       return this.$store.getters["shoppingList/itemsForShoppingList"](this.shoppingList.id);
     },

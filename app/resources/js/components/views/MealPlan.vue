@@ -34,7 +34,7 @@
         </b-col>
       </b-row>
       <b-row
-        v-if="pastDays.length > 0"
+        v-if="pastDays.length > 0 && isWeekWithCurrentDay"
         class="mt-1 mb-1 text-right"
       >
         <b-col>
@@ -84,7 +84,7 @@
               <b-col>
                 <b-card>
                   <template #header>
-                    <b-icon-bookmark-fill /> <b>Merkliste</b>
+                    <b-icon-bookmark-fill /> <b>Merkliste</b> <b-badge>{{ $store.state.recipe.recipeRemembered.length }}</b-badge>
                   </template>
                   <b-card-body>
                     <RememberList
@@ -120,12 +120,16 @@ export default {
     }
   },
   computed: {
+    isWeekWithCurrentDay() {
+      const foundIndex = this.$store.state.meal.days.findIndex(el => this.dayIsCurentDay(el));
+      return foundIndex !== -1;
+    },
     pastDays() {
       return this.$store.state.meal.days.filter(el => this.dayIsPast(el));
     },
     activeDays(){
       const activeDays = this.$store.state.meal.days.filter(el => !this.dayIsPast(el));
-      if (this.showPastDays) {
+      if (this.showPastDays || !this.isWeekWithCurrentDay) {
         return this.pastDays.concat(activeDays);
       }
 
@@ -200,6 +204,9 @@ export default {
     },
     dayIsPast(day) {
       return day.date.isBefore(this.$dayjs(), 'day');
+    },
+    dayIsCurentDay(day) {
+      return day.date.isSame(this.$dayjs(), 'day');
     }
   }
 }

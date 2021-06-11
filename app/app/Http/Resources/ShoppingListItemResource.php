@@ -20,6 +20,7 @@ class ShoppingListItemResource extends JsonResource
             'unitAmount' => $this->unit_amount,
             'good' => new GoodResource($this->good),
             'recipe_id' => $this->dayPlan->recipe->id ?? null,
+            'recipe_title' => $this->dayPlan->recipe->title ?? null,
             'shopping_list_id' => $this->shopping_list_id,
             'descriptionAmount' => $this->descriptionAmount,
             'description' => $this->description,

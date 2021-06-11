@@ -10,7 +10,7 @@ class Good extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'carbs', 'fat', 'protein', 'kcal', 'piece_in_gramm'];
+    protected $fillable = ['title', 'carbs', 'fat', 'protein', 'kcal', 'piece_in_gramm', 'allow_in_recipes'];
 
     public function goodGroup(): BelongsTo
     {

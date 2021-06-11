@@ -147,6 +147,7 @@
     >
       <GoodForm
         v-model="form.newGood.title"
+        default-in-recipe-allowed
         @abort="onAbortGood"
         @save="onSaveGood"
       />
@@ -266,7 +267,7 @@ export default {
         const itemIndex = this.form.ingredients.findIndex((item) => { return item.id === this.form.newGood.item.id });
         this.$refs['add-good-modal'].hide();
         if (itemIndex > -1) {
-          let updatedItem  =this.form.ingredients[itemIndex];
+          let updatedItem = this.form.ingredients[itemIndex];
           updatedItem.goodId = res.id;
           this.$set(this.form.ingredients, itemIndex, updatedItem);
         }

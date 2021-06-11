@@ -5,6 +5,46 @@
       justified
     >
       <b-tab
+        v-if="!editMode || modeIngredient"
+        title="Ware"
+        :active="modeIngredient"
+      >
+        <b-row>
+          <b-col>
+            <IngredientsSingleEdit
+              :amount="form.ingredient.amount"
+              :good-id="form.ingredient.goodId"
+              :unit-id="form.ingredient.unitId"
+              :recipe-mode="false"
+              @changed="onItemChange"
+              @createGood="onCreateGood"
+              @createUnit="onCreateUnit"
+            />
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col class="text-right">
+            <b-button-group>
+              <b-button
+                class="mr-2"
+                variant="secondary"
+                @click="onAbort"
+              >
+                Abbrechen
+              </b-button>
+              <b-button
+                type="submit"
+                variant="primary"
+                @click="onSaveIngredient"
+              >
+                Speichern
+              </b-button>
+            </b-button-group>
+          </b-col>
+        </b-row>
+      </b-tab>
+      <b-tab
+        v-if="!editMode || modeFreeText"
         title="Freitext"
         :active="modeFreeText"
       >
@@ -16,7 +56,8 @@
                   v-model="form.descriptionAmount"
                   autofocus
                   placeholder="Anzahl"
-                  type="number"
+                  type="text"
+                  pattern="*"
                 />
               </b-form-group>
             </b-col>
@@ -50,51 +91,31 @@
           </b-row>
         </b-form>
       </b-tab>
-      <b-tab
-        title="Lebensmittel"
-        :active="modeIngredient"
-      >
-        <b-row>
-          <b-col>
-            <IngredientsSingleEdit
-              :amount="form.ingredient.amount"
-              :good-id="form.ingredient.goodId"
-              :unit-id="form.ingredient.unitId"
-              @changed="onItemChange"
-            />
-          </b-col>
-        </b-row>
-        <b-row>
-          <b-col class="text-right">
-            <b-button-group>
-              <b-button
-                class="mr-2"
-                variant="secondary"
-                @click="onAbort"
-              >
-                Abbrechen
-              </b-button>
-              <b-button
-                type="submit"
-                variant="primary"
-                @click="onSaveIngredient"
-              >
-                Speichern
-              </b-button>
-            </b-button-group>
-          </b-col>
-        </b-row>
-      </b-tab>
     </b-tabs>
+    <b-modal
+      id="add-good-modal"
+      ref="add-good-modal"
+      centered
+      title="Zutat hinzufügen"
+      hide-footer
+    >
+      <GoodForm
+        v-model="newGood.title"
+        default-recipe-not-enabled
+        @abort="abortCreateGood"
+        @save="onSaveGood"
+      />
+    </b-modal>
   </div>
 </template>
 
 <script>
 import IngredientsSingleEdit from "../recipe/IngredientsSingleEdit";
+import GoodForm from "../good/GoodForm";
 
 export default {
   name: "ItemForm",
-  components: {IngredientsSingleEdit},
+  components: {IngredientsSingleEdit, GoodForm},
   props: {
     shoppingList: {
       type: Object,
@@ -118,6 +139,9 @@ export default {
         description: null,
         descriptionAmount: null
       },
+      newGood: {
+        title: null,
+      },
       editMode: false
     }
   },
@@ -129,28 +153,37 @@ export default {
       return this.form.ingredient.goodId !== null;
     }
   },
-  created() {
-    if (this.item) {
-      if (this.item.good){
-        this.form.ingredient = {
-          goodId: this.item.good.id,
-          unitId: this.item.unit.id,
-          amount: this.item.unitAmount
-        }
-      } else {
-        this.form.description = this.item.description;
-        this.form.descriptionAmount = this.item.descriptionAmount;
+  watch: {
+    item: {
+      deep: true,
+      handler: function() {
+        this.initializeFormData();
       }
-      this.editMode =  true;
     }
   },
+  mounted() {
+    this.initializeFormData();
+  },
   methods: {
-    onItemChange(changeData) {
-      this.form.ingredient = {
-        goodId: changeData.data.goodId,
-        unitId: changeData.data.unitId,
-        amount: changeData.data.amount,
+    initializeFormData() {
+      if (this.item) {
+        if (this.item.good) {
+          this.form.ingredient = {
+            goodId: this.item.good.id,
+            unitId: this.item.unit.id,
+            amount: this.item.unitAmount
+          }
+        } else {
+          this.form.description = this.item.description;
+          this.form.descriptionAmount = this.item.descriptionAmount;
+        }
+        this.editMode =  true;
       }
+    },
+    onItemChange(changeData) {
+      this.form.ingredient.goodId = changeData.data.goodId;
+      this.form.ingredient.unitId = changeData.data.unitId;
+      this.form.ingredient.amount = changeData.data.amount;
     },
     onSaveIngredient() {
       let payload = {
@@ -187,7 +220,30 @@ export default {
     },
     onAbort() {
       this.$emit('aborted');
-    }
+    },
+    onCreateGood(newGoodTitle){
+      this.newGood.title = newGoodTitle;
+      this.$refs['add-good-modal'].show();
+    },
+    abortCreateGood() {
+      this.$refs['add-good-modal'].hide();
+      this.newGood.title = null;
+    },
+    onSaveGood(data) {
+      this.$store.dispatch('recipe/saveNewGood', data).then(res => {
+        this.form.ingredient.goodId = res.id;
+        this.abortCreateGood();
+      }).catch(err => {
+        console.log(err);
+      })
+    },
+    onCreateUnit(newUnitTitle){
+      this.$store.dispatch('recipe/saveUnit', {title: newUnitTitle}).then(res => {
+        this.form.ingredient.unitId = res.id;
+      }).catch(err => {
+        console.log(err);
+      })
+    },
   }
 }
 </script>

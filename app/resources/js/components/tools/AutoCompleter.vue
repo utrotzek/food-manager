@@ -5,6 +5,7 @@
       data-vue-test="autocompleter"
       class="form-control preview"
       tabindex="0"
+      @blur="flushMovingState"
       @keyup.tab="enableEditMode"
       @click="toggleEditMode"
       v-text="selectedItem ? selectedItem[searchKey] : placeholder"
@@ -22,6 +23,7 @@
         type="text"
         autofocus
         @keydown.esc="disableEditMode"
+        @blur="disableEditMode"
         @keydown.up="keyUp"
         @keydown.down="keyDown"
         @keydown.enter="selectItem"
@@ -117,7 +119,8 @@ export default {
       selectionChangeMode: false,
       editMode: false,
       query: "",
-      backwards: false
+      backwards: false,
+      forward: false
     };
   },
   computed: {
@@ -186,6 +189,9 @@ export default {
       if (!this.backwards && !this.forward){
         this.editMode = true;
       }
+      this.flushMovingState();
+    },
+    flushMovingState() {
       this.backwards = false;
       this.forward = false;
     },
@@ -199,6 +205,7 @@ export default {
     moveForward() {
       this.forward = true;
       this.disableEditMode();
+      this.flushMovingState();
     },
     moveBackwards() {
       this.backwards = true;

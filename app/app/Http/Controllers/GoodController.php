@@ -46,6 +46,7 @@ class GoodController extends Controller
             'protein' => 'int',
             'kcal' => 'int',
             'piece_in_gramm' => 'int',
+            'allow_in_recipes' => 'required|boolean',
             'good_group_id' => 'required|int|exists:good_groups,id'
         ];
         $validator = Validator::make($request->all(), $rules);

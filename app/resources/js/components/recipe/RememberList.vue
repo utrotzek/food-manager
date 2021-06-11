@@ -7,17 +7,6 @@
         v-if="remembered.length > 0"
         class="remembered-list"
       >
-        <!-- eslint-disable vue/no-v-html -->
-        <div v-html="rememberCountText">
-          <b-button
-            variant="link"
-            class="icon-button"
-            @click="loadList"
-          >
-            <b-icon-arrow-repeat />
-          </b-button>
-        </div>
-        <!-- eslint-enable -->
         <b-row>
           <b-col
             v-for="recipe in remembered"
@@ -99,14 +88,6 @@ export default {
       return {
         cols: 12,
         md: md
-      }
-    },
-    rememberCountText() {
-      const count = this.remembered.length;
-      if (count === 1) {
-        return "Es befindet sich aktuell <b>1 Rezept</b> auf der Merkliste.";
-      }else {
-        return "Es befinden sich aktuell <b>" + count  + " Rezepte</b> auf der Merkliste.";
       }
     }
   },
