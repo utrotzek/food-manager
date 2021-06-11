@@ -155,8 +155,7 @@
       <div v-if="moveItem">
         <ShoppingListSelector
           :exluded-shopping-list-id="moveItem ? moveItem.shopping_list_id : null"
-          :title="moveItem | itemTitle"
-          :description="modeToShopingListDescription"
+          :description="shoppingSelectorDescription"
           @abort="closeMoveModal"
           @save="onMoveItemConfirm"
         />
@@ -225,6 +224,10 @@ export default {
     }
   },
   computed: {
+    shoppingSelectorDescription() {
+      const itemName = this.moveItem.description ?? this.moveItem.good.title;
+      return "Den Eintrag '" + itemName + "' auf eine andere Einkaufsliste verschieben";
+    },
     allItems(){
       return this.$store.getters["shoppingList/itemsForShoppingList"](this.shoppingList.id);
     },

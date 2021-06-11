@@ -1,6 +1,6 @@
 <template>
   <div class="shopping-list-selector">
-    <p>Den Eintrag '<b>{{ title }}"</b>' auf eine andere Einkaufsliste verschieben</p>
+    <p>{{ description }}</p>
     <b-form @submit.prevent="onSave">
       <b-row>
         <b-col>
@@ -39,7 +39,7 @@
 export default {
   name: "ShoppingListSelector",
   props: {
-    title: {
+    description: {
       type: String,
       required: true
     },

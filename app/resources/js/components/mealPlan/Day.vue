@@ -156,6 +156,7 @@
       hide-footer
     >
       <ShoppingListSelector
+        description="Bitte wähle die Einkaufsliste aus, auf der die Zutaten eingefügt werden sollen."
         @save="onShoppingListSelected"
         @abort="onShoppingListAbort"
       />
