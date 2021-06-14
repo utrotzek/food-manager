@@ -184,11 +184,7 @@ export default {
       return this.$store.getters['recipe/unitsSorted'];
     },
     goods() {
-      if (this.recipeMode) {
-        return this.$store.getters['recipe/goodsForRecipes'];
-      } else {
-        return this.$store.getters['recipe/goodsSorted'];
-      }
+      return this.$store.getters['recipe/goodsSorted'];
     }
   },
   watch: {
@@ -211,9 +207,17 @@ export default {
     this.form.amount = actualAmount ? actualAmount.toString().replace('.', ',') : null;
     Vue.nextTick(() => {
       this.emitChanged();
+      //delayed validation is for some reason necessary to be to save recipe form in edit mode
+      if (this.form.goodId && this.form.unitId != null){
+        this.validate();
+      }
     });
   },
   methods: {
+    validate(){
+      this.$refs.good.validate(this.form.goodId);
+      this.$refs.unit.validate(this.form.unitId);
+    },
     getValidationState({ dirty, validated, valid = null }) {
       let state = null;
       if (validated || dirty) {

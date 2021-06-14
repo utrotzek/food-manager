@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Repositories\AppStateRepository;
 use App\Repositories\DayRepository;
+use App\Repositories\GoodRepository;
 use App\Repositories\MealConfigRepository;
 use App\Repositories\RecipeRepository;
 use Illuminate\Cache\RateLimiting\Limit;
@@ -32,6 +33,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     // protected $namespace = 'App\\Http\\Controllers';
 
+    protected GoodRepository $goodReposotiry;
     protected RecipeRepository $recipeReposotiry;
     protected DayRepository $dayRepository;
     protected MealConfigRepository $mealConfigRepository;
@@ -44,6 +46,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->dayRepository = $app->make(DayRepository::class);
         $this->mealConfigRepository = $app->make(MealConfigRepository::class);
         $this->appStateRepository = $app->make(AppStateRepository::class);
+        $this->goodReposotiry = $app->make(GoodRepository::class);
     }
 
     /**
@@ -97,6 +100,10 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->app['router']->bind('app_state', function ($value, $route) {
             return $this->appStateRepository->findByName($value);
+        });
+
+        $this->app['router']->bind('good', function ($value, $route) {
+            return $this->goodReposotiry->findByIdOrSlug($value);
         });
     }
 }

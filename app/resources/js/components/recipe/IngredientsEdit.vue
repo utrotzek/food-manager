@@ -147,7 +147,6 @@
     >
       <GoodForm
         v-model="form.newGood.title"
-        default-in-recipe-allowed
         @abort="onAbortGood"
         @save="onSaveGood"
       />
