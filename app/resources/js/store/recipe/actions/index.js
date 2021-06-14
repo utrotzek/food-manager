@@ -42,7 +42,6 @@ export default {
             const data = {
                 title: payload.title,
                 good_group_id: payload.goodGroupId,
-                allow_in_recipes: payload.allowInRecipes,
                 carbs: 60,
                 fat: 30,
                 protein: 100,

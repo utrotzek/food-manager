@@ -101,7 +101,6 @@
     >
       <GoodForm
         v-model="newGood.title"
-        default-recipe-not-enabled
         @abort="abortCreateGood"
         @save="onSaveGood"
       />
