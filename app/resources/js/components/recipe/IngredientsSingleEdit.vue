@@ -184,11 +184,7 @@ export default {
       return this.$store.getters['recipe/unitsSorted'];
     },
     goods() {
-      if (this.recipeMode) {
-        return this.$store.getters['recipe/goodsForRecipes'];
-      } else {
-        return this.$store.getters['recipe/goodsSorted'];
-      }
+      return this.$store.getters['recipe/goodsSorted'];
     }
   },
   watch: {
