@@ -23,6 +23,8 @@
               :state="getValidationState(validationContext)"
               :autofocus="!goodId"
               type="number"
+              min="0"
+              step="0.5"
               @change="onChanged"
             />
             <b-form-invalid-feedback id="amount-feedback">
