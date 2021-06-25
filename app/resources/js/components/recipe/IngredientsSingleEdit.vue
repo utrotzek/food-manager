@@ -22,9 +22,9 @@
               placeholder="Anzahl"
               :state="getValidationState(validationContext)"
               :autofocus="!goodId"
-              type="number"
-              min="0"
-              step="0.5"
+              type="text"
+              inputmode="numeric"
+              pattern="[-+]?[0-9]*[.,]?[0-9]+"
               @change="onChanged"
             />
             <b-form-invalid-feedback id="amount-feedback">
