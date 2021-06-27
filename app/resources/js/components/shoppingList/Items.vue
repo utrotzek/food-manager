@@ -44,60 +44,37 @@
                   <td
                     v-if="item.good"
                     class="col-3"
+                    @click="showEditMenu(item)"
                   >
                     {{ item.unit.title }}
                   </td>
                   <td
                     v-if="item.good"
                     class="col-5"
+                    @click="showEditMenu(item)"
                   >
                     {{ item.good.title }}
                   </td>
                   <td
                     v-if="!item.good"
                     class="col-2 text-right"
+                    @click="showEditMenu(item)"
                   >
                     {{ item.descriptionAmount | unitFreeText('unit') }}
                   </td>
                   <td
                     v-if="!item.good"
                     class="col-3"
+                    @click="showEditMenu(item)"
                   >
                     {{ item.descriptionAmount | unitFreeText('text') }}
                   </td>
                   <td
                     v-if="!item.good"
-                    class="col-5"
+                    class="col-7"
+                    @click="showEditMenu(item)"
                   >
                     {{ item.description }}
-                  </td>
-                  <td
-                    v-if="!printView"
-                    class="col-2 col-lg-1"
-                  >
-                    <div class="position-relative">
-                      <b-dropdown
-                        variant="light"
-                        dropright
-                      >
-                        <b-dropdown-item
-                          @click="onEditItem(item)"
-                        >
-                          <b-icon-pen /> Bearbeiten
-                        </b-dropdown-item>
-                        <b-dropdown-item
-                          v-if="$store.state.shoppingList.shoppingLists.length > 1"
-                          @click="onMoveItem(item)"
-                        >
-                          <b-icon-arrows-move /> Verschieben
-                        </b-dropdown-item>
-                        <b-dropdown-item
-                          @click="onDeleteItem(item)"
-                        >
-                          <b-icon-trash /> Löschen
-                        </b-dropdown-item>
-                      </b-dropdown>
-                    </div>
                   </td>
                 </tr>
               </tbody>
@@ -119,10 +96,56 @@
     </div>
 
     <b-modal
+      id="item-edit-menu"
+      ref="item-edit-menu"
+      :title="editMenuTitle"
+      centered
+      hide-footer
+    >
+      <b-row v-if="menuForItem">
+        <b-col
+          cols="12"
+          class="text-center"
+        >
+          <b-button
+            class="mb-2 menu-button"
+            @click="onEditItem(menuForItem)"
+          >
+            <b-icon-pen /> Bearbeiten
+          </b-button>
+        </b-col>
+        <b-col
+          cols="12"
+          class="text-center"
+        >
+          <b-button
+            v-if="$store.state.shoppingList.shoppingLists.length > 1"
+            class="mb-2 menu-button"
+            @click="onMoveItem(menuForItem)"
+          >
+            <b-icon-arrows-move /> Verschieben
+          </b-button>
+        </b-col>
+        <b-col
+          cols="12"
+          class="text-center"
+        >
+          <b-button
+            class="mb-2 menu-button"
+            variant="danger"
+            @click="onDeleteItem(menuForItem)"
+          >
+            <b-icon-trash /> Löschen
+          </b-button>
+        </b-col>
+      </b-row>
+    </b-modal>
+    <b-modal
       id="edit-item-modal"
       ref="edit-item-modal"
       title="Eintrag bearbeiten"
       hide-footer
+      centered
     >
       <ItemForm
         :item="editItem"
@@ -139,6 +162,7 @@
       cancel-title="Abbrechen"
       ok-variant="danger"
       title="Bestätigung"
+      centered
       @ok="onDeleteConfirm"
     >
       <div v-if="deleteItem">
@@ -151,6 +175,7 @@
       ref="list-selector-modal"
       title="Eintrag verschieben"
       hide-footer
+      centered
     >
       <div v-if="moveItem">
         <ShoppingListSelector
@@ -220,10 +245,22 @@ export default {
       renderKey: 0,
       editItem: null,
       deleteItem: null,
-      moveItem: null
+      moveItem: null,
+      menuForItem: null,
     }
   },
   computed: {
+    editMenuTitle() {
+      if (this.menuForItem) {
+        if (this.menuForItem.good) {
+          return "Menü für den Eintrag '" + this.menuForItem.good.title + "'";
+        }
+        if (this.menuForItem.description) {
+          return "Menü für den Eintrag '" + this.menuForItem.description + "'";
+        }
+      }
+      return "Menü für einen Eintrag";
+    },
     shoppingSelectorDescription() {
       const itemName = this.moveItem.description ?? this.moveItem.good.title;
       return "Den Eintrag '" + itemName + "' auf eine andere Einkaufsliste verschieben";
@@ -253,7 +290,8 @@ export default {
       this.editItem = item;
       this.$refs['edit-item-modal'].show();
     },
-    closeEditModal(){
+    closeEditModal() {
+      this.closeMenuModal();
       this.$refs['edit-item-modal'].hide();
       this.editItem = null;
     },
@@ -270,9 +308,14 @@ export default {
         item: this.moveItem,
         shoppingList: shoppingList
       };
+      this.closeMenuModal();
       this.$store.dispatch('shoppingList/moveItem', data).then(() => {
         this.closeMoveModal();
       })
+    },
+    closeMenuModal() {
+      this.$refs['item-edit-menu'].hide();
+      this.menuForItem = null;
     },
     closeMoveModal() {
       this.$refs['list-selector-modal'].hide();
@@ -285,6 +328,7 @@ export default {
       };
       this.$store.dispatch('shoppingList/deleteItem', payload).then(() => {
         this.deleteItem = null;
+        this.closeMenuModal();
         this.$refs['modal-confirm-delete'].hide();
       });
     },
@@ -388,6 +432,10 @@ export default {
         if (a.date > b.date) return 1;
         return 0;
       })
+    },
+    showEditMenu(item) {
+      this.menuForItem = item;
+      this.$refs['item-edit-menu'].show();
     }
   }
 }
@@ -413,6 +461,10 @@ export default {
 
   .table th, .table td {
     padding: 0.3rem;
+  }
+
+  .menu-button {
+    width: 20em;
   }
 </style>
 
