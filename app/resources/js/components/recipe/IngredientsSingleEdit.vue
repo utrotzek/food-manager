@@ -22,9 +22,9 @@
               placeholder="Anzahl"
               :state="getValidationState(validationContext)"
               :autofocus="!goodId"
-              type="number"
-              min="0"
-              step="0.5"
+              type="text"
+              inputmode="numeric"
+              pattern="[-+]?[0-9]*[.,]?[0-9]+"
               @change="onChanged"
             />
             <b-form-invalid-feedback id="amount-feedback">
@@ -203,7 +203,7 @@ export default {
   mounted() {
     let actualAmount = this.form.amount;
     if (this.portionOverride && this.portionOriginal){
-      actualAmount = Number(actualAmount);
+      actualAmount = parseFloat(actualAmount.toString().replace(',', '.'));
       actualAmount = actualAmount  / this.portionOriginal * this.portionOverride;
     }
     this.form.amount = actualAmount ? actualAmount.toString().replace('.', ',') : null;
@@ -249,7 +249,7 @@ export default {
         data: {
           id: this.id,
           unitId: parseInt(this.form.unitId),
-          amount: parseFloat(amount),
+          amount: amount !== null ? parseFloat(amount) : amount,
           goodId: parseInt(this.form.goodId),
           category: this.category
         }
