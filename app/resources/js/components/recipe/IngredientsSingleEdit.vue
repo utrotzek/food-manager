@@ -249,7 +249,7 @@ export default {
         data: {
           id: this.id,
           unitId: parseInt(this.form.unitId),
-          amount: parseFloat(amount),
+          amount: amount !== null ? parseFloat(amount) : amount,
           goodId: parseInt(this.form.goodId),
           category: this.category
         }
