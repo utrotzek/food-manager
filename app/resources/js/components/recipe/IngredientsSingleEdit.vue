@@ -203,7 +203,7 @@ export default {
   mounted() {
     let actualAmount = this.form.amount;
     if (this.portionOverride && this.portionOriginal){
-      actualAmount = Number(actualAmount);
+      actualAmount = parseFloat(actualAmount.toString().replace(',', '.'));
       actualAmount = actualAmount  / this.portionOriginal * this.portionOverride;
     }
     this.form.amount = actualAmount ? actualAmount.toString().replace('.', ',') : null;
