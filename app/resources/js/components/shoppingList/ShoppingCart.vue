@@ -276,9 +276,10 @@ export default {
     }
   },
   mounted() {
-    this.loaded = true;
     this.form.sorted = this.$store.state.app.shoppingList.sorting;
-    this.$store.dispatch('recipe/fetchIngredientItems');
+    this.$store.dispatch('recipe/fetchIngredientItems').then(() => {
+      this.loaded = true;
+    })
   },
   methods: {
     hasMergeableItems(shoppingList) {
