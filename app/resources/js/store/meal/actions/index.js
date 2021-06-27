@@ -97,7 +97,7 @@ export default {
             }
 
             axios.put('/api/day-plans/' + payload.id, data).then(res => {
-                commit('updateDayPlan', {dayPlan: data});
+                commit('updateDayPlan', {dayPlan: res.data.item});
                 resolve();
             })
         })
