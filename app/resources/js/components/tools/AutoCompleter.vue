@@ -174,16 +174,9 @@ export default {
   },
   methods: {
     preselectConfiguredItem(){
-      for (let i = 0; i < this.items.length; i++){
-        let currentItem = this.items[i];
-
-        if (currentItem[this.valueKey] === this.preselectedValue){
-          this.selected = i;
-          this.selectedItem = currentItem;
-          return;
-        }
-      }
-
+      const selectedIndex = this.items.findIndex(el => el[this.valueKey] === this.preselectedValue);
+      this.selectedItem = this.items[selectedIndex];
+      this.selected = selectedIndex;
     },
     enableEditMode() {
       if (!this.backwards && !this.forward){
