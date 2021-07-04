@@ -100,8 +100,9 @@
       hide-footer
     >
       <GoodForm
+        v-if="newGood.title"
         v-model="newGood.title"
-        @abort="abortCreateGood"
+        @abort="closeCreateGoodModal"
         @save="onSaveGood"
       />
     </b-modal>
@@ -224,14 +225,14 @@ export default {
       this.newGood.title = newGoodTitle;
       this.$refs['add-good-modal'].show();
     },
-    abortCreateGood() {
+    closeCreateGoodModal() {
       this.$refs['add-good-modal'].hide();
       this.newGood.title = null;
     },
     onSaveGood(data) {
       this.$store.dispatch('recipe/saveNewGood', data).then(res => {
         this.form.ingredient.goodId = res.id;
-        this.abortCreateGood();
+        this.closeCreateGoodModal();
       }).catch(err => {
         console.log(err);
       })

@@ -33,7 +33,15 @@
           </b-navbar-nav>
         </b-collapse>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item right>
+          <b-nav-item right />
+        </b-navbar-nav>
+      </b-navbar>
+      <main class="LayoutDefault__main h-100">
+        <b-row
+          class="sticky-top"
+          style="background-color: white"
+        >
+          <b-col class="text-right">
             <b-button-group>
               <b-button
                 v-b-modal:modal-remember-list
@@ -57,10 +65,8 @@
                 <b-badge>{{ shoppingCartItems }}</b-badge>
               </b-button>
             </b-button-group>
-          </b-nav-item>
-        </b-navbar-nav>
-      </b-navbar>
-      <main class="LayoutDefault__main h-100">
+          </b-col>
+        </b-row>
         <b-row>
           <b-col
             offset-xl="1"

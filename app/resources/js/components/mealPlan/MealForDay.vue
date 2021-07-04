@@ -16,6 +16,7 @@
           <DayPlan
             :plan="plan"
             :day="day"
+            @change-plan-description="onChangePlanDescription($event, plan)"
           />
           <hr>
         </div>
@@ -188,6 +189,11 @@ export default {
   mounted() {
   },
   methods: {
+    onChangePlanDescription(text, plan) {
+      plan.description = text;
+        this.$store.dispatch('meal/updateDayPlan', plan).then(() => {
+      });
+    },
     focusDescriptionInput() {
       setTimeout(() => {
         this.$refs['description-input'].$el.focus();

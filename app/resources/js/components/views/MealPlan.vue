@@ -219,7 +219,7 @@ export default {
     position: sticky;
     overflow-y: scroll;
     overflow-x: hidden;
-    top: 2vh;
+    top: 6vh;
   }
 </style>
 

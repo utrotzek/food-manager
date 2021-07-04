@@ -79,7 +79,9 @@ export default {
     },
     removeDayPlan(state, payload){
         const deleteIndex = state.dayPlans.findIndex(el => {return el.id === payload.id});
-        state.dayPlans.splice(deleteIndex, 1);
+        if (deleteIndex !== -1){
+            state.dayPlans.splice(deleteIndex, 1);
+        }
     },
     updateDayDone(state, payload){
         let day = state.days.find(el => {return el.date.isSame(payload.day.date, 'day')})
