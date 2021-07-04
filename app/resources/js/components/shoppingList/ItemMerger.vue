@@ -67,6 +67,14 @@
               <span class="d-inline d-sm-none">Nächster</span>
             </b-button>
             <b-button
+              variant="danger"
+              @click="onDelete"
+            >
+              <b-icon-trash />
+              <span class="d-none d-sm-inline">Löschen</span>
+              <span class="d-inline d-sm-none">Löschen</span>
+            </b-button>
+            <b-button
               variant="warning"
               @click="onMerge"
             >
@@ -156,17 +164,35 @@ export default {
       this.currentIndex++;
       this.loadCurrentItems();
     },
-    async onMerge() {
-      const itemsToDelete = this.currentItems;
-      let deletePromises = [];
-      itemsToDelete.forEach(el => {
-        let deleteData = {
-          id: el.id,
-          shoppingListId: this.shoppingList.id
-        }
-        deletePromises.push(this.$store.dispatch('shoppingList/deleteItem', deleteData));
+    deleteAllItems() {
+      return new Promise((resolve, reject) => {
+        const itemsToDelete = this.currentItems;
+        let deletePromises = [];
+        itemsToDelete.forEach(el => {
+          let deleteData = {
+            id: el.id,
+            shoppingListId: this.shoppingList.id
+          }
+          deletePromises.push(this.$store.dispatch('shoppingList/deleteItem', deleteData));
+        });
+        Promise.all(deletePromises).then(() => {
+          resolve();
+        }).catch((err) => {
+          reject(err);
+        });
       });
-      Promise.all(deletePromises).then(() => {
+    },
+    onDelete() {
+      this.deleteAllItems().then(() => {
+        if (this.hasNext){
+          this.loadNext();
+        }else{
+          this.cancel();
+        }
+      })
+    },
+    onMerge() {
+     this.deleteAllItems().then(() => {
         const addItemData = {
           ingredient: {
             goodId: this.newItem.goodId,
