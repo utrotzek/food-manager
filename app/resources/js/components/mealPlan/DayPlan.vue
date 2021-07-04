@@ -3,7 +3,10 @@
     class="plan-item"
     :class="{withRecipe: plan.recipe}"
   >
-    <div class="card ">
+    <div
+      class="card "
+      :class="{'to-be-moved': moveEnabled}"
+    >
       <div class="card-body">
         <h4
           class="card-title recipe-title"
@@ -28,7 +31,10 @@
           {{ plan.portion }} Portionen
         </div>
       </div>
-      <div class="card-footer plan-menu">
+      <div
+        v-if="!moveEnabled"
+        class="card-footer plan-menu"
+      >
         <b-button-group
           v-if="day.done"
           class="button-group-full-width"
@@ -170,6 +176,12 @@ export default {
     }
   },
   computed: {
+    moveEnabled() {
+      if (this.$store.state.meal.movePlan.enabled) {
+        return this.$store.state.meal.movePlan.plan.id === this.plan.id;
+      }
+      return false;
+    },
     planTitle () {
       if (this.plan.recipe){
         return this.plan.recipe.title;
@@ -203,11 +215,13 @@ export default {
       this.$store.dispatch('meal/updateDayPlan', data);
     },
     onDayPlanClick() {
-      if (this.plan.recipe) {
-        this.$refs['recipe-details-modal'].show();
-      }else {
-        this.form.planNewDescription = this.plan.description;
-        this.$refs['edit-free-text-modal'].show();
+      if (!this.moveEnabled) {
+        if (this.plan.recipe) {
+          this.$refs['recipe-details-modal'].show();
+        }else {
+          this.form.planNewDescription = this.plan.description;
+          this.$refs['edit-free-text-modal'].show();
+        }
       }
     },
     onCookingClick(){
@@ -258,5 +272,10 @@ export default {
 
   .plan-menu {
     padding: 0 0 0.4rem 0;
+  }
+
+  .to-be-moved {
+    background-color: lighten($primary, 40%);
+    opacity: 0.6;
   }
 </style>
