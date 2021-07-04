@@ -5,16 +5,17 @@
   >
     <div class="card ">
       <div class="card-body">
-        <h4 class="card-title recipe-title">
+        <h4
+          class="card-title recipe-title"
+          @click="onDayPlanClick"
+        >
           <span
             v-if="plan.done"
-            @click="onShowRecipeModal"
           >
             <strike>{{ planTitle }}</strike>
           </span>
           <span
             v-else
-            @click="onShowRecipeModal"
           >
             {{ planTitle }}
           </span>
@@ -88,6 +89,60 @@
         :portion-override="plan.portion"
       />
     </b-modal>
+
+    <b-modal
+      id="edit-free-text-modal"
+      ref="edit-free-text-modal"
+      centered
+      title="Eintrag ändern"
+      hide-footer
+    >
+      <ValidationObserver
+        ref="free-text-observer"
+        v-slot="{ invalid, handleSubmit }"
+      >
+        <b-form @submit.stop.prevent="handleSubmit(onEditFreeTextSubmit)">
+          <b-row>
+            <b-col>
+              <validation-provider
+                v-slot="validationContext"
+                name="Freitext"
+                :rules="{ required: true }"
+              >
+                <b-form-group label="Freitext">
+                  <b-input
+                    ref="plan-description-input"
+                    v-model="form.planNewDescription"
+                    autofocus
+                    :state="getValidationState(validationContext)"
+                    @focus="$event.target.select()"
+                  />
+                  <b-form-invalid-feedback id="freetext-feedback">
+                    {{ validationContext.errors[0] }}
+                  </b-form-invalid-feedback>
+                </b-form-group>
+              </validation-provider>
+            </b-col>
+          </b-row>
+          <b-row>
+            <b-col class="text-right">
+              <b-button-group>
+                <b-button @click="onEditFreeTextAbort">
+                  Abbrechen
+                </b-button>
+                <b-button
+                  variant="primary"
+                  type="submit"
+                  :disabled="invalid"
+                >
+                  Speichern
+                </b-button>
+              </b-button-group>
+            </b-col>
+          </b-row>
+        </b-form>
+      </ValidationObserver>
+    </b-modal>
   </div>
 </template>
 
@@ -109,7 +164,9 @@ export default {
   },
   data() {
     return {
-
+      form: {
+        planNewDescription: ""
+      }
     }
   },
   computed: {
@@ -129,6 +186,9 @@ export default {
 
   },
   methods: {
+    getValidationState({ dirty, validated, valid = null }) {
+      return dirty || validated ? valid : null;
+    },
     onDelete(){
       this.$store.dispatch('meal/deletePlanItem', {dayPlanId: this.plan.id}).then(res => {
         this.$store.dispatch('meal/refreshDay', {id: this.plan.day.id})
@@ -142,11 +202,25 @@ export default {
       data.done = !this.plan.done;
       this.$store.dispatch('meal/updateDayPlan', data);
     },
-    onShowRecipeModal() {
-      this.$refs['recipe-details-modal'].show();
+    onDayPlanClick() {
+      if (this.plan.recipe) {
+        this.$refs['recipe-details-modal'].show();
+      }else {
+        this.form.planNewDescription = this.plan.description;
+        this.$refs['edit-free-text-modal'].show();
+      }
     },
     onCookingClick(){
       this.$router.push({name: 'recipe', params: {id: this.plan.recipe.id, cooking: true, portion: this.plan.portion}});
+    },
+    onEditFreeTextAbort() {
+      this.$refs['edit-free-text-modal'].hide();
+      this.form.planNewDescription = "";
+    },
+    onEditFreeTextSubmit() {
+      this.$emit('change-plan-description', this.form.planNewDescription);
+      this.$refs['edit-free-text-modal'].hide();
+      this.form.planNewDescription = "";
     }
   }
 }
