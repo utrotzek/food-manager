@@ -48,7 +48,7 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
         yarn
 
 RUN a2dissite 000-default
-RUN a2enmod rewrite
+RUN a2enmod rewrite ssl
 
 COPY resources/apache/ports.conf /etc/apache2/ports.conf
 COPY resources/apache/site.conf /etc/apache2/sites-enabled/site.conf
@@ -61,6 +61,13 @@ ENV APACHE_RUN_GROUP=$USER_NAME
 RUN chown -R $USER_NAME:$USER_NAME /var/log/apache2*
 RUN chown -R $USER_NAME:$USER_NAME /var/lock/apache2*
 RUN chown -R $USER_NAME:$USER_NAME /var/run/apache2*
+
+RUN mkdir /etc/apache2/certs/
+
+COPY certs/food-manager.key /etc/apache2/certs/food-manager.key
+COPY certs/food-manager.crt /etc/apache2/certs/food-manager.crt
+
+RUN chown -R $USER_NAME /etc/apache2/certs
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /var/log/apache2/access.log && \

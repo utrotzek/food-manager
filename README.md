@@ -6,6 +6,16 @@ Food Manager
 
 Start the environment: `bin/container start` (use -s flag to boot only the container)
 
+## SSL certificates
+
+To use valid ssl certificates you can use [mkcert](https://github.com/FiloSottile/mkcert)
+
+And type the following command:
+
+```
+mkcert -key-file docker/app/certs/food-manager.key -cert-file docker/app/certs/food-manager.crt food-manager.local.de localhost 127.0.0.1
+```
+
 # Postman collection export
 
 Profclems aweseom postman collection generator (big thanks) is included. A fresh export can be done using:
