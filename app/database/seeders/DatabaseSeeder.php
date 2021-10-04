@@ -1,6 +1,8 @@
 <?php
 namespace Database\Seeders;
 
+use Database\Seeders\Development\AppointmentSeeder;
+use Database\Seeders\Development\CalendarSeeder;
 use Database\Seeders\Development\DayPlanSeeder;
 use Database\Seeders\Development\DaySeeder;
 use Database\Seeders\Development\GoodGroupSeeder;
@@ -30,7 +32,9 @@ class DatabaseSeeder extends Seeder
             DaySeeder::class,
             DayPlanSeeder::class,
             ShoppingListSeeder::class,
-            ShoppingListItemSeeder::class
+            ShoppingListItemSeeder::class,
+            CalendarSeeder::class,
+            AppointmentSeeder::class
         ]);
     }
 }
