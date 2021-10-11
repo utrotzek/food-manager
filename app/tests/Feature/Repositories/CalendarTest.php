@@ -16,7 +16,14 @@ beforeEach(function () {
 
 it('Can insert a new calendar', function () {
     $subject = new CalendarRepository();
-    $calendar = $subject->create(['title' => 'Pest Calendar', 'color' => '#ffffff']);
+    $calendar = $subject->create(
+        [
+            'title' => 'Pest Calendar',
+            'color' => '#ffffff',
+            'token' => 'my-token',
+            'refresh_token' => 'my-refresh-token'
+        ]
+    );
 
     $actual = Calendar::find($calendar['id']);
     expect($actual->getAttribute('color'))->toBe('#ffffff');

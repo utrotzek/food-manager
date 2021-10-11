@@ -11,7 +11,7 @@ class Calendar extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['title', 'color'];
+    protected $fillable = ['title', 'color', 'token', 'refresh_token'];
 
     public function appointments(): HasMany
     {

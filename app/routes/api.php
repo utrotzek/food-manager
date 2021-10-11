@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\AppStateController;
+use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\DayController;
 use App\Http\Controllers\DayPlanController;
 use App\Http\Controllers\GoodController;
 use App\Http\Controllers\GoodGroupController;
+use App\Http\Controllers\GoogleCalendarApiController;
 use App\Http\Controllers\ImageController;
 use App\Http\Controllers\IngredientController;
 use App\Http\Controllers\MealConfigController;
@@ -27,6 +29,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/calendar/auth-url', [GoogleCalendarApiController::class, 'authLink']);
+Route::post('/calendar/auth-confirm', [GoogleCalendarApiController::class, 'authConfirm']);
+
 Route::get('/days/range', [DayController::class, 'range']);
 Route::put('/days/{day}/shopping-day', [DayController::class, 'shoppingDay']);
 Route::get('/day-plans/range', [DayPlanController::class, 'range']);
@@ -45,6 +50,7 @@ Route::delete('/shopping-lists/{shopping_list}/clearAll', [ShoppingListControlle
 
 Route::apiResources([
     'app-states' => AppStateController::class,
+    'calendar' => CalendarController::class,
     'days' => DayController::class,
     'day-plans' => DayPlanController::class,
     'goods' => GoodController::class,

@@ -14,8 +14,8 @@ class CalendarSeeder extends Seeder
             [
                 'title' => 'Testcalendar',
                 'color' => '#d81a1a',
-                'token' => $faker->text(),
-                'refresh_token' => $faker->text()
+                'token' => md5(rand()),
+                'refresh_token' => md5(rand())
             ]
         );
     }
