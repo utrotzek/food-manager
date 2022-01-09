@@ -1,6 +1,7 @@
 <?php
 namespace Database\Seeders;
 
+use Database\Seeders\Development\AccountSeeder;
 use Database\Seeders\Development\AppointmentSeeder;
 use Database\Seeders\Development\CalendarSeeder;
 use Database\Seeders\Development\DayPlanSeeder;
@@ -24,6 +25,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            AccountSeeder::class,
             AppStateSeeder::class,
             GoodGroupSeeder::class,
             GoodSeeder::class,

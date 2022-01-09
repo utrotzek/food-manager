@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CalendarResource extends JsonResource
+class AccountResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,8 +17,8 @@ class CalendarResource extends JsonResource
         return [
             "id" => $this->id,
             "title" => $this->title,
-            "color" => $this->color,
-            "account" => $this->account
+            "token" => $this->token,
+            "refresh_token" => $this->refresh_token
         ];
     }
 }

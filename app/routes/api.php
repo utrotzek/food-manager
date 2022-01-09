@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AppStateController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\DayController;
@@ -49,6 +50,7 @@ Route::post('/shopping-list-items/store-multiple', [ShoppingListItemController::
 Route::delete('/shopping-lists/{shopping_list}/clearAll', [ShoppingListController::class, 'clearAll']);
 
 Route::apiResources([
+    'account' => AccountController::class,
     'app-states' => AppStateController::class,
     'calendar' => CalendarController::class,
     'days' => DayController::class,

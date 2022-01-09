@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class CalendarStoreRequest extends FormRequest
+class AccountStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -27,15 +27,11 @@ class CalendarStoreRequest extends FormRequest
         return [
             'title' => [
                 'required',
-                Rule::unique('calendars')->ignore($this->calendar->id ?? null),
+                Rule::unique('accounts')->ignore($this->account->id ?? null),
                 'max:255'
             ],
-            'color' => [
-                'required',
-                Rule::unique('calendars')->ignore($this->calendar->id ?? null),
-                'max:7'
-            ],
-            'account_id' => 'int'
+            'token' => 'required',
+            'refresh_token' => 'required',
         ];
     }
 }
