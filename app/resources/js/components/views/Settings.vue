@@ -10,10 +10,10 @@
           >
             <b-button
               v-for="entry in menu"
-              :key="entry.name"
+              :key="entry.route"
               variant="light"
               class="text-left"
-              @click="currentEntry = entry.name"
+              :to="entry.route"
             >
               <b-icon
                 v-if="entry.icon"
@@ -24,10 +24,10 @@
           </b-button-group>
         </b-col>
         <b-col
-          v-if="currentEntry != null"
+          v-if="$route.meta.settingModule != null"
           cols="12"
         >
-          <component :is="currentEntry" />
+          <router-view />
         </b-col>
         <b-col
           v-else
@@ -44,18 +44,18 @@
 
 <script>
 import LayoutDefaultDynamic from "../layouts/LayoutDefaultDynamic";
-import Calender from "../settings/Calender";
+import Calender from "../settings/Calendar";
 import Goods from "../settings/Goods";
 
 export default {
   name: "Settings",
-  components: {LayoutDefaultDynamic, Calender, Goods},
+  components: {LayoutDefaultDynamic},
   data() {
     return {
       currentEntry: null,
       menu: [
-        { name: "Calender", title: "Kalender", icon: "calendar"},
-        { name: "Goods", title: "Zutaten verwalten", icon: "bag"}
+        { title: "Kalender", icon: "calendar", route: "/settings/calendar"},
+        { title: "Zutaten verwalten", icon: "bag", route: "/settings/goods"}
       ]
     }
   },

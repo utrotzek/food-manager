@@ -5,7 +5,10 @@ import Recipe from "./components/views/Recipe";
 import RecipeForm from "./components/views/RecipeForm";
 import MealPlan from "./components/views/MealPlan";
 import ShoppingListPrint from "./components/views/ShoppingListPrint";
+import Auth from "./components/views/Auth";
 import Settings from "./components/views/Settings";
+import Calendar from "./components/settings/Calendar";
+import Goods from "./components/settings/Goods";
 
 const router = new VueRouter({
     mode: "history",
@@ -45,7 +48,30 @@ const router = new VueRouter({
         {
             path: "/settings",
             name: "settings",
-            component: Settings
+            component: Settings,
+            children: [
+                {
+                    path: "calendar",
+                    name: "settings-calendar",
+                    component: Calendar,
+                    meta: {
+                        settingModule: "calendar"
+                    }
+                },
+                {
+                    path: "goods",
+                    name: "settings-goods",
+                    component: Goods,
+                    meta: {
+                        settingModule: "goods"
+                    }
+                }
+            ]
+        },
+        {
+            path: "/calendar/auth",
+            name: "calendar-auth",
+            component: Auth
         }
     ],
     scrollBehavior (to, from, savedPosition) {
