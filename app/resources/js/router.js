@@ -5,6 +5,7 @@ import Recipe from "./components/views/Recipe";
 import RecipeForm from "./components/views/RecipeForm";
 import MealPlan from "./components/views/MealPlan";
 import ShoppingListPrint from "./components/views/ShoppingListPrint";
+import Settings from "./components/views/Settings";
 
 const router = new VueRouter({
     mode: "history",
@@ -40,6 +41,11 @@ const router = new VueRouter({
             path: "/print-shopping-list/:id",
             name: "print-shoppling-list",
             component: ShoppingListPrint
+        },
+        {
+            path: "/settings",
+            name: "settings",
+            component: Settings
         }
     ],
     scrollBehavior (to, from, savedPosition) {

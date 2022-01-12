@@ -33,7 +33,13 @@
           </b-navbar-nav>
         </b-collapse>
         <b-navbar-nav class="ml-auto">
-          <b-nav-item right />
+          <b-nav-item
+            href="#"
+            right
+            @click="$router.push({ name: 'settings'})"
+          >
+            <b-icon-gear />
+          </b-nav-item>
         </b-navbar-nav>
       </b-navbar>
       <main class="LayoutDefault__main h-100">
