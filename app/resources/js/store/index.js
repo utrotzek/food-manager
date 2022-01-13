@@ -5,6 +5,7 @@ import VuexPersist from 'vuex-persist';
 
 import app from './app';
 import auth from './auth';
+import calendar from './calendar';
 import recipe from './recipe';
 import meal from './meal';
 import shoppingList from './shoppingList';
@@ -23,6 +24,7 @@ export default new Vuex.Store({
         auth: auth,
         recipe: recipe,
         meal: meal,
-        shoppingList: shoppingList
+        shoppingList: shoppingList,
+        calendar: calendar
     }
 });

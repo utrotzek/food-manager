@@ -18,7 +18,8 @@ class AccountResource extends JsonResource
             "id" => $this->id,
             "title" => $this->title,
             "token" => $this->token,
-            "refresh_token" => $this->refresh_token
+            "refresh_token" => $this->refresh_token,
+            "calendars" => new CalendarResourceCollection($this->calendars)
         ];
     }
 }

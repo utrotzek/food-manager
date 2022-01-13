@@ -18,7 +18,7 @@ class CalendarResource extends JsonResource
             "id" => $this->id,
             "title" => $this->title,
             "color" => $this->color,
-            "account" => $this->account
+            "account_id" => $this->account_id
         ];
     }
 }
