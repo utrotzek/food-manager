@@ -12,17 +12,8 @@ class GoogleCalendarApiController extends Controller
 {
     public function authLink(Request $request): Response
     {
-        $client = new Google_Client([
-            'application_name'              => 'Food Manager Web APP',
-            'client_id'                     => '916946199150-0q3kmvl725i8fnnjk475s7hbajat33g3.apps.googleusercontent.com',
-            'project_id'                    => 'food-manager-320920',
-            'auth_uri'                      => 'https=>//accounts.google.com/o/oauth2/auth',
-            'token_uri'                     => 'https=>//oauth2.googleapis.com/token',
-            'auth_provider_x509_cert_url'   => 'https=>//www.googleapis.com/oauth2/v1/certs',
-            'client_secret'                 => 'Vw72ej-IY_rzjbQrVR3vgsnC',
-            'redirect_uri'                  => 'https://food-manager.local.de/calendar/auth'
-        ]);
-        $client->setApplicationName('Google Calendar API PHP Quickstart');
+        $client = new Google_Client($this->buildApiConfig());
+        $client->setApplicationName(config('calendar.google_api_application_name'));
         $client->setScopes(
             [
             Google_Service_Calendar::CALENDAR_READONLY,
@@ -55,17 +46,8 @@ class GoogleCalendarApiController extends Controller
 
     public function authConfirm(Request $request): Response
     {
-        $client = new Google_Client([
-            'application_name'              => 'Food Manager Web APP',
-            'client_id'                     => '916946199150-0q3kmvl725i8fnnjk475s7hbajat33g3.apps.googleusercontent.com',
-            'project_id'                    => 'food-manager-320920',
-            'auth_uri'                      => 'https=>//accounts.google.com/o/oauth2/auth',
-            'token_uri'                     => 'https=>//oauth2.googleapis.com/token',
-            'auth_provider_x509_cert_url'   => 'https=>//www.googleapis.com/oauth2/v1/certs',
-            'client_secret'                 => 'Vw72ej-IY_rzjbQrVR3vgsnC',
-            'redirect_uri'                  => 'https://food-manager.local.de/calendar/auth'
-        ]);
-        $client->setApplicationName('Google Calendar API PHP Quickstart');
+        $client = new Google_Client($this->buildApiConfig());
+        $client->setApplicationName(config('calendar.google_api_application_name'));
         $client->setScopes(
             [
                 Google_Service_Calendar::CALENDAR_READONLY,
@@ -79,7 +61,25 @@ class GoogleCalendarApiController extends Controller
         $accessToken = $client->fetchAccessTokenWithAuthCode($code);
 
         return new Response([
-            'token' => $accessToken
+            'token' => $accessToken['access_token'],
+            'refresh_token' => $accessToken['refresh_token']
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    private function buildApiConfig(): array
+    {
+        return [
+            'application_name'              => config('calendar.google_api_application_name'),
+            'client_id'                     => config('calendar.google_api_client_id'),
+            'client_secret'                 => config('calendar.google_api_client_secret'),
+            'project_id'                    => config('calendar.google_api_project_id'),
+            'auth_uri'                      => config('calendar.google_api_auth_uri'),
+            'token_uri'                     => config('calendar.google_api_token_uri'),
+            'auth_provider_x509_cert_url'   => config('calendar.google_api_auth_provider_x509_cert_url'),
+            'redirect_uri'                  => config('app.url').config('calendar.google_api_redirect_uri')
+        ];
     }
 }

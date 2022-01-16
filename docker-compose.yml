@@ -16,6 +16,9 @@ services:
       DB_DATABASE: ${dbName}
       DB_USERNAME: ${dbUser}
       DB_PASSWORD: ${dbPassword}
+      CALENDAR_GOOGLE_API_CLIENT_ID: ${CALENDAR_GOOGLE_API_CLIENT_ID}
+      CALENDAR_GOOGLE_API_CLIENT_SECRET: ${CALENDAR_GOOGLE_API_CLIENT_SECRET}
+      APP_URL: https://food-manager.local.de
     volumes:
       - ./app:/var/www/html/app
     working_dir: /var/www/html/app
