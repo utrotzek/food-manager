@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Google\Client;
+use Google\Service\Calendar;
+use Google\Service\Calendar\Event;
 use Google_Client;
 use Google_Service_Calendar;
 use Illuminate\Http\Request;
@@ -12,15 +14,7 @@ class GoogleCalendarApiController extends Controller
 {
     public function authLink(Request $request): Response
     {
-        $client = new Google_Client($this->buildApiConfig());
-        $client->setApplicationName(config('calendar.google_api_application_name'));
-        $client->setScopes(
-            [
-            Google_Service_Calendar::CALENDAR_READONLY,
-            Google_Service_Calendar::CALENDAR_EVENTS]
-        );
-        $client->setAccessType('offline');
-        $client->setPrompt('select_account consent');
+        $client = $this->initializeClient();
 
         // If there is no previous token or it's expired.
         if ($client->isAccessTokenExpired()) {
@@ -46,15 +40,7 @@ class GoogleCalendarApiController extends Controller
 
     public function authConfirm(Request $request): Response
     {
-        $client = new Google_Client($this->buildApiConfig());
-        $client->setApplicationName(config('calendar.google_api_application_name'));
-        $client->setScopes(
-            [
-                Google_Service_Calendar::CALENDAR_READONLY,
-                Google_Service_Calendar::CALENDAR_EVENTS]
-        );
-        $client->setAccessType('offline');
-        $client->setPrompt('select_account consent');
+        $client = $this->initializeClient();
 
         $code = $request->input('code');
         // Exchange authorization code for an access token.
@@ -62,8 +48,26 @@ class GoogleCalendarApiController extends Controller
 
         return new Response([
             'token' => $accessToken['access_token'],
-            'refresh_token' => $accessToken['refresh_token']
+            'refresh_token' => $accessToken['refresh_token'],
+            'calendars' => $this->listCalendars($client)
         ]);
+    }
+
+    public function listCalendars($client): array
+    {
+        $calendarItems = [];
+
+        $service = new Calendar($client);
+        $calendars = $service->calendarList->listCalendarList();
+
+        foreach ($calendars->getItems() as $calendar) {
+            $calendarItems[] = [
+                'id' => $calendar['id'],
+                'title'  => $calendar['summary'],
+                'color' => $calendar['backgroundColor']
+            ];
+        }
+        return $calendarItems;
     }
 
     /**
@@ -81,5 +85,20 @@ class GoogleCalendarApiController extends Controller
             'auth_provider_x509_cert_url'   => config('calendar.google_api_auth_provider_x509_cert_url'),
             'redirect_uri'                  => config('app.url').config('calendar.google_api_redirect_uri')
         ];
+    }
+
+    private function initializeClient(): Google_Client
+    {
+        $client = new Google_Client($this->buildApiConfig());
+        $client->setApplicationName(config('calendar.google_api_application_name'));
+        $client->setScopes(
+            [
+                Google_Service_Calendar::CALENDAR_READONLY,
+                Google_Service_Calendar::CALENDAR_EVENTS
+            ]
+        );
+        $client->setAccessType('offline');
+        $client->setPrompt('select_account consent');
+        return $client;
     }
 }

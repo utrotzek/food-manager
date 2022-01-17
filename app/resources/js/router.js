@@ -5,7 +5,7 @@ import Recipe from "./components/views/Recipe";
 import RecipeForm from "./components/views/RecipeForm";
 import MealPlan from "./components/views/MealPlan";
 import ShoppingListPrint from "./components/views/ShoppingListPrint";
-import Auth from "./components/views/Auth";
+import Auth from "./components/settings/Auth";
 import Settings from "./components/views/Settings";
 import Calendar from "./components/settings/Calendar";
 import Goods from "./components/settings/Goods";
@@ -56,7 +56,18 @@ const router = new VueRouter({
                     component: Calendar,
                     meta: {
                         settingModule: "calendar"
-                    }
+                    },
+                    children: [
+                        {
+                            path: "auth",
+                            name: "settings-calendar-auth",
+                            component: Auth,
+                            meta: {
+                                settingModule: "calendar",
+                                settingSubModule: "auth"
+                            }
+                        }
+                    ]
                 },
                 {
                     path: "goods",

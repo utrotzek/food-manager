@@ -14,14 +14,16 @@ class CalendarSeeder extends Seeder
             [
                 'title' => 'Testcalendar',
                 'color' => '#d81a1a',
-                'account_id' => 1
+                'account_id' => 1,
+                'external_id' => 'calendar1'
             ]
         );
         Calendar::create(
             [
                 'title' => 'Testcalendar 2',
                 'color' => '#ffeeee',
-                'account_id' => 2
+                'account_id' => 2,
+                'external_id' => 'calendar2'
             ]
         );
     }

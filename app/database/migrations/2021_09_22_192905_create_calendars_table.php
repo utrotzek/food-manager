@@ -16,9 +16,10 @@ class CreateCalendarsTable extends Migration
         Schema::create('calendars', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
-            $table->string('title')->unique();
+            $table->string('title');
             $table->integer('account_id')->unsigned();
-            $table->string('color', 7)->unique();
+            $table->string('color', 7);
+            $table->string('external_id', 255);
         });
     }
 

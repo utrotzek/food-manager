@@ -27,7 +27,7 @@
           v-if="$route.meta.settingModule != null"
           cols="12"
         >
-          <router-view />
+          <router-view :key="$route.path" />
         </b-col>
         <b-col
           v-else

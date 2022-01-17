@@ -11,7 +11,8 @@ export default {
                 calendars.push({
                     id: parseInt(calendar.id),
                     title: calendar.title,
-                    color: calendar.color
+                    color: calendar.color,
+                    external_id: parseInt(calendar.external_id)
                 })
             });
 

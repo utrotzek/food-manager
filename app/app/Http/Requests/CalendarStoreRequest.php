@@ -26,13 +26,9 @@ class CalendarStoreRequest extends FormRequest
     {
         return [
             'title' => [
-                'required',
-                Rule::unique('calendars')->ignore($this->calendar->id ?? null),
                 'max:255'
             ],
             'color' => [
-                'required',
-                Rule::unique('calendars')->ignore($this->calendar->id ?? null),
                 'max:7'
             ],
             'account_id' => 'int'

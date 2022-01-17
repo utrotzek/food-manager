@@ -29,9 +29,8 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::get('/calendar/auth-url', [GoogleCalendarApiController::class, 'authLink']);
-Route::post('/calendar/auth-confirm', [GoogleCalendarApiController::class, 'authConfirm']);
+Route::get('/google-api/auth-url', [GoogleCalendarApiController::class, 'authLink']);
+Route::post('/google-api/auth-confirm', [GoogleCalendarApiController::class, 'authConfirm']);
 
 Route::get('/days/range', [DayController::class, 'range']);
 Route::put('/days/{day}/shopping-day', [DayController::class, 'shoppingDay']);
