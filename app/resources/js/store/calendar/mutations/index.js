@@ -24,5 +24,10 @@ export default {
                 calendars: calendars
             });
         });
+    },
+    deleteAccount(state, payload) {
+        const indexToDelete = state.accounts.findIndex(item => item.id === payload.id);
+        state.accounts.splice(indexToDelete, 1);
     }
+
 }

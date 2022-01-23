@@ -21,12 +21,24 @@ export default {
                 });
 
                 Promise.all(calendarPromises).then(() => {
-                    console.log('all resolved');
                     resolve();
                 }).catch(err => {
                     reject();
                 })
             });
+        });
+    },
+    deleteAccount({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            const id = payload.id;
+            axios.delete('/api/account/' + id)
+                .then(res => {
+                    commit('deleteAccount', {id: id})
+                    resolve();
+                })
+                .catch(err => {
+                    reject (err);
+                })
         });
     },
     fetchConnectedAccounts({commit}) {

@@ -45,6 +45,7 @@
                   <b-button
                     variant="light"
                     class="text-left"
+                    @click="deleteAccountPrompt(account)"
                   >
                     <b-icon-trash />
                   </b-button>
@@ -77,6 +78,21 @@
     >
       <b-spinner label="Loading..." />
     </div>
+
+    <!-- modals -->
+    <b-modal
+      id="delete-account"
+      ref="delete-account"
+      title="Account löschen?"
+      ok-title="Löschen"
+      ok-variant="danger"
+      centered
+      @ok="deleteAccount"
+    >
+      <p v-if="accountToDelete !== null">
+        Wollen Sie den Account <b>{{ accountToDelete.title }}</b> wirklich löschen?
+      </p>
+    </b-modal>
   </div>
 </template>
 
@@ -85,7 +101,8 @@ export default {
   name: "Calender",
   data() {
     return {
-      loaded: false
+      loaded: false,
+      accountToDelete: null
     }
   },
   computed: {
@@ -105,6 +122,13 @@ export default {
       axios.get('/api/google-api/auth-url').then(res => {
         window.location.href = res.data.auth_url;
       });
+    },
+    deleteAccountPrompt(account) {
+      this.accountToDelete = account;
+      this.$bvModal.show('delete-account');
+    },
+    deleteAccount() {
+      this.$store.dispatch('calendar/deleteAccount', {id: this.accountToDelete.id });
     }
   }
 }
