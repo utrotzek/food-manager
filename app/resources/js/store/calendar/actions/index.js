@@ -28,6 +28,21 @@ export default {
             });
         });
     },
+    fetchCalendarsForAccount({commit}, payload) {
+        return new Promise((resolve, reject) => {
+            axios.get('/api/google-api/calendars', {
+                headers: {
+                    'account-token': payload.token,
+                    'account-refresh-token': payload.refresh_token
+                }
+            })
+            .then(res => {
+                resolve(res.data);
+            }).catch(err => {
+                reject(err);
+            })
+        });
+    },
     deleteAccount({commit}, payload) {
         return new Promise((resolve, reject) => {
             const id = payload.id;

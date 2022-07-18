@@ -53,6 +53,15 @@ class GoogleCalendarApiController extends Controller
         ]);
     }
 
+    public function fetchCalendars(Request $request): array
+    {
+        $client = $this->initializeClient(
+            $request->header('account-token'),
+            $request->header('account-refresh-token')
+        );
+        return $this->listCalendars($client);
+    }
+
     public function listCalendars($client): array
     {
         $calendarItems = [];
@@ -87,7 +96,7 @@ class GoogleCalendarApiController extends Controller
         ];
     }
 
-    private function initializeClient(): Google_Client
+    private function initializeClient(string $access_token = "", string $refresh_token = ""): Google_Client
     {
         $client = new Google_Client($this->buildApiConfig());
         $client->setApplicationName(config('calendar.google_api_application_name'));
@@ -99,6 +108,14 @@ class GoogleCalendarApiController extends Controller
         );
         $client->setAccessType('offline');
         $client->setPrompt('select_account consent');
+
+        if ($access_token) {
+            $client->setAccessToken($access_token);
+        }
+
+        if ($refresh_token) {
+            $client->refreshToken($refresh_token);
+        }
         return $client;
     }
 }

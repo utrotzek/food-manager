@@ -38,6 +38,7 @@
                   <b-button
                     class="text-left mx-1"
                     variant="light"
+                    @click="editAccountPrompt(account)"
                   >
                     <b-icon-pencil />
                   </b-button>
@@ -81,6 +82,20 @@
 
     <!-- modals -->
     <b-modal
+      id="edit-account"
+      ref="edit-account"
+      title="Account bearbeiten"
+      ok-title="Speichern"
+      ok-variant="primary"
+      centered
+    >
+      <div v-if="accountToEdit != null">
+        <AccountForm v-model="accountToEdit" />
+      </div>
+    </b-modal>
+
+    <!-- modals -->
+    <b-modal
       id="delete-account"
       ref="delete-account"
       title="Account löschen?"
@@ -97,12 +112,16 @@
 </template>
 
 <script>
+import AccountForm from "./AccountForm";
+
 export default {
   name: "Calender",
+  components: {AccountForm},
   data() {
     return {
       loaded: false,
-      accountToDelete: null
+      accountToDelete: null,
+      accountToEdit: null,
     }
   },
   computed: {
@@ -129,6 +148,10 @@ export default {
     },
     deleteAccount() {
       this.$store.dispatch('calendar/deleteAccount', {id: this.accountToDelete.id });
+    },
+    editAccountPrompt(account) {
+      this.accountToEdit = account;
+      this.$bvModal.show('edit-account');
     }
   }
 }

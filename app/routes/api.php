@@ -31,6 +31,7 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get('/google-api/auth-url', [GoogleCalendarApiController::class, 'authLink']);
 Route::post('/google-api/auth-confirm', [GoogleCalendarApiController::class, 'authConfirm']);
+Route::get('/google-api/calendars', [GoogleCalendarApiController::class, 'fetchCalendars']);
 
 Route::get('/days/range', [DayController::class, 'range']);
 Route::put('/days/{day}/shopping-day', [DayController::class, 'shoppingDay']);
