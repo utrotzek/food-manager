@@ -40,7 +40,7 @@ function copyEnvExample {
 
 function startContainer {
     #start container
-    docker-compose -f docker-compose.yml up --build -d
+    docker compose -f docker-compose.yml up --build -d
     installEnvironment
 }
 
@@ -80,7 +80,7 @@ function start {
 }
 
 function stop {
-    docker-compose -f docker-compose.yml stop
+    docker compose -f docker-compose.yml stop
 }
 
 function restart {
@@ -89,7 +89,7 @@ function restart {
 }
 
 function status {
-    docker-compose -f  docker-compose.yml ps
+    docker -compose -f  docker-compose.yml ps
 }
 
 function main {
