@@ -1,0 +1,10 @@
+stages:
+  - build_test
+  - test
+  - build_prod
+  - deploy
+
+job_composer_install_testing:
+  stage: build_test
+  script:
+    - echo "hello world"
